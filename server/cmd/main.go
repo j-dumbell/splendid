@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/j-dumbell/splendid/routes"
 	"net/http"
 	"strconv"
+
+	"github.com/j-dumbell/splendid/api"
 )
 
 func main() {
 	port := 8080
 	fmt.Println("Starting on port " + strconv.Itoa(port))
-	http.HandleFunc("/health", routes.Health)
-	http.ListenAndServe(":" + strconv.Itoa(port), nil)
+	http.HandleFunc("/health", api.Health)
+	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
-
