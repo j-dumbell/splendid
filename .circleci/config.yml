@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  build-and-test-server:
+    machine:
+      image: circleci/golang:stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      #Add tests here when we have some
+      - run:
+          name: build
+          command: |
+            cd server && \
+            go build cmd/main.go
+
+
+  build-and-test-client:
+    machine:
+      image: circleci/node:stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      #Add tests here when we have some
+      - run:
+          name: build
+          command: |
+            cd client && \
+            yarn install && \
+            yarn build
+
+workflows:
+  version: 2.1
+  build_test_deploy:
+    jobs:
+      - build-and-test-server
+      - build-and-test-client
