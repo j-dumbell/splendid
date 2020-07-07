@@ -1,3 +1,3 @@
 export default {
-  apiUrl: process.env.SPLENDID_API_URL
+  apiUrl: process.env.REACT_APP_API_URL
 }
