@@ -2,11 +2,12 @@ FROM golang:latest
 
 WORKDIR /app
 
-COPY routes routes/
-COPY go.mod main.go ./
+COPY cmd cmd/
+COPY api api/
+COPY go.mod ./
 
-RUN go build -o main .
+RUN go build -o build/main cmd/main.go
 
 EXPOSE 8080
 
-CMD ["./main"]
+CMD ./build/main
