@@ -18,19 +18,21 @@ jobs:
   build-and-test-client:
     docker:
       - image: circleci/node:stretch
-    working_directory: ~/repo
+    working_directory: ~/repo/client
     steps:
       - checkout
       #Add tests here when we have some
       - run:
           name: install
           command: |
-            cd client && \
             yarn install
+      - run:
+          name: test
+          command: |
+            yarn test
       - run:
           name: build
           command: |
-            cd client && \
             yarn build
 
 workflows:
