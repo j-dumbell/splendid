@@ -1,3 +1,3 @@
-# splendid
+# Splendid
 
-Bootleg version of the board game
+A bootleg version of the board game, Splendor
