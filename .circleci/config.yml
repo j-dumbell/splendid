@@ -20,16 +20,17 @@ jobs:
       - image: circleci/node:stretch
     working_directory: ~/repo
     steps:
-      - checkout
+      - checkout:
+          path: ~/repo/client
       #Add tests here when we have some
       - run:
           name: install
           command: |
-            cd client && \
             yarn install
       - run:
           name: test
           command: |
+            pwd
             yarn test
       - run:
           name: build
