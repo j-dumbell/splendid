@@ -1,15 +1,23 @@
 import React from "react";
-import { useAsyncFetchData } from "./hooks/fetch";
+import JSONPretty from "react-json-pretty";
+
+import { useWebSocket } from "./hooks/websocket";
 
 function App() {
-  const [loading, error, data] = useAsyncFetchData("/health");
+  const [loading, error, data] = useWebSocket("/");
   return (
     <>
-      <header>
-        <h1>Splendid</h1>
-      </header>
-      <p>Loading: {JSON.stringify(loading)}</p>
-      <p>Data: {JSON.stringify(error || data)}</p>
+      <h1>Splendid</h1>
+      <JSONPretty
+        data={{ loading, error, data }}
+        theme={{
+          main: "color:#66d9ef;",
+          key: "color:#f92672;",
+          string: "color:#fd971f;",
+          value: "color:#a6e22e;",
+          boolean: "color:#ac81fe;",
+        }}
+      />
     </>
   );
 }

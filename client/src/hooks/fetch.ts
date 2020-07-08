@@ -15,7 +15,7 @@ export const useAsyncFetchData = (path: string) => {
       return;
     }
   
-    const url = config.apiUrl + path;
+    const url = new URL(`http://'${config.apiUrl}${path}`);
     const fetchData = async () => {
       setLoading(true);
       try {
