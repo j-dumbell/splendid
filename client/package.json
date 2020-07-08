@@ -13,6 +13,7 @@
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-json-pretty": "^2.2.0",
     "react-scripts": "3.4.1",
     "typescript": "~3.7.2"
   },
@@ -38,6 +39,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.7"
+    "@types/node-fetch": "^2.5.7",
+    "@types/react-json-pretty": "^2.2.0"
   }
 }
