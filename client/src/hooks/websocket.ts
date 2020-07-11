@@ -15,8 +15,9 @@ export const useWebSocket = (path: string) => {
       return;
     }
 
-    const url = new URL(`wss://${config.apiUrl}${path}`);
+    const url = new URL(`ws://${config.apiUrl}${path}`);
     ws.current = new WebSocket(url.toString());
+    (window as any).ws = ws.current;
 
     setLoading(true);
     if (ws.current) {
