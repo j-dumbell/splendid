@@ -1,4 +1,4 @@
-package game
+package splendid
 
 type Resource struct {
 	Type string

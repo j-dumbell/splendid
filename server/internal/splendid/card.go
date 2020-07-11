@@ -1,4 +1,4 @@
-package game
+package splendid
 
 type Card struct {
 	Points   int
