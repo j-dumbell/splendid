@@ -1,4 +1,4 @@
-module github.com/j-dumbell/splendid
+module github.com/j-dumbell/splendid/server
 
 go 1.14
 
