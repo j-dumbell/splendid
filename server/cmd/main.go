@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
-	"splendid/server/pkg/splendid"
-
 	//"net/http"
 	//"strconv"
 
-	//"github.com/j-dumbell/splendid/splendid"
 	//"golang.org/x/net/websocket"
+	"github.com/j-dumbell/splendid/server/pkg/splendid"
 )
 
 func main() {
@@ -17,7 +15,6 @@ func main() {
 	//http.HandleFunc("/health", api.Health)
 	//http.Handle("/", websocket.Handler(api.WebSocket))
 	//http.ListenAndServe(":"+strconv.Itoa(port), nil)
-
 
 	fmt.Println(splendid.Card1)
 }
