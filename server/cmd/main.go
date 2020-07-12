@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/j-dumbell/splendid/api"
+	"github.com/j-dumbell/splendid/server/api"
+
 	"golang.org/x/net/websocket"
 )
 
