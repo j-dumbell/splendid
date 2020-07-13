@@ -1,6 +1,6 @@
 package config
 
-import "splendid/server/pkg/splendid"
+import "github.com/j-dumbell/splendid/server/pkg/splendid"
 
 var Elites = []splendid.Elite{
 	splendid.Elite{
