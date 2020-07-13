@@ -1,6 +1,6 @@
 package config
 
-import "splendid/server/pkg/splendid"
+import "github.com/j-dumbell/splendid/server/pkg/splendid"
 
 var Deck1 = []splendid.Card{
 	splendid.Card{
@@ -10,13 +10,13 @@ var Deck1 = []splendid.Card{
 		IsPublic: true,
 	},
 	splendid.Card{
-		Points:   1,
+		Points:   2,
 		Cost:     map[splendid.Resource]int{Gold: 1, Silver: 2},
 		Income:   Bronze,
 		IsPublic: true,
 	},
 	splendid.Card{
-		Points:   1,
+		Points:   3,
 		Cost:     map[splendid.Resource]int{Gold: 1, Silver: 2},
 		Income:   Bronze,
 		IsPublic: true,
