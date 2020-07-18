@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/j-dumbell/splendid/server/pkg/splendid"
 	"net/http"
-	"splendid/server/api"
+	"github.com/j-dumbell/splendid/server/api"
 	"strconv"
 
 	"github.com/j-dumbell/splendid/server/pkg/splendid"
