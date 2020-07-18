@@ -3,7 +3,7 @@ package splendid
 import (
 	"math/rand"
 	"reflect"
-	"time"
+	//"time"
 )
 
 type Board struct {
@@ -14,12 +14,12 @@ type Board struct {
 	Bank   map[Resource]int
 }
 
-func Shuffle(arr interface{}) interface{} {
+func Shuffle(arr interface{}, seed int64) interface{} {
 	arrType := reflect.TypeOf(arr)
 	arrValue := reflect.ValueOf(arr)
 	arrLength := arrValue.Len()
 	arrRand := reflect.MakeSlice(arrType, 0, 0)
-	r := rand.New(rand.NewSource(time.Now().Unix()))
+	r := rand.New(rand.NewSource(seed)) //time.Now().Unix()
 	perms := r.Perm(arrLength)
 	for _, v := range perms {
 		arrRand = reflect.Append(arrRand, arrValue.Index(v))

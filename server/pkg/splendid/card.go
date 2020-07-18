@@ -6,4 +6,3 @@ type Card struct {
 	Income   Resource
 	IsPublic bool
 }
-
