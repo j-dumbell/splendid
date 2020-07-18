@@ -1,21 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
-
 	"fmt"
-	"github.com/j-dumbell/splendid/server/pkg/splendid"
-	"net/http"
-	"github.com/j-dumbell/splendid/server/api"
-	"strconv"
-
-	"github.com/j-dumbell/splendid/server/pkg/splendid"
-	"github.com/j-dumbell/splendid/server/config"
-
 
 	"golang.org/x/net/websocket"
+
+	"github.com/j-dumbell/splendid/server/config"
+	"github.com/j-dumbell/splendid/server/api"
+	"github.com/j-dumbell/splendid/server/pkg/splendid"
 )
 
 func main() {
