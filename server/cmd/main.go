@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net/http"
-	"strconv"
 	"fmt"
 	"golang.org/x/net/websocket"
+	"net/http"
+	"strconv"
 
 	"github.com/j-dumbell/splendid/server/api"
 )
