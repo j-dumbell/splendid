@@ -32,4 +32,8 @@ func TestFilterCards(t *testing.T) {
 	if !reflect.DeepEqual([]Card{cards[0]}, FilterCards(cards, f)) {
 		t.Fail()
 	}
+
+	if reflect.DeepEqual([]Card{cards[1]}, FilterCards(cards, f)) {
+		t.Fail()
+	}
 }
