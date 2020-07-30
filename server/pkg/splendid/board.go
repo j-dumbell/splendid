@@ -1,8 +1,9 @@
 package splendid
 
 import (
-	"math/rand"
-	"reflect"
+	"encoding/csv"
+	"io"
+	"os"
 )
 
 type Board struct {
@@ -13,15 +14,36 @@ type Board struct {
 	Bank   map[Resource]int
 }
 
-func Shuffle(arr interface{}, seed int64) interface{} {
-	arrType := reflect.TypeOf(arr)
-	arrValue := reflect.ValueOf(arr)
-	arrLength := arrValue.Len()
-	arrRand := reflect.MakeSlice(arrType, 0, 0)
-	r := rand.New(rand.NewSource(seed))
-	perms := r.Perm(arrLength)
-	for _, v := range perms {
-		arrRand = reflect.Append(arrRand, arrValue.Index(v))
+func ReadCards(path string) ([]Card, error) {
+	csvfile, err := os.Open(path)
+	if err != nil {
+		return nil, err
 	}
-	return arrRand.Interface()
+	r := csv.NewReader(csvfile)
+	var cards []Card
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		card := Card{
+			Id: len(cards)+1,
+			Tier: StringToInt(record[0]),
+			Points: StringToInt(record[2]),
+			Cost: map[Resource]int{
+				Black: StringToInt(record[3]),
+				White: StringToInt(record[4]),
+				Red: StringToInt(record[5]),
+				Blue: StringToInt(record[6]),
+				Green: StringToInt(record[7]),
+			},
+			Income: MapResource(record[1]),
+			IsPublic: false,
+		}
+		cards = append(cards, card)
+	}
+	return cards, err
 }

@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
+	"golang.org/x/net/websocket"
 	"net/http"
 	"strconv"
 
 	"github.com/j-dumbell/splendid/server/api"
-
-	"golang.org/x/net/websocket"
 )
 
 func main() {

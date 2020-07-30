@@ -7,7 +7,11 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      #Add tests here when we have some
+      - run:
+          name: test
+          command: |
+            cd server && \
+            go test ./...
       - run:
           name: build
           command: |
