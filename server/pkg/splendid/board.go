@@ -2,6 +2,7 @@ package splendid
 
 import "github.com/j-dumbell/splendid/server/pkg/util"
 
+// Board represents the game board
 type Board struct {
 	Deck1  []Card
 	Deck2  []Card
