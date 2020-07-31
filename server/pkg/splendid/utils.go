@@ -1,10 +1,26 @@
 package splendid
 
 import (
+	"encoding/csv"
 	"math/rand"
+	"os"
 	"reflect"
 	"strconv"
 )
+
+// ReadCSV parses and returns a CSV file from a given path
+func ReadCSV(path string) ([][]string, error) {
+	csvfile, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	r := csv.NewReader(csvfile)
+	records, err := r.ReadAll()
+	if err != nil {
+		return nil, err
+	}
+	return records, err
+}
 
 func Shuffle(arr interface{}, seed int64) interface{} {
 	arrType := reflect.TypeOf(arr)
