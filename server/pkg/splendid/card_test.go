@@ -38,25 +38,44 @@ func TestFilterCards(t *testing.T) {
 	}
 }
 
-func TestCreateCard(t *testing.T) {
-	csvRow := []string{"1", "Black", "0", "0", "1", "1", "1", "1"}
-
-	expectedCard := Card{
-		ID:     1,
-		Tier:   1,
-		Points: 0,
-		Cost: map[Resource]int{
-			Black: 0,
-			White: 1,
-			Red:   1,
-			Blue:  1,
-			Green: 1,
-		},
-		Income:   MapResource("Black"),
-		IsPublic: false,
+func TestCreateCards(t *testing.T) {
+	csvRows := [][]string{
+		{"1", "Black", "0", "0", "1", "1", "1", "1"},
+		{"2", "Red", "1", "1", "1", "1", "0", "0"},
 	}
 
-	if !reflect.DeepEqual(CreateCard(csvRow, 0), expectedCard) {
+	expectedCards := []Card{
+		{
+			ID:     1,
+			Tier:   1,
+			Points: 0,
+			Cost: map[Resource]int{
+				Black: 0,
+				White: 1,
+				Red:   1,
+				Blue:  1,
+				Green: 1,
+			},
+			Income:   MapResource("Black"),
+			IsPublic: false,
+		},
+		{
+			ID:     2,
+			Tier:   2,
+			Points: 1,
+			Cost: map[Resource]int{
+				Black: 1,
+				White: 1,
+				Red:   1,
+				Blue:  0,
+				Green: 0,
+			},
+			Income:   MapResource("Red"),
+			IsPublic: false,
+		},
+	}
+
+	if !reflect.DeepEqual(CreateCards(csvRows), expectedCards) {
 		t.Fail()
 	}
 }

@@ -10,8 +10,7 @@ type Card struct {
 	IsPublic bool
 }
 
-// CreateCard creates a Card struct from a CSV row of data
-func CreateCard(row []string, i int) Card {
+func createCard(row []string, i int) Card {
 	return Card{
 		ID:     i + 1,
 		Tier:   StringToInt(row[0]),
@@ -26,6 +25,15 @@ func CreateCard(row []string, i int) Card {
 		Income:   MapResource(row[1]),
 		IsPublic: false,
 	}
+}
+
+// CreateCards creates a list of Card structs from CSV data
+func CreateCards(rows [][]string) []Card {
+	var cards []Card
+	for i, row := range rows {
+		cards = append(cards, createCard(row, i))
+	}
+	return cards
 }
 
 // FilterCards returns a slice of Card structs that pass the
