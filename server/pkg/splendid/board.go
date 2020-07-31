@@ -10,12 +10,14 @@ type Board struct {
 	Bank   map[Resource]int
 }
 
+// FilterFn returns a card tier filter function
 func FilterFn(tier int) func(c Card) bool {
 	return func(c Card) bool {
 		return c.Tier == tier
 	}
 }
 
+// CreateDecks Read card/elite records from csv and instantiate decks
 func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, []Elite) {
 	cardRows, _ := util.ReadCSV(cardsPath)
 	cards := CreateCards(cardRows)
