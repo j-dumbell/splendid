@@ -7,7 +7,7 @@ import (
 
 func TestFilterCards(t *testing.T) {
 	cards := []Card{
-		Card{
+		{
 			ID:       1,
 			Tier:     1,
 			Points:   10,
@@ -15,7 +15,7 @@ func TestFilterCards(t *testing.T) {
 			Income:   Black,
 			IsPublic: true,
 		},
-		Card{
+		{
 			ID:       1,
 			Tier:     2,
 			Points:   10,
@@ -46,30 +46,18 @@ func TestCreateCards(t *testing.T) {
 
 	expectedCards := []Card{
 		{
-			ID:     1,
-			Tier:   1,
-			Points: 0,
-			Cost: map[Resource]int{
-				Black: 0,
-				White: 1,
-				Red:   1,
-				Blue:  1,
-				Green: 1,
-			},
+			ID:       1,
+			Tier:     1,
+			Points:   0,
+			Cost:     map[Resource]int{Black: 0, White: 1, Red: 1, Blue: 1, Green: 1},
 			Income:   MapResource("Black"),
 			IsPublic: false,
 		},
 		{
-			ID:     2,
-			Tier:   2,
-			Points: 1,
-			Cost: map[Resource]int{
-				Black: 1,
-				White: 1,
-				Red:   1,
-				Blue:  0,
-				Green: 0,
-			},
+			ID:       2,
+			Tier:     2,
+			Points:   1,
+			Cost:     map[Resource]int{Black: 1, White: 1, Red: 1, Blue: 0, Green: 0},
 			Income:   MapResource("Red"),
 			IsPublic: false,
 		},
