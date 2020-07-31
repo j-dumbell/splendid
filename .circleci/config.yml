@@ -16,7 +16,7 @@ jobs:
           name: build
           command: |
             cd server && \
-            go build cmd/main.go
+            go build main.go
 
 
   build-and-test-client:
