@@ -1,4 +1,4 @@
-package splendid
+package util
 
 import (
 	"reflect"
