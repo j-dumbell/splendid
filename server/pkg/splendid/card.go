@@ -1,5 +1,6 @@
 package splendid
 
+// Card represents a development card
 type Card struct {
 	ID       int
 	Tier     int
@@ -9,7 +10,7 @@ type Card struct {
 	IsPublic bool
 }
 
-// CreateCard will create a slice of Cards from a CSV data
+// CreateCard creates a Card struct from a CSV row of data
 func CreateCard(row []string, i int) Card {
 	return Card{
 		ID:     i + 1,
@@ -27,6 +28,8 @@ func CreateCard(row []string, i int) Card {
 	}
 }
 
+// FilterCards returns a slice of Card structs that pass the
+// test implemented by the provided function
 func FilterCards(cards []Card, f func(Card) bool) []Card {
 	var filtered []Card
 	for _, v := range cards {
