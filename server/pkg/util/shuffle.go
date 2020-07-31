@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// Shuffle will randomise items in a list
 func Shuffle(arr interface{}, seed int64) interface{} {
 	arrType := reflect.TypeOf(arr)
 	arrValue := reflect.ValueOf(arr)
