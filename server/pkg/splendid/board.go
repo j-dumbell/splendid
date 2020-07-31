@@ -16,14 +16,14 @@ func FilterFn(tier int) func(c Card) bool {
 	}
 }
 
-func createDecks() ([]Card, []Card, []Card, []Elite) {
-	cardRows, _ := util.ReadCSV("config/cards.csv")
+func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, []Elite) {
+	cardRows, _ := util.ReadCSV(cardPath)
 	cards := CreateCards(cardRows)
 	deck1 := FilterCards(cards, FilterFn(1))
 	deck2 := FilterCards(cards, FilterFn(2))
 	deck3 := FilterCards(cards, FilterFn(3))
 
-	eliteRows, _ := util.ReadCSV("config/elites.csv")
+	eliteRows, _ := util.ReadCSV(elitePath)
 	elites := CreateElites(eliteRows)
 
 	return deck1, deck2, deck3, elites
