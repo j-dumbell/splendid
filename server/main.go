@@ -13,8 +13,9 @@ import (
 )
 
 func main() {
-	deck1, deck2, deck3, elites := splendid.CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
-	fmt.Println("Starting on port "+strconv.Itoa(config.Port), deck1, deck2, deck3, elites)
+	splendid.CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
+
+	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
 	http.HandleFunc("/health", api.Health)
 	http.Handle("/", websocket.Handler(api.WebSocket))
 	http.ListenAndServe(":"+strconv.Itoa(config.Port), nil)
