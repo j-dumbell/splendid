@@ -8,9 +8,7 @@ import (
 )
 
 // Board represents the game board
-type Board interface{}
-
-type board struct {
+type Board struct {
 	Deck1  []Card
 	Deck2  []Card
 	Deck3  []Card
@@ -42,7 +40,7 @@ func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, [
 // NewBoard instantiates a new game board
 func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
 	seed := time.Now().Unix()
-	return board{
+	return Board{
 		Deck1:  util.Shuffle(deck1, seed).([]Card),
 		Deck2:  util.Shuffle(deck2, seed).([]Card),
 		Deck3:  util.Shuffle(deck3, seed).([]Card),
