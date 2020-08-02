@@ -1,6 +1,11 @@
 package splendid
 
-import "github.com/j-dumbell/splendid/server/pkg/util"
+import (
+	"time"
+
+	"github.com/j-dumbell/splendid/server/config"
+	"github.com/j-dumbell/splendid/server/pkg/util"
+)
 
 // Board represents the game board
 type Board struct {
@@ -30,4 +35,23 @@ func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, [
 	elites := CreateElites(eliteRows)
 
 	return deck1, deck2, deck3, elites
+}
+
+// NewBoard instantiates a new game board
+func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
+	seed := time.Now().Unix()
+	return Board{
+		Deck1:  util.Shuffle(deck1, seed+1).([]Card),
+		Deck2:  util.Shuffle(deck2, seed+2).([]Card),
+		Deck3:  util.Shuffle(deck3, seed+3).([]Card),
+		Elites: util.Shuffle(elites, seed).([]Elite),
+		Bank: map[Resource]int{
+			Black:  config.ResourceDefault,
+			White:  config.ResourceDefault,
+			Red:    config.ResourceDefault,
+			Blue:   config.ResourceDefault,
+			Green:  config.ResourceDefault,
+			Yellow: config.YellowDefault,
+		},
+	}
 }
