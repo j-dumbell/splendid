@@ -45,13 +45,13 @@ func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
 		Deck2:  util.Shuffle(deck2, seed+2).([]Card),
 		Deck3:  util.Shuffle(deck3, seed+3).([]Card),
 		Elites: util.Shuffle(elites, seed).([]Elite),
-		Bank: map[*Resource]int{
-			&Black:  config.ResourceDefault,
-			&White:  config.ResourceDefault,
-			&Red:    config.ResourceDefault,
-			&Blue:   config.ResourceDefault,
-			&Green:  config.ResourceDefault,
-			&Yellow: config.YellowDefault,
+		Bank: map[Resource]int{
+			Black:  config.ResourceDefault,
+			White:  config.ResourceDefault,
+			Red:    config.ResourceDefault,
+			Blue:   config.ResourceDefault,
+			Green:  config.ResourceDefault,
+			Yellow: config.YellowDefault,
 		},
 	}
 }

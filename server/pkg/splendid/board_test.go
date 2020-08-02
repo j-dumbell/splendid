@@ -7,10 +7,10 @@ import (
 func TestFilterFn(t *testing.T) {
 	i := 1
 	card := Card{
-		ID: 1,
-		Tier: 1,
+		ID:     1,
+		Tier:   1,
 		Points: 1,
-		Cost: map[Resource]int{Black: 1},
+		Cost:   map[Resource]int{Black: 1},
 	}
 	filter1 := FilterFn(i)
 	if !filter1(card) {
@@ -33,7 +33,7 @@ func TestNewBoard(t *testing.T) {
 			ID:     1,
 			Tier:   1,
 			Points: 1,
-			Cost:   map[*Resource]int{&Black: 1},
+			Cost:   map[Resource]int{Black: 1},
 		},
 	}
 
@@ -43,7 +43,7 @@ func TestNewBoard(t *testing.T) {
 			{
 				ID:     1,
 				Points: 3,
-				Cost:   map[*Resource]int{&Black: 0, &White: 0, &Red: 4, &Blue: 0, &Green: 4},
+				Cost:   map[Resource]int{Black: 0, White: 0, Red: 4, Blue: 0, Green: 4},
 			},
 		},
 	)
