@@ -47,9 +47,7 @@ export const useWebSocket = (path: string) => {
     return () => ws.current && ws.current.close();
   }, [path]);
 
-  const send = (message: any) => ws.current?.send(
-    JSON.stringify(message)
-  );
+  const send = (message: any) => ws.current?.send(JSON.stringify(message));
 
   return [loading, error, message, send];
 };
