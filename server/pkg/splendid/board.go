@@ -41,9 +41,9 @@ func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, [
 func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
 	seed := time.Now().Unix()
 	return Board{
-		Deck1:  util.Shuffle(deck1, seed).([]Card),
-		Deck2:  util.Shuffle(deck2, seed).([]Card),
-		Deck3:  util.Shuffle(deck3, seed).([]Card),
+		Deck1:  util.Shuffle(deck1, seed+1).([]Card),
+		Deck2:  util.Shuffle(deck2, seed+2).([]Card),
+		Deck3:  util.Shuffle(deck3, seed+3).([]Card),
 		Elites: util.Shuffle(elites, seed).([]Elite),
 		Bank: map[*Resource]int{
 			&Black:  config.ResourceDefault,
