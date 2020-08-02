@@ -2,11 +2,12 @@ FROM golang:latest
 
 WORKDIR /app
 
-COPY cmd cmd/
 COPY api api/
-COPY go.mod ./
+COPY config config/
+COPY pkg pkg/
+COPY main.go go.mod go.sum ./
 
-RUN go build -o build/main cmd/main.go
+RUN go build -o build/main .
 
 EXPOSE 8080
 
