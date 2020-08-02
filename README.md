@@ -1,21 +1,21 @@
 # Splendid
 
-A bootleg version of the board game, Splendor
+A bootleg version of the board game Splendor
 
-## Client
+### Client
 ```bash
 cd client
 yarn install
 yarn start
 ```
 
-## Server
+### Server
 ```bash
 cd server
 go run .
 ```
 
-#### Testing websockets
+### Client and Server together
 With both the client and server running (either with `docker-compose up` or the individual commands as listed above)
 - go to `localhost:3000`
 - open the inspector
