@@ -18,9 +18,6 @@ type board struct {
 	Bank   map[Resource]int
 }
 
-var Deck1, Deck2, Deck3 []Card
-var Elites []Elite
-
 // FilterFn returns a card tier filter function
 func FilterFn(tier int) func(c Card) bool {
 	return func(c Card) bool {
@@ -29,15 +26,17 @@ func FilterFn(tier int) func(c Card) bool {
 }
 
 // CreateDecks Read card/elite records from csv and instantiate decks
-func CreateDecks(cardsPath string, elitesPath string) {
+func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, []Elite) {
 	cardRows, _ := util.ReadCSV(cardsPath)
 	cards := CreateCards(cardRows)
-	Deck1 = FilterCards(cards, FilterFn(1))
-	Deck2 = FilterCards(cards, FilterFn(2))
-	Deck3 = FilterCards(cards, FilterFn(3))
+	deck1 := FilterCards(cards, FilterFn(1))
+	deck2 := FilterCards(cards, FilterFn(2))
+	deck3 := FilterCards(cards, FilterFn(3))
 
 	eliteRows, _ := util.ReadCSV(elitesPath)
-	Elites = CreateElites(eliteRows)
+	elites := CreateElites(eliteRows)
+
+	return deck1, deck2, deck3, elites
 }
 
 // NewBoard instantiates a new game board

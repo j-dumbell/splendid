@@ -22,28 +22,30 @@ type Response struct {
 }
 
 // WebSocket handles a websocket connection
-func WebSocket(ws *websocket.Conn) {
-	for {
-		var p Payload
-		var board splendid.Board
+func WebSocket(deck1, deck2, deck3 []splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
+	return func(ws *websocket.Conn) {
+		for {
+			var p Payload
+			var board splendid.Board
 
-		err := websocket.JSON.Receive(ws, &p)
+			err := websocket.JSON.Receive(ws, &p)
 
-		if err != nil {
-			fmt.Println("ws end:", err)
-			return
+			if err != nil {
+				fmt.Println("ws end:", err)
+				return
+			}
+
+			if p.Message == "new game" {
+				board = splendid.NewBoard(deck1, deck2, deck3, elites)
+			}
+
+			r := Response{
+				Timestamp: time.Now().String(),
+				Payload:   &Payload{p.Message},
+				Board:     fmt.Sprintf("%+v", board),
+			}
+
+			websocket.JSON.Send(ws, r)
 		}
-
-		if p.Message == "new game" {
-			board = splendid.NewBoard(splendid.Deck1, splendid.Deck2, splendid.Deck3, splendid.Elites)
-		}
-
-		r := Response{
-			Timestamp: time.Now().String(),
-			Payload:   &Payload{p.Message},
-			Board:     fmt.Sprintf("%+v", board),
-		}
-
-		websocket.JSON.Send(ws, r)
 	}
 }
