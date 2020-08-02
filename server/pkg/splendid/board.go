@@ -49,6 +49,8 @@ func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
 			&Black:  config.ResourceDefault,
 			&White:  config.ResourceDefault,
 			&Red:    config.ResourceDefault,
+			&Blue:   config.ResourceDefault,
+			&Green:  config.ResourceDefault,
 			&Yellow: config.ResourceDefault,
 		},
 	}
