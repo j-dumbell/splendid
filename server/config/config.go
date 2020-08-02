@@ -10,4 +10,7 @@ var CardsCSVPath string = "config/cards.csv"
 var ElitesCSVPath string = "config/elites.csv"
 
 // ResourceDefault is the default amount for each Resource
-var ResourceDefault int = 6
+var ResourceDefault int = 7
+
+// YellowDefault is the default amount for Gold Resources
+var YellowDefault int = 5
