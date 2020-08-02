@@ -1,6 +1,8 @@
 import React from "react";
 import JSONPretty from "react-json-pretty";
 
+import "./App.css";
+
 import { useWebSocket } from "./hooks/websocket";
 
 function App() {
