@@ -21,5 +21,5 @@ With both the client and server running (either with `docker-compose up` or the 
 - open the inspector
 - type and send
 ```js
-  ws.send(JSON.stringify({ message: "new game" }))
+ws.send(JSON.stringify({ message: "new game" }))
 ```
