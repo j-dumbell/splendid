@@ -24,18 +24,18 @@ var Green = Resource{Name: "Green"}
 var Yellow = Resource{Name: "Yellow"}
 
 // MapResource maps a string to a Resource
-func MapResource(s string) *Resource {
+func MapResource(s string) Resource {
 	switch s {
 	case "Black":
-		return &Black
+		return Black
 	case "White":
-		return &White
+		return White
 	case "Red":
-		return &Red
+		return Red
 	case "Blue":
-		return &Blue
+		return Blue
 	case "Green":
-		return &Green
+		return Green
 	default:
 		panic("Unknown resource")
 	}

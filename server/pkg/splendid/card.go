@@ -7,8 +7,8 @@ type Card struct {
 	ID       int
 	Tier     int
 	Points   int
-	Cost     map[*Resource]int
-	Income   *Resource
+	Cost     map[Resource]int
+	Income   Resource
 	IsPublic bool
 }
 
@@ -20,12 +20,12 @@ func CreateCards(rows [][]string) []Card {
 			ID:     i + 1,
 			Tier:   util.StringToInt(row[0]),
 			Points: util.StringToInt(row[2]),
-			Cost: map[*Resource]int{
-				&Black: util.StringToInt(row[3]),
-				&White: util.StringToInt(row[4]),
-				&Red:   util.StringToInt(row[5]),
-				&Blue:  util.StringToInt(row[6]),
-				&Green: util.StringToInt(row[7]),
+			Cost: map[Resource]int{
+				Black: util.StringToInt(row[3]),
+				White: util.StringToInt(row[4]),
+				Red:   util.StringToInt(row[5]),
+				Blue:  util.StringToInt(row[6]),
+				Green: util.StringToInt(row[7]),
 			},
 			Income:   MapResource(row[1]),
 			IsPublic: false,
