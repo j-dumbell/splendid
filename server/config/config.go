@@ -1,7 +1,7 @@
 package config
 
 // Port is the port exposed for the web server
-var Port int = 8000
+var Port int = 8080
 
 // CardsCSVPath is the relative location for the CSV to populate Cards
 var CardsCSVPath string = "config/cards.csv"
