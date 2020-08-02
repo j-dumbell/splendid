@@ -1,14 +1,13 @@
-FROM golang:latest
+FROM golang:latest AS build-env
 
 WORKDIR /app
+COPY . .
+RUN go build -o goapp .
 
-COPY api api/
-COPY config config/
-COPY pkg pkg/
-COPY main.go go.mod go.sum ./
-
-RUN go build -o build/main .
+FROM alpine
+WORKDIR /app
+COPY --from=build-env /app/goapp goapp
 
 EXPOSE 8080
 
-CMD ./build/main
+CMD .goapp
