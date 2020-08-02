@@ -8,7 +8,7 @@ type Board struct {
 	Deck2  []Card
 	Deck3  []Card
 	Elites []Elite
-	Bank   map[*Resource]int
+	Bank   map[Resource]int
 }
 
 // FilterFn returns a card tier filter function
