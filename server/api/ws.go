@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -9,40 +10,49 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/splendid"
 )
 
-// Payload represents the JSON payload received
+//Payload represents the received JSON
 type Payload struct {
-	Message string `json:"message"`
+	Action string `json:"action"`
+	Values json.RawMessage `json."value"`
 }
 
 // Response represents the JSON response
 type Response struct {
-	*Payload
 	Timestamp string `json:"timestamp"`
-	Board     string `json:"board"`
+	Game     string `json:"game"`
+}
+
+type JoinGame struct {
+	Name string `json:"name"`
 }
 
 // WebSocket handles a websocket connection
 func WebSocket(deck1, deck2, deck3 []splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
 	return func(ws *websocket.Conn) {
+		var game splendid.Game
 		for {
 			var p Payload
-			var board splendid.Board
-
 			err := websocket.JSON.Receive(ws, &p)
-
 			if err != nil {
 				fmt.Println("ws end:", err)
 				return
 			}
 
-			if p.Message == "new game" {
-				board = splendid.NewBoard(deck1, deck2, deck3, elites)
+			switch p."Action" {
+			case "join_game":
+				var j JoinGame
+				json.Unmarshal(p.values, j)
+				player := splendid.NewPlayer(j.Name)
+				game, _ = splendid.AddPlayer(game, player)
+			case "start_game":
+				board := splendid.NewBoard(deck1, deck2, deck3, elites)
+				setBoard := splendid.UdateBoard(game, board)
+				game := splendid.FirstPlayer(setBoard)
 			}
 
 			r := Response{
 				Timestamp: time.Now().String(),
-				Payload:   &Payload{p.Message},
-				Board:     fmt.Sprintf("%+v", board),
+				Board:     fmt.Sprintf("%+v", game),
 			}
 
 			websocket.JSON.Send(ws, r)
