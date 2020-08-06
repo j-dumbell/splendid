@@ -9,4 +9,4 @@ COPY --from=builder app/goapp .
 
 EXPOSE 8080
 
-CMD "./goapp"
+CMD ./goapp
