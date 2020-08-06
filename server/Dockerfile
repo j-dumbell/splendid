@@ -1,13 +1,12 @@
-FROM golang:latest AS build-env
-
+FROM golang:latest AS builder
 WORKDIR /app
 COPY . .
-RUN go build -o goapp .
+RUN CGO_ENABLED=0 GOOS=linux go build -o goapp .
 
-FROM alpine
+FROM alpine:latest
 WORKDIR /app
-COPY --from=build-env /app/goapp goapp
+COPY --from=builder app/goapp .
 
 EXPOSE 8080
 
-CMD .goapp
+CMD ./goapp
