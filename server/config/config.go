@@ -7,3 +7,5 @@ var ElitesCSVPath string = "config/elites.csv"
 
 var ResourceDefault int = 7
 var YellowDefault int = 5
+
+var MaxPlayersDefault int = 4

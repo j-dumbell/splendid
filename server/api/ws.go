@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"splendid/server/config"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -10,18 +11,19 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/splendid"
 )
 
-//Payload represents the received JSON
+// Payload represents the received JSON
 type Payload struct {
-	Action string `json:"action"`
+	Action string          `json:"action"`
 	Values json.RawMessage `json."value"`
 }
 
 // Response represents the JSON response
 type Response struct {
 	Timestamp string `json:"timestamp"`
-	Game     string `json:"game"`
+	Game      string `json:"game"`
 }
 
+// JoinGame represents the "join_game" values
 type JoinGame struct {
 	Name string `json:"name"`
 }
@@ -38,21 +40,21 @@ func WebSocket(deck1, deck2, deck3 []splendid.Card, elites []splendid.Elite) fun
 				return
 			}
 
-			switch p."Action" {
+			switch p.Action {
 			case "join_game":
 				var j JoinGame
-				json.Unmarshal(p.values, j)
+				json.Unmarshal(p.Values, j)
 				player := splendid.NewPlayer(j.Name)
-				game, _ = splendid.AddPlayer(game, player)
+				game.AddPlayer(player, config.MaxPlayersDefault)
 			case "start_game":
 				board := splendid.NewBoard(deck1, deck2, deck3, elites)
-				setBoard := splendid.UdateBoard(game, board)
-				game := splendid.FirstPlayer(setBoard)
+				game.SetBoard(board)
+				game.SetFirstPlayer(time.Now().Unix())
 			}
 
 			r := Response{
 				Timestamp: time.Now().String(),
-				Board:     fmt.Sprintf("%+v", game),
+				Game:      fmt.Sprintf("%+v", game),
 			}
 
 			websocket.JSON.Send(ws, r)

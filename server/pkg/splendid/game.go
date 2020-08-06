@@ -2,6 +2,7 @@ package splendid
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 )
 
@@ -12,22 +13,25 @@ type Game struct {
 	Board        Board
 }
 
-func AddPlayer(game Game, player Player, max int) (Game, error) {
-	if len(game.Players) >= max {
-		return Game{}, errors.New("game full")
+// ddPlayer adds the provided player to game, as long as there's space
+func (g Game) AddPlayer(player Player, max int) error {
+	if len(g.Players) >= max {
+		return errors.New("game full")
 	}
-	game.Players = append(game.Players, player)
-	return game, nil
+	g.Players = append(g.Players, player)
+	return nil
 }
 
-func UpdateBoard(game Game, board Board) (Game) {
-	game.Board = board
-	return game
+// SetBoard updates the game with provided board
+func (g Game) SetBoard(board Board) {
+	g.Board = board
 }
 
-func FirstPlayer(game Game) Game {
-	players := game.Players
-	index := rand.Intn(len(players))
-	game.ActivePlayer = players[index]
-	return game
+// SetFirstPlayer randomly sets the active player
+func (g Game) SetFirstPlayer(seed int) {
+	r := rand.New(rand.NewSource(seed))
+	players := g.Players
+	index := r.Intn(len(players))
+	fmt.Println(index)
+	g.ActivePlayer = players[index]
 }
