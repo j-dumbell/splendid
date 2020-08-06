@@ -7,3 +7,12 @@ type Player struct {
 	ReservedHand []Card
 	Bank         map[Resource]int
 }
+
+func NewPlayer(name string) Player {
+	return Player{
+		Name: name,
+		ActiveHand: []Card{},
+		ReservedHand: []Card{},
+		Bank: map[Resource]int{},
+	}
+}
