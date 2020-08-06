@@ -14,24 +14,24 @@ type Game struct {
 }
 
 // ddPlayer adds the provided player to game, as long as there's space
-func (g Game) AddPlayer(player Player, max int) error {
+func (g *Game) AddPlayer(player Player, max int) error {
 	if len(g.Players) >= max {
 		return errors.New("game full")
 	}
 	g.Players = append(g.Players, player)
+	fmt.Println(g)
 	return nil
 }
 
 // SetBoard updates the game with provided board
-func (g Game) SetBoard(board Board) {
+func (g *Game) SetBoard(board Board) {
 	g.Board = board
 }
 
 // SetFirstPlayer randomly sets the active player
-func (g Game) SetFirstPlayer(seed int) {
+func (g *Game) SetFirstPlayer(seed int64) {
 	r := rand.New(rand.NewSource(seed))
 	players := g.Players
 	index := r.Intn(len(players))
-	fmt.Println(index)
 	g.ActivePlayer = players[index]
 }
