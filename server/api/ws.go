@@ -3,11 +3,11 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/j-dumbell/splendid/server/config"
 	"time"
 
 	"golang.org/x/net/websocket"
 
+	"github.com/j-dumbell/splendid/server/config"
 	"github.com/j-dumbell/splendid/server/pkg/splendid"
 )
 

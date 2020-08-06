@@ -13,7 +13,7 @@ type Game struct {
 	Board        Board
 }
 
-// ddPlayer adds the provided player to game, as long as there's space
+// AddPlayer adds the provided player to game, as long as there's space
 func (g *Game) AddPlayer(player Player, max int) error {
 	if len(g.Players) >= max {
 		return errors.New("game full")

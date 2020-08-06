@@ -17,8 +17,8 @@ func TestGame_AddPlayer(t *testing.T) {
 	}
 
 	g2 := g
-	err2 := g2.AddPlayer(p2, 1)
-	if err2 == nil {
+	err := g2.AddPlayer(p2, 1)
+	if err == nil {
 		t.Fail()
 	}
 }
