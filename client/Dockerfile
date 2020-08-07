@@ -1,12 +1,11 @@
-FROM node:12-alpine
-
-WORKDIR /code
-
-COPY package.json yarn.lock tsconfig.json ./
+FROM node:12-alpine AS builder
+WORKDIR /app
+COPY . .
 RUN yarn install --frozen-lockfile
+RUN yarn build
 
-COPY public public/
-COPY src src/
-
-EXPOSE 3000
-CMD yarn start
+FROM nginx:alpine
+COPY --from=builder /app/build/ /usr/share/nginx/html
+RUN ls
+EXPOSE 80
+CMD nginx -g "daemon off;"
