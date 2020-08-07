@@ -6,6 +6,5 @@ RUN yarn build
 
 FROM nginx:alpine
 COPY --from=builder /app/build/ /usr/share/nginx/html
-RUN ls
 EXPOSE 80
 CMD nginx -g "daemon off;"
