@@ -14,7 +14,7 @@ import (
 // Payload represents the received JSON
 type Payload struct {
 	Action string          `json:"action"`
-	Values json.RawMessage `json."value"`
+	Values json.RawMessage `json:"value"`
 }
 
 // Response represents the JSON response
@@ -43,7 +43,7 @@ func WebSocket(deck1, deck2, deck3 []splendid.Card, elites []splendid.Elite) fun
 			switch p.Action {
 			case "join_game":
 				var j JoinGame
-				json.Unmarshal(p.Values, j)
+				json.Unmarshal(p.Values, &j)
 				player := splendid.NewPlayer(j.Name)
 				game.AddPlayer(player, config.MaxPlayersDefault)
 			case "start_game":
