@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"reflect"
 )
 
 // Game represents the state of a current game
@@ -49,41 +48,27 @@ func LastCards(cards []Card, index int) ([]Card, error) {
 	return cards[lowerBound:], nil
 }
 
-//VisibleCards returns the visible cards from each deck
-func (g *Game) VisibleCards(capacity int) ([]Card, []Card, []Card) {
-	board := g.Board
-	visDeck1, _ := LastCards(board.Deck1, capacity)
-	visDeck2, _ := LastCards(board.Deck2, capacity)
-	visDeck3, _ := LastCards(board.Deck3, capacity)
-	return visDeck1, visDeck2, visDeck3
-}
-
-//GetCard checks whether <id> is visible and returns the corresponding card
-func (g *Game) GetCard(id int, capacity int) (Card, error) {
-	visDeck1, visDeck2, visDeck3 := g.VisibleCards(capacity)
-	visDecks := append(visDeck1, append(visDeck2, visDeck3...)...)
-	for _, v := range visDecks {
-		if v.ID == id {
-			return v, nil
-		}
+func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
+	if playerName != g.ActivePlayer.Name {
+		errors.New("not active player")
 	}
-	return Card{}, errors.New("invalid card selected")
-}
-
-//Checks to see whether <player> can buy the card, then performs the transaction
-func (g *Game) BuyCard(player Player, cardID int, capacity int) error {
-	//Should input param be playerName instead?
-	if g.ActivePlayer != player {
-		return errors.New("not player's turn")
-	}
-	card, err := g.GetCard(cardID, capacity)
+	card, err := g.Board.GetCard(cardID, capacity)
 	if err != nil {
 		return err
 	}
-	for res, amount := range card.Cost {
-		if newAmount := player.Bank[res] - amount; newAmount < 0 {
+	var newPBank map[Resource]int
+	var newGBank map[Resource]int
+	for res, cost := range card.Cost {
+		newAmount := g.ActivePlayer.Bank[res] - cost
+		if newAmount < 0 {
 			return errors.New("can't afford")
 		}
-		//To do - mutate banks.  Use pointers?
+		newPBank[res] = newAmount
+		newGBank[res] = g.Board.Bank[res] + cost
 	}
+	g.ActivePlayer.Bank = newPBank
+	g.Board.Bank = newGBank
+	g.ActivePlayer.ActiveHand = append(g.ActivePlayer.ActiveHand, card)
+
+	return nil
 }

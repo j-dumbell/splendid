@@ -1,6 +1,7 @@
 package splendid
 
 import (
+	"errors"
 	"time"
 
 	"github.com/j-dumbell/splendid/server/config"
@@ -55,3 +56,27 @@ func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
 		},
 	}
 }
+
+//VisibleCards returns the visible cards from each deck
+func (b *Board) VisibleCards(capacity int) ([]Card) {
+	decks := [][]Card{b.Deck1, b.Deck2, b.Deck3}
+	var allVisCards []Card
+	for _, deck := range decks {
+		visCards, _ := LastCards(deck, capacity)
+		allVisCards = append(allVisCards, visCards...)
+	}
+	return allVisCards
+}
+
+//GetCard checks whether <id> is visible and returns the corresponding card
+func (b *Board) GetCard(ID int, capacity int) (Card, error) {
+	cards := b.VisibleCards(capacity)
+	for _, card := range cards {
+		if card.ID == ID {
+			return card, nil
+		}
+	}
+	return Card{}, errors.New("invalid card selected")
+}
+
+func (b *Board) RemoveCard()
