@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"reflect"
 )
 
 // Game represents the state of a current game
@@ -52,7 +53,8 @@ func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
 	if playerName != g.ActivePlayer.Name {
 		errors.New("not active player")
 	}
-	card, err := g.Board.GetCard(cardID, capacity)
+	card, err := GetCard(g.Board.Decks, cardID, capacity)
+	tier := card.Tier
 	if err != nil {
 		return err
 	}
@@ -69,6 +71,12 @@ func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
 	g.ActivePlayer.Bank = newPBank
 	g.Board.Bank = newGBank
 	g.ActivePlayer.ActiveHand = append(g.ActivePlayer.ActiveHand, card)
-
+	var newGDeck []Card
+	for _, v := range g.Board.Decks[tier] {
+		if !reflect.DeepEqual(v, card) {
+			newGDeck = append(newGDeck, v)
+		}
+	}
+	g.Board.Decks[tier] = newGDeck
 	return nil
 }

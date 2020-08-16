@@ -32,3 +32,14 @@ func TestGame_SetFirstPlayer(t *testing.T) {
 		t.Fail()
 	}
 }
+
+//func TestGame_BuyCard(t *testing.T) {
+//	p1 := Player{Name: "Van"}
+//	g := Game{Players: []Player{p1}, ActivePlayer: &p1}
+//
+//	err1 := g.BuyCard("James", 2, 2)
+//	if err1.Error() != "not active player" {
+//		t.Fail()
+//	}
+//
+//}
