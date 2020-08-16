@@ -9,7 +9,7 @@ import (
 // Game represents the state of a current game
 type Game struct {
 	Players      []Player
-	ActivePlayer Player
+	ActivePlayer *Player
 	Board        Board
 }
 
@@ -33,5 +33,5 @@ func (g *Game) SetFirstPlayer(seed int64) {
 	r := rand.New(rand.NewSource(seed))
 	players := g.Players
 	index := r.Intn(len(players))
-	g.ActivePlayer = players[index]
+	g.ActivePlayer = &players[index]
 }

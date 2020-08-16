@@ -28,7 +28,7 @@ func TestGame_SetFirstPlayer(t *testing.T) {
 	p2 := Player{Name: "James"}
 	g := Game{Players: []Player{p1, p2}}
 	g.SetFirstPlayer(1)
-	if !reflect.DeepEqual(g.ActivePlayer, p2) {
+	if !reflect.DeepEqual(g.ActivePlayer, &p2) {
 		t.Fail()
 	}
 }
