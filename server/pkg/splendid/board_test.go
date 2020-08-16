@@ -38,7 +38,7 @@ func TestNewBoard(t *testing.T) {
 	}
 
 	result := NewBoard(
-		deck, deck, deck,
+		map[int][]Card{1: deck},
 		[]Elite{
 			{
 				ID:     1,
