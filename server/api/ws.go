@@ -29,7 +29,7 @@ type JoinGame struct {
 }
 
 // WebSocket handles a websocket connection
-func WebSocket(deck1, deck2, deck3 []splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
+func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
 	return func(ws *websocket.Conn) {
 		var game splendid.Game
 		for {
@@ -47,7 +47,7 @@ func WebSocket(deck1, deck2, deck3 []splendid.Card, elites []splendid.Elite) fun
 				player := splendid.NewPlayer(j.Name)
 				game.AddPlayer(player, config.MaxPlayersDefault)
 			case "start_game":
-				board := splendid.NewBoard(deck1, deck2, deck3, elites)
+				board := splendid.NewBoard(decks, elites)
 				game.SetBoard(board)
 				game.SetFirstPlayer(time.Now().Unix())
 			}

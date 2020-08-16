@@ -10,9 +10,7 @@ import (
 
 // Board represents the game board
 type Board struct {
-	Deck1  []Card
-	Deck2  []Card
-	Deck3  []Card
+	Decks  map[int][]Card
 	Elites []Elite
 	Bank   map[Resource]int
 }
@@ -25,26 +23,32 @@ func FilterFn(tier int) func(c Card) bool {
 }
 
 // CreateDecks Read card/elite records from csv and instantiate decks
-func CreateDecks(cardsPath string, elitesPath string) ([]Card, []Card, []Card, []Elite) {
+func CreateDecks(cardsPath string, elitesPath string) (map[int][]Card, []Elite) {
 	cardRows, _ := util.ReadCSV(cardsPath)
 	cards := CreateCards(cardRows)
-	deck1 := FilterCards(cards, FilterFn(1))
-	deck2 := FilterCards(cards, FilterFn(2))
-	deck3 := FilterCards(cards, FilterFn(3))
+
+	var decks map[int][]Card
+	for i := 1; i <= 3; i++ {
+		decks[i] = FilterCards(cards, FilterFn(i))
+	}
 
 	eliteRows, _ := util.ReadCSV(elitesPath)
 	elites := CreateElites(eliteRows)
 
-	return deck1, deck2, deck3, elites
+	return decks, elites
 }
 
 // NewBoard instantiates a new game board
-func NewBoard(deck1, deck2, deck3 []Card, elites []Elite) Board {
+func NewBoard(decks map[int][]Card, elites []Elite) Board {
 	seed := time.Now().Unix()
+
+	var shuffledDecks map[int][]Card
+	for i := 1; i <= 3; i++ {
+		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]Card)
+	}
+
 	return Board{
-		Deck1:  util.Shuffle(deck1, seed+1).([]Card),
-		Deck2:  util.Shuffle(deck2, seed+2).([]Card),
-		Deck3:  util.Shuffle(deck3, seed+3).([]Card),
+		Decks:  shuffledDecks,
 		Elites: util.Shuffle(elites, seed).([]Elite),
 		Bank: map[Resource]int{
 			Black:  config.ResourceDefault,
