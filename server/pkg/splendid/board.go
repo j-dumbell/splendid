@@ -62,22 +62,29 @@ func NewBoard(decks map[int][]Card, elites []Elite) Board {
 }
 
 //VisibleCards returns the visible cards from each deck
-func (b *Board) VisibleCards(capacity int) ([]Card) {
-	decks := [][]Card{b.Deck1, b.Deck2, b.Deck3}
-	var allVisCards []Card
-	for _, deck := range decks {
-		visCards, _ := LastCards(deck, capacity)
-		allVisCards = append(allVisCards, visCards...)
+func VisibleCards(decks map[int][]Card, capacity int) (map[int][]Card, error) {
+	var visDecks map[int][]Card
+	for tier, deck := range decks {
+		visDeck, err := LastCards(deck, capacity)
+		if err != nil {
+			return nil, err
+		}
+		visDecks[tier] = visDeck
 	}
-	return allVisCards
+	return visDecks, nil
 }
 
 //GetCard checks whether <id> is visible and returns the corresponding card
 func (b *Board) GetCard(ID int, capacity int) (Card, error) {
-	cards := b.VisibleCards(capacity)
-	for _, card := range cards {
-		if card.ID == ID {
-			return card, nil
+	decks, err := VisibleCards(b.Decks, capacity)
+	if err != nil {
+		return Card{}, err
+	}
+	for _, deck := range decks {
+		for _, card := range deck {
+			if card.ID == ID {
+				return card, nil
+			}
 		}
 	}
 	return Card{}, errors.New("invalid card selected")
