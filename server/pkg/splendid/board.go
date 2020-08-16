@@ -27,7 +27,7 @@ func CreateDecks(cardsPath string, elitesPath string) (map[int][]Card, []Elite) 
 	cardRows, _ := util.ReadCSV(cardsPath)
 	cards := CreateCards(cardRows)
 
-	var decks map[int][]Card
+	decks := make(map[int][]Card)
 	for i := 1; i <= 3; i++ {
 		decks[i] = FilterCards(cards, FilterFn(i))
 	}
