@@ -29,3 +29,7 @@ func MapResource(s string) Resource {
 		panic("Unknown resource")
 	}
 }
+
+func NewBank() map[Resource]int {
+	return map[Resource]int{Black: 0, White: 0, Red: 0, Blue: 0, Green: 0, Yellow: 0}
+}

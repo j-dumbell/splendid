@@ -13,6 +13,6 @@ func NewPlayer(name string) Player {
 		Name: name,
 		ActiveHand: []Card{},
 		ReservedHand: []Card{},
-		Bank: map[Resource]int{},
+		Bank: NewBank(),
 	}
 }

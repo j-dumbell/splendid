@@ -50,16 +50,16 @@ func LastCards(cards []Card, index int) ([]Card, error) {
 }
 
 func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
-	if playerName != g.ActivePlayer.Name {
-		errors.New("not active player")
+	if playerName != (*g.ActivePlayer).Name {
+		return errors.New("not active player")
 	}
 	card, err := GetCard(g.Board.Decks, cardID, capacity)
 	tier := card.Tier
 	if err != nil {
 		return err
 	}
-	var newPBank map[Resource]int
-	var newGBank map[Resource]int
+	newPBank := NewBank()
+	newGBank := NewBank()
 	for res, cost := range card.Cost {
 		newAmount := g.ActivePlayer.Bank[res] - cost
 		if newAmount < 0 {
