@@ -2,9 +2,7 @@ package splendid
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
-	"reflect"
 )
 
 // Game represents the state of a current game
@@ -20,7 +18,6 @@ func (g *Game) AddPlayer(player Player, max int) error {
 		return errors.New("game full")
 	}
 	g.Players = append(g.Players, player)
-	fmt.Println(g)
 	return nil
 }
 
@@ -49,6 +46,7 @@ func LastCards(cards []Card, index int) ([]Card, error) {
 	return cards[lowerBound:], nil
 }
 
+// BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
 func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
 	if playerName != (*g.ActivePlayer).Name {
 		return errors.New("not active player")
@@ -58,8 +56,8 @@ func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
 	if err != nil {
 		return err
 	}
-	newPBank := NewBank()
-	newGBank := NewBank()
+	newPBank := g.ActivePlayer.Bank
+	newGBank := g.Board.Bank
 	for res, cost := range card.Cost {
 		newAmount := g.ActivePlayer.Bank[res] - cost
 		if newAmount < 0 {
@@ -70,13 +68,9 @@ func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
 	}
 	g.ActivePlayer.Bank = newPBank
 	g.Board.Bank = newGBank
-	g.ActivePlayer.ActiveHand = append(g.ActivePlayer.ActiveHand, card)
-	var newGDeck []Card
-	for _, v := range g.Board.Decks[tier] {
-		if !reflect.DeepEqual(v, card) {
-			newGDeck = append(newGDeck, v)
-		}
-	}
-	g.Board.Decks[tier] = newGDeck
+
+	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], g.ActivePlayer.ActiveHand)
+	g.Board.Decks[tier] = newDeck
+	g.ActivePlayer.ActiveHand = newHand
 	return nil
 }

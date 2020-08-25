@@ -1,7 +1,6 @@
 package splendid
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -48,21 +47,15 @@ func TestGame_BuyCard(t *testing.T) {
 	g2 := g
 
 	err1 := g1.BuyCard("Tom", 2, 2)
-	if err1.Error() != "not active player" {
+	if err1.Error() != "not active player" || !reflect.DeepEqual(g1, g) {
 		t.Fail()
 	}
 
 	g2.BuyCard("Van", 6, 2)
 	expGBank := map[Resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5}
-	fmt.Println(g2.Board.Bank)
-	if !reflect.DeepEqual(g2.Board.Bank, expGBank) {
+	expPBank := map[Resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3}
+
+	if !(reflect.DeepEqual(g2.Board.Bank, expGBank) && reflect.DeepEqual(g2.ActivePlayer.Bank, expPBank)) {
 		t.Fail()
 	}
-
-	expPBank := map[Resource]int{Blue: 3, Red: 1, Black: 5, Green: 5, White: 5}
-	if !reflect.DeepEqual(g2.ActivePlayer.Bank, expPBank) {
-		t.Fail()
-	}
-
-
 }
