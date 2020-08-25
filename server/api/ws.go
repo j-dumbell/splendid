@@ -29,7 +29,7 @@ type JoinGame struct {
 	Name string `json:"name"`
 }
 
-type BuyGame struct {
+type BuyCard struct {
 	name string `json:"name"`
 	ID	int `json:"id"`
 }
@@ -58,7 +58,7 @@ func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*web
 				game.SetBoard(board)
 				game.SetFirstPlayer(time.Now().Unix())
 			case "buy_card":
-				var b BuyGame
+				var b BuyCard
 				json.Unmarshal(p.Values, &b)
 				err = game.BuyCard(b.name, b.ID, config.BoardCapacity)
 			}
