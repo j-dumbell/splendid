@@ -8,6 +8,13 @@ jobs:
     steps:
       - checkout
       - run:
+          name: tree hash
+          command: |
+            git rev-parse HEAD:server | tee /tmp/server.hash
+      - restore_cache:
+          keys:
+            - v1-tree-{{ checksum "/tmp/server.hash" }}
+      - run:
           name: test
           command: |
             cd server && \
@@ -17,6 +24,10 @@ jobs:
           command: |
             cd server && \
             go build main.go
+      - save_cache:
+          key: v1-tree-{{ checksum "/tmp/tree.hash" }}
+          paths:
+            - build
 
 
   build-and-test-client:
