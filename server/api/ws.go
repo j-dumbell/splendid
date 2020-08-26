@@ -21,7 +21,7 @@ type Payload struct {
 type Response struct {
 	Timestamp string `json:"timestamp"`
 	Game      string `json:"game"`
-	Errors    error `json:"errors"`
+	Errors    error  `json:"errors"`
 }
 
 // JoinGame represents the "join_game" values
