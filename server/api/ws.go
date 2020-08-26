@@ -60,7 +60,7 @@ func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*web
 			case "buy_card":
 				var b BuyCard
 				json.Unmarshal(p.Values, &b)
-				err = game.BuyCard(b.Name, b.CardID, config.BoardCapacity)
+				err = game.BuyCard(b.Name, b.CardID, config.DeckCapacity)
 			}
 
 			r := Response{
