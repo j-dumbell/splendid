@@ -10,4 +10,4 @@ var YellowDefault int = 5
 
 var MaxPlayersDefault int = 4
 
-var BoardCapacity int = 4
+var DeckCapacity int = 4

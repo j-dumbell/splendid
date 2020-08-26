@@ -34,8 +34,8 @@ func (g *Game) SetFirstPlayer(seed int64) {
 	g.ActivePlayer = &players[index]
 }
 
-//LastCards returns the last <index> cards
-func LastCards(cards []Card, index int) ([]Card, error) {
+// lastCards returns the last <index> cards
+func lastCards(cards []Card, index int) ([]Card, error) {
 	if index < 0 {
 		return nil, errors.New("negative index provided")
 	}

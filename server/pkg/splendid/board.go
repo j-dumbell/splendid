@@ -61,11 +61,11 @@ func NewBoard(decks map[int][]Card, elites []Elite) Board {
 	}
 }
 
-//VisibleDeckCards returns the visible cards from each deck
+// VisibleDeckCards returns the visible cards from each deck
 func VisibleDeckCards(decks map[int][]Card, capacity int) (map[int][]Card, error) {
 	visDecks := make(map[int][]Card)
 	for tier, deck := range decks {
-		visDeck, err := LastCards(deck, capacity)
+		visDeck, err := lastCards(deck, capacity)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +74,7 @@ func VisibleDeckCards(decks map[int][]Card, capacity int) (map[int][]Card, error
 	return visDecks, nil
 }
 
-//GetCard checks whether <id> is visible and returns the corresponding card
+// GetCard checks whether <id> is visible and returns the corresponding card
 func GetCard(decks map[int][]Card, ID int, capacity int) (Card, error) {
 	visDecks, err := VisibleDeckCards(decks, capacity)
 	if err != nil {
