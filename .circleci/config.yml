@@ -17,10 +17,13 @@ jobs:
       - run:
           name: test
           command: |
-            cat /tmp/success.txt && \
-            echo "Skipping" ||
-            cd server && \
-            go test ./...
+            if [ test -f /tmp/success.txt ]
+            then
+               echo "skipping"
+            else
+              cd server && go test ./...
+            fi
+
       - run:
           name: build
           command: |
