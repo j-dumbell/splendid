@@ -34,7 +34,7 @@ jobs:
       - save_cache:
           key: v1-tree-{{ checksum "/tmp/server.hash" }}
           paths:
-            - build
+            - /tmp/success.txt
 
 
   build-and-test-client:
