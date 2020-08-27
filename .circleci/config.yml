@@ -24,9 +24,7 @@ jobs:
           command: |
             [ -f /tmp/success.txt ] && echo "skipping" ||
             (cd server && go build main.go)
-      - run:
-          name: write success
-          command: touch /tmp/success.txt
+      - run: touch /tmp/success.txt
       - save_cache:
           key: v1-tree-{{ checksum "/tmp/server.hash" }}
           paths:
