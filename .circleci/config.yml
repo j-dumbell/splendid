@@ -18,7 +18,7 @@ jobs:
           name: test
           command: |
             [ -f /tmp/success.txt ] && echo "skipping" ||
-            cd server && go test ./...
+            (cd server && go test ./...)
 
       - run:
           name: build
