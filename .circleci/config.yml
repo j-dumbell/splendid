@@ -19,14 +19,11 @@ jobs:
           command: |
             [ -f /tmp/success.txt ] && echo "skipping" ||
             (cd server && go test ./...)
-
       - run:
           name: build
           command: |
-            cat /tmp/success.txt && \
-            echo "Skipping" ||
-            cd server && \
-            go build main.go
+            [ -f /tmp/success.txt ] && echo "skipping" ||
+            (cd server && go build main.go)
       - run:
           name: write success
           command: touch /tmp/success.txt
