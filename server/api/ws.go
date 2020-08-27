@@ -61,3 +61,4 @@ func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*web
 		}
 	}
 }
+
