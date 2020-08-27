@@ -21,11 +21,17 @@ type Payload struct {
 type Response struct {
 	Timestamp string `json:"timestamp"`
 	Game      string `json:"game"`
+	Errors    error  `json:"errors"`
 }
 
 // JoinGame represents the "join_game" values
 type JoinGame struct {
 	Name string `json:"name"`
+}
+
+type BuyCard struct {
+	Name   string `json:"name"`
+	CardID int    `json:"cardId"`
 }
 
 // WebSocket handles a websocket connection
@@ -34,7 +40,8 @@ func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*web
 		var game splendid.Game
 		for {
 			var p Payload
-			err := websocket.JSON.Receive(ws, &p)
+			var err error
+			err = websocket.JSON.Receive(ws, &p)
 			if err != nil {
 				fmt.Println("ws end:", err)
 				return
@@ -50,11 +57,16 @@ func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*web
 				board := splendid.NewBoard(decks, elites)
 				game.SetBoard(board)
 				game.SetFirstPlayer(time.Now().Unix())
+			case "buy_card":
+				var b BuyCard
+				json.Unmarshal(p.Values, &b)
+				err = game.BuyCard(b.Name, b.CardID, config.DeckCapacity)
 			}
 
 			r := Response{
 				Timestamp: time.Now().String(),
 				Game:      fmt.Sprintf("%+v", game),
+				Errors:    err,
 			}
 
 			websocket.JSON.Send(ws, r)

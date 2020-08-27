@@ -1,6 +1,10 @@
 package splendid
 
-import "github.com/j-dumbell/splendid/server/pkg/util"
+import (
+	"errors"
+	"github.com/j-dumbell/splendid/server/pkg/util"
+	"reflect"
+)
 
 // Card represents a development card
 type Card struct {
@@ -44,4 +48,19 @@ func FilterCards(cards []Card, f func(Card) bool) []Card {
 		}
 	}
 	return filtered
+}
+
+// MoveCard removes <card> from <fromDeck> and appends to <toDeck>
+func MoveCard(card Card, fromDeck []Card, toDeck []Card) ([]Card, []Card, error) {
+	var newFromDeck []Card
+	for _, deckCard := range fromDeck {
+		if !reflect.DeepEqual(card, deckCard) {
+			newFromDeck = append(newFromDeck, deckCard)
+		}
+	}
+	if len(newFromDeck) == len(fromDeck) {
+		return []Card{}, []Card{}, errors.New("Card does not exist in fromDeck")
+	}
+	newToDeck := append(toDeck, card)
+	return newFromDeck, newToDeck, nil
 }

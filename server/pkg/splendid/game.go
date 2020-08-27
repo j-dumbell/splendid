@@ -2,7 +2,6 @@ package splendid
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 )
 
@@ -19,7 +18,6 @@ func (g *Game) AddPlayer(player Player, max int) error {
 		return errors.New("game full")
 	}
 	g.Players = append(g.Players, player)
-	fmt.Println(g)
 	return nil
 }
 
@@ -34,4 +32,45 @@ func (g *Game) SetFirstPlayer(seed int64) {
 	players := g.Players
 	index := r.Intn(len(players))
 	g.ActivePlayer = &players[index]
+}
+
+// lastCards returns the last <index> cards
+func lastCards(cards []Card, index int) ([]Card, error) {
+	if index < 0 {
+		return nil, errors.New("negative index provided")
+	}
+	lowerBound := len(cards) - index
+	if lowerBound < 0 {
+		return cards, nil
+	}
+	return cards[lowerBound:], nil
+}
+
+// BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
+func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
+	if playerName != (*g.ActivePlayer).Name {
+		return errors.New("not active player")
+	}
+	card, err := GetCard(g.Board.Decks, cardID, capacity)
+	tier := card.Tier
+	if err != nil {
+		return err
+	}
+	newPBank := g.ActivePlayer.Bank
+	newGBank := g.Board.Bank
+	for res, cost := range card.Cost {
+		newAmount := g.ActivePlayer.Bank[res] - cost
+		if newAmount < 0 {
+			return errors.New("can't afford")
+		}
+		newPBank[res] = newAmount
+		newGBank[res] = g.Board.Bank[res] + cost
+	}
+	g.ActivePlayer.Bank = newPBank
+	g.Board.Bank = newGBank
+
+	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], g.ActivePlayer.ActiveHand)
+	g.Board.Decks[tier] = newDeck
+	g.ActivePlayer.ActiveHand = newHand
+	return nil
 }

@@ -67,3 +67,18 @@ func TestCreateCards(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestMoveCard(t *testing.T) {
+	fromDeck := []Card{{ID: 1}, {ID: 2}, {ID: 3}}
+	toDeck := []Card{{ID: 4}, {ID: 5}, {ID: 6}}
+	expFromDeck := []Card{{ID: 2}, {ID: 3}}
+	expToDeck := []Card{{ID: 4}, {ID: 5}, {ID: 6}, {ID: 1}}
+	recFromDeck, recToDeck, _ := MoveCard(Card{ID: 1}, fromDeck, toDeck)
+	if !(reflect.DeepEqual(recFromDeck, expFromDeck) && reflect.DeepEqual(expToDeck, recToDeck)) {
+		t.Fail()
+	}
+	_, _, err := MoveCard(Card{ID: 10}, fromDeck, toDeck)
+	if err == nil {
+		t.Fail()
+	}
+}
