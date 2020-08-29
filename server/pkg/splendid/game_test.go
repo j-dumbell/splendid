@@ -44,8 +44,7 @@ func TestGame_BuyCard(t *testing.T) {
 	g2.BuyCard("Van", 6, 2)
 	expGBank := map[Resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5}
 	expPBank := map[Resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3}
-
-	if !(reflect.DeepEqual(g2.Board.Bank, expGBank) && reflect.DeepEqual(g2.Players[g2.ActivePlayerIndex].Bank, expPBank)) {
+	if !(reflect.DeepEqual(g2.Board.Bank, expGBank) && reflect.DeepEqual(g2.Players[0].Bank, expPBank)) {
 		t.Fail()
 	}
 }
