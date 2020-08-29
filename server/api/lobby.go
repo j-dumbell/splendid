@@ -68,17 +68,9 @@ func (l *Lobby) HandleAction(p Payload) error {
 }
 
 // NewLobby instantiates a blank Lobby
-func NewLobby(d map[int][]splendid.Card, e []splendid.Elite) Lobby {
-	g := splendid.Game{
-		ActivePlayerIndex: 0,
-	}
-	l := Lobby{
+func NewLobby(g splendid.Game) Lobby {
+	return Lobby{
 		Clients: map[string]*websocket.Conn{},
 		Game:    g,
 	}
-
-	board := splendid.NewBoard(d, e)
-	l.Game.SetBoard(board)
-
-	return l
 }

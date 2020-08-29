@@ -12,6 +12,14 @@ type Game struct {
 	Turn              int
 }
 
+// NewGame instantiates a new Game
+func NewGame(d map[int][]Card, e []Elite) Game {
+	return Game{
+		ActivePlayerIndex: 0,
+		Board:             NewBoard(d, e),
+	}
+}
+
 // AddPlayer adds the provided player to game, as long as there's space
 func (g *Game) AddPlayer(player Player, max int) error {
 	if len(g.Players) >= max {
@@ -19,11 +27,6 @@ func (g *Game) AddPlayer(player Player, max int) error {
 	}
 	g.Players = append(g.Players, player)
 	return nil
-}
-
-// SetBoard updates the game with provided board
-func (g *Game) SetBoard(board Board) {
-	g.Board = board
 }
 
 // lastCards returns the last <index> cards
