@@ -2,14 +2,14 @@ package splendid
 
 import (
 	"errors"
-	"math/rand"
 )
 
 // Game represents the state of a current game
 type Game struct {
-	Players      []Player
-	ActivePlayer *Player
-	Board        Board
+	Players           []Player
+	ActivePlayerIndex int
+	Board             Board
+	Turn              int
 }
 
 // AddPlayer adds the provided player to game, as long as there's space
@@ -26,14 +26,6 @@ func (g *Game) SetBoard(board Board) {
 	g.Board = board
 }
 
-// SetFirstPlayer randomly sets the active player
-func (g *Game) SetFirstPlayer(seed int64) {
-	r := rand.New(rand.NewSource(seed))
-	players := g.Players
-	index := r.Intn(len(players))
-	g.ActivePlayer = &players[index]
-}
-
 // lastCards returns the last <index> cards
 func lastCards(cards []Card, index int) ([]Card, error) {
 	if index < 0 {
@@ -48,7 +40,8 @@ func lastCards(cards []Card, index int) ([]Card, error) {
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
 func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
-	if playerName != (*g.ActivePlayer).Name {
+	activePlayer := &g.Players[g.ActivePlayerIndex]
+	if playerName != activePlayer.Name {
 		return errors.New("not active player")
 	}
 	card, err := GetCard(g.Board.Decks, cardID, capacity)
@@ -56,21 +49,31 @@ func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
 	if err != nil {
 		return err
 	}
-	newPBank := g.ActivePlayer.Bank
+	newPBank := activePlayer.Bank
 	newGBank := g.Board.Bank
 	for res, cost := range card.Cost {
-		newAmount := g.ActivePlayer.Bank[res] - cost
+		newAmount := activePlayer.Bank[res] - cost
 		if newAmount < 0 {
 			return errors.New("can't afford")
 		}
 		newPBank[res] = newAmount
 		newGBank[res] = g.Board.Bank[res] + cost
 	}
-	g.ActivePlayer.Bank = newPBank
+	activePlayer.Bank = newPBank
 	g.Board.Bank = newGBank
 
-	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], g.ActivePlayer.ActiveHand)
+	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], activePlayer.ActiveHand)
 	g.Board.Decks[tier] = newDeck
-	g.ActivePlayer.ActiveHand = newHand
+	activePlayer.ActiveHand = newHand
+	g.NextPlayer()
 	return nil
+}
+
+// NextPlayer sets the next activeplayer and updates turn if necessary
+func (g *Game) NextPlayer() {
+	newIndex := (g.ActivePlayerIndex + 1) % len(g.Players)
+	g.ActivePlayerIndex = newIndex
+	if newIndex == 0 {
+		g.Turn += 1
+	}
 }

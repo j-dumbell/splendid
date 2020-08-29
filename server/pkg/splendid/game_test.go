@@ -23,16 +23,6 @@ func TestGame_AddPlayer(t *testing.T) {
 	}
 }
 
-func TestGame_SetFirstPlayer(t *testing.T) {
-	p1 := Player{Name: "Van"}
-	p2 := Player{Name: "James"}
-	g := Game{Players: []Player{p1, p2}}
-	g.SetFirstPlayer(1)
-	if !reflect.DeepEqual(g.ActivePlayer, &p2) {
-		t.Fail()
-	}
-}
-
 func TestGame_BuyCard(t *testing.T) {
 	p1 := Player{Name: "Van", Bank: map[Resource]int{Blue: 3, Red: 3, Black: 3, Green: 3, White: 3}}
 	p2 := Player{Name: "James"}
@@ -42,7 +32,7 @@ func TestGame_BuyCard(t *testing.T) {
 	decks := map[int][]Card{1: deck1, 2: deck2, 3: deck3}
 	bank := map[Resource]int{Blue: 5, Red: 5, Black: 5, Green: 5, White: 5}
 	board := Board{Decks: decks, Bank: bank}
-	g := Game{Players: []Player{p1, p2}, ActivePlayer: &p1, Board: board}
+	g := Game{Players: []Player{p1, p2}, ActivePlayerIndex: 0, Board: board}
 	g1 := g
 	g2 := g
 
@@ -55,7 +45,23 @@ func TestGame_BuyCard(t *testing.T) {
 	expGBank := map[Resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5}
 	expPBank := map[Resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3}
 
-	if !(reflect.DeepEqual(g2.Board.Bank, expGBank) && reflect.DeepEqual(g2.ActivePlayer.Bank, expPBank)) {
+	if !(reflect.DeepEqual(g2.Board.Bank, expGBank) && reflect.DeepEqual(g2.Players[g2.ActivePlayerIndex].Bank, expPBank)) {
 		t.Fail()
 	}
+}
+
+func TestGame_NextPlayer(t *testing.T) {
+	players := []Player{{Name: "Van"}, {Name: "James"}}
+	g1 := Game{Players: players, ActivePlayerIndex: 0, Turn: 1}
+	g1.NextPlayer()
+	if g1.ActivePlayerIndex != 1 || g1.Turn != 1 {
+		t.Fail()
+	}
+
+	g2 := Game{Players: players, ActivePlayerIndex: 1, Turn: 1}
+	g2.NextPlayer()
+	if g2.ActivePlayerIndex != 0 || g2.Turn != 2 {
+		t.Fail()
+	}
+
 }
