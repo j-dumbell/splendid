@@ -36,16 +36,16 @@ type BuyCard struct {
 }
 
 // WebSocket handles a websocket connection
-func WebSocket(clients map[string]*websocket.Conn, decks map[int][]splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
+func WebSocket(lobby Lobby, decks map[int][]splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
 	return func(ws *websocket.Conn) {
-		clients[ws.RemoteAddr().String()] = ws
-
 		var game splendid.Game
+		lobby.AddClient(ws)
 		for {
 			var p Payload
 			var err error
 			err = websocket.JSON.Receive(ws, &p)
 			if err != nil {
+				lobby.RemoveClient(ws)
 				fmt.Println("ws end:", err)
 				return
 			}
@@ -74,10 +74,7 @@ func WebSocket(clients map[string]*websocket.Conn, decks map[int][]splendid.Card
 				Errors:    err,
 			}
 
-			for _, conn := range clients {
-				websocket.JSON.Send(conn, r)
-			}
+			lobby.Broadcast(r)
 		}
 	}
 }
-

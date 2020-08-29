@@ -13,11 +13,12 @@ import (
 )
 
 func main() {
-	clients := make(map[string]*websocket.Conn)
-
+	lobby := api.Lobby{
+		Clients: map[string]*websocket.Conn{},
+	}
 	decks, elites := splendid.CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
 	http.HandleFunc("/health", api.Health)
-	http.Handle("/", websocket.Handler(api.WebSocket(clients, decks, elites)))
+	http.Handle("/", websocket.Handler(api.WebSocket(lobby, decks, elites)))
 	http.ListenAndServe(":"+strconv.Itoa(config.Port), nil)
 }
