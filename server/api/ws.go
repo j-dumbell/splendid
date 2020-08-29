@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/j-dumbell/splendid/server/pkg/util"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -56,7 +57,9 @@ func WebSocket(decks map[int][]splendid.Card, elites []splendid.Elite) func(*web
 			case "start_game":
 				board := splendid.NewBoard(decks, elites)
 				game.SetBoard(board)
-				game.SetFirstPlayer(time.Now().Unix())
+				shuffledPlayers := util.Shuffle(game.Players, time.Now().Unix())
+				game.Players = shuffledPlayers.([]splendid.Player)
+				game.ActivePlayerIndex = 0
 			case "buy_card":
 				var b BuyCard
 				json.Unmarshal(p.Values, &b)
