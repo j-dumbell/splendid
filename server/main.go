@@ -13,9 +13,7 @@ import (
 )
 
 func main() {
-	lobby := api.Lobby{
-		Clients: map[string]*websocket.Conn{},
-	}
+	lobby := api.NewLobby()
 	decks, elites := splendid.CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
 	http.HandleFunc("/health", api.Health)

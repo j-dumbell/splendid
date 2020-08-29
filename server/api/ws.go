@@ -3,8 +3,9 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/j-dumbell/splendid/server/pkg/util"
 	"time"
+
+	"github.com/j-dumbell/splendid/server/pkg/util"
 
 	"golang.org/x/net/websocket"
 
@@ -36,16 +37,15 @@ type BuyCard struct {
 }
 
 // WebSocket handles a websocket connection
-func WebSocket(lobby Lobby, decks map[int][]splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
+func WebSocket(l Lobby, decks map[int][]splendid.Card, elites []splendid.Elite) func(*websocket.Conn) {
 	return func(ws *websocket.Conn) {
-		var game splendid.Game
-		lobby.AddClient(ws)
+		l.AddClient(ws)
 		for {
 			var p Payload
 			var err error
 			err = websocket.JSON.Receive(ws, &p)
 			if err != nil {
-				lobby.RemoveClient(ws)
+				l.RemoveClient(ws)
 				fmt.Println("ws end:", err)
 				return
 			}
@@ -55,7 +55,7 @@ func WebSocket(lobby Lobby, decks map[int][]splendid.Card, elites []splendid.Eli
 				var j JoinGame
 				json.Unmarshal(p.Values, &j)
 				player := splendid.NewPlayer(j.Name)
-				game.AddPlayer(player, config.MaxPlayersDefault)
+				l.Game.AddPlayer(player, config.MaxPlayersDefault)
 			case "start_game":
 				board := splendid.NewBoard(decks, elites)
 				game.SetBoard(board)
@@ -65,16 +65,16 @@ func WebSocket(lobby Lobby, decks map[int][]splendid.Card, elites []splendid.Eli
 			case "buy_card":
 				var b BuyCard
 				json.Unmarshal(p.Values, &b)
-				err = game.BuyCard(b.Name, b.CardID, config.DeckCapacity)
+				err = l.Game.BuyCard(b.Name, b.CardID, config.DeckCapacity)
 			}
 
 			r := Response{
 				Timestamp: time.Now().String(),
-				Game:      fmt.Sprintf("%+v", game),
+				Game:      fmt.Sprintf("%+v", l.Game),
 				Errors:    err,
 			}
 
-			lobby.Broadcast(r)
+			l.Broadcast(r)
 		}
 	}
 }

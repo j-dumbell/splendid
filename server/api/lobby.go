@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/j-dumbell/splendid/server/pkg/splendid"
 	"golang.org/x/net/websocket"
+
+	"github.com/j-dumbell/splendid/server/pkg/splendid"
 )
 
 // Lobby is a collection of websocket connections
@@ -25,5 +26,13 @@ func (l *Lobby) RemoveClient(ws *websocket.Conn) {
 func (l *Lobby) Broadcast(r Response) {
 	for _, conn := range l.Clients {
 		websocket.JSON.Send(conn, r)
+	}
+}
+
+// NewLobby instantiates a blank Lobby
+func NewLobby() Lobby {
+	return Lobby{
+		Clients: map[string]*websocket.Conn{},
+		Game:    splendid.Game{},
 	}
 }
