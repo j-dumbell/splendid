@@ -54,7 +54,10 @@ jobs:
     steps:
       - run:
           name: Install Heroku CLI
-          command: sudo snap install --classic heroku
+          command: |
+            sudo apt update && \
+            sudo apt install snapd && \
+            sudo snap install --classic heroku
       - checkout
       - run:
           name: Heroku docker repo login
