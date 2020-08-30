@@ -60,7 +60,7 @@ jobs:
           name: Build & push image
           command: cd server && heroku container:push -a splendid-server
       - run:
-          name: Deploy imagee
+          name: Deploy image
           command: heroku container:release -a splendid-server
 
 
@@ -69,5 +69,11 @@ workflows:
   build_test_deploy:
     jobs:
       - build-and-test-server
+      - deploy-server:
+          requires:
+            - build-and-test-server
+          filters:
+            branches:
+              only: master
       - build-and-test-client
 
