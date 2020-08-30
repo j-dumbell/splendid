@@ -72,8 +72,8 @@ workflows:
       - deploy-server:
           requires:
             - build-and-test-server
-          filters:
-            branches:
-              only: master
+#          filters:
+#            branches:
+#              only: master
       - build-and-test-client
 
