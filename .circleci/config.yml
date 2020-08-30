@@ -46,13 +46,16 @@ jobs:
             cd client && yarn build
 
   deploy-server:
-    executor: heroku/default
+    docker:
+      - image: cimg/base:2020.01
     working_directory: ~/repo
     environment:
       HEROKU_API_KEY: $HEROKU_SERVER_API_KEY
     steps:
+      - run:
+          name: Install Heroku CLI
+          run: sudo snap install --classic heroku
       - checkout
-      - heroku/install
       - run:
           name: Heroku docker repo login
           command: 'heroku container:login'
@@ -62,7 +65,6 @@ jobs:
       - run:
           name: Deploy image
           command: heroku container:release -a splendid-server
-
 
 workflows:
   version: 2.1
