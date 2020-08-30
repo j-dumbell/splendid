@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@1.2.2
+
 jobs:
   build-and-test-server:
     docker:
@@ -41,6 +44,25 @@ jobs:
           name: build
           command: |
             cd client && yarn build
+
+  deploy-server:
+    executor: heroku/default
+    working_directory: ~/repo
+    environment:
+      HEROKU_API_KEY: $HEROKU_SERVER_API_KEY
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          name: Heroku docker repo login
+          command: 'heroku container:login'
+      - run:
+          name: Build & push image
+          command: cd server && heroku container:push -a splendid-server
+      - run:
+          name: Deploy imagee
+          command: heroku container:release -a splendid-server
+
 
 workflows:
   version: 2.1
