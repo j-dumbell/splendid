@@ -1,7 +1,7 @@
 version: 2.1
 
-orbs:
-  heroku: circleci/heroku@1.2.2
+#orbs:
+#  heroku: circleci/heroku@1.2.2
 
 jobs:
   build-and-test-server:
@@ -54,7 +54,7 @@ jobs:
     steps:
       - run:
           name: Install Heroku CLI
-          run: sudo snap install --classic heroku
+          command: sudo snap install --classic heroku
       - checkout
       - run:
           name: Heroku docker repo login
