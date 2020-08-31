@@ -1,7 +1,7 @@
 version: 2.1
 
-#orbs:
-#  heroku: circleci/heroku@1.2.2
+orbs:
+  heroku: circleci/heroku@1.2.2
 
 jobs:
   build-and-test-server:
@@ -52,16 +52,9 @@ jobs:
     environment:
       HEROKU_API_KEY: $HEROKU_SERVER_API_KEY
     steps:
-      - run:
-          name: Install Heroku CLI
-          command: |
-            (printf 'y' | sudo apt update)
-            (printf 'y' | sudo apt install snapd)
-            sudo snap install --classic heroku
+      - install
+      - check-authentication
       - checkout
-      - run:
-          name: Heroku docker repo login
-          command: 'heroku container:login'
       - run:
           name: Build & push image
           command: cd server && heroku container:push -a splendid-server
@@ -73,12 +66,18 @@ workflows:
   version: 2.1
   build_test_deploy:
     jobs:
-      - build-and-test-server
+      - build-and-test-server:
+          filters:
+            branches:
+              ignore: master
       - deploy-server:
           requires:
             - build-and-test-server
 #          filters:
 #            branches:
 #              only: master
-      - build-and-test-client
+      - build-and-test-client:
+          filters:
+            branches:
+              ignore: master
 
