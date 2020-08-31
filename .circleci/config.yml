@@ -60,7 +60,10 @@ jobs:
           name: Login to Heroku Docker image registry
       - run:
           name: Build & push image
-          command: cd server && heroku container:push web -a splendid-server
+          command: |
+            sudo service docker restart &&
+            cd server &&
+            heroku container:push web -a splendid-server
       - run:
           name: Deploy image
           command: heroku container:release -a splendid-server
