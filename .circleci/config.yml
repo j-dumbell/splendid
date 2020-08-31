@@ -56,12 +56,11 @@ jobs:
       - heroku/check-authentication
       - checkout
       - run:
-          command: 'heroku container:login'
+          command: sudo service docker restart && heroku container:login
           name: Login to Heroku Docker image registry
       - run:
           name: Build & push image
           command: |
-            sudo service docker restart &&
             cd server &&
             heroku container:push web -a splendid-server
       - run:
