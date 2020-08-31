@@ -56,7 +56,7 @@ jobs:
       - heroku/check-authentication
       - checkout
       - run:
-          command: sudo service docker restart && heroku container:login
+          command: sudo service docker start && heroku container:login
           name: Login to Heroku Docker image registry
       - run:
           name: Build & push image
