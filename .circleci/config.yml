@@ -46,8 +46,8 @@ jobs:
             cd client && yarn build
 
   deploy-server:
-    docker:
-      - image: cimg/base:2020.01
+    machine:
+      image: ubuntu-1604:201903-01
     working_directory: ~/repo
     environment:
       HEROKU_API_KEY: $HEROKU_SERVER_API_KEY
@@ -56,8 +56,8 @@ jobs:
       - heroku/check-authentication
       - checkout
       - run:
-          command: sudo service docker start && heroku container:login
           name: Login to Heroku Docker image registry
+          command: heroku container:login
       - run:
           name: Build & push image
           command: |
