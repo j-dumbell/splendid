@@ -57,7 +57,7 @@ jobs:
       - checkout
       - run:
           name: Build & push image
-          command: ls && cd server && heroku container:push -a splendid-server
+          command: cd server && heroku container:push web -a splendid-server
       - run:
           name: Deploy image
           command: heroku container:release -a splendid-server
