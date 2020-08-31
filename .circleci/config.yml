@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Install Heroku CLI
           command: |
-            (y | sudo apt update) && \
+            (yes | sudo apt update) && \
             sudo apt install snapd && \
             sudo snap install --classic heroku
       - checkout
