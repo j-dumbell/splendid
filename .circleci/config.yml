@@ -52,8 +52,8 @@ jobs:
     environment:
       HEROKU_API_KEY: $HEROKU_SERVER_API_KEY
     steps:
-      - install
-      - check-authentication
+      - heroku/install
+      - heroku/check-authentication
       - checkout
       - run:
           name: Build & push image
