@@ -45,9 +45,13 @@ jobs:
           command: |
             cd client && yarn build
 
-  deploy-server:
+  deploy-heroku:
     machine:
       image: ubuntu-1604:201903-01
+    parameters:
+      app-name:
+        description: The Heroku app name.
+        type: string
     working_directory: ~/repo
     steps:
       - heroku/install
@@ -63,7 +67,7 @@ jobs:
             heroku container:push web -a splendid-server
       - run:
           name: Deploy image
-          command: heroku container:release -a splendid-server
+          command: heroku container:release web -a splendid-server
 
 workflows:
   version: 2.1
@@ -73,14 +77,23 @@ workflows:
           filters:
             branches:
               ignore: master
-      - deploy-server:
+      - deploy-heroku:
+          app-name: splendid-server
           requires:
             - build-and-test-server
 #          filters:
 #            branches:
 #              only: master
+
       - build-and-test-client:
           filters:
             branches:
               ignore: master
+      - deploy-heroku:
+          app-name: splendid-client
+          requires:
+            - build-and-test-client
+#          filters:
+#            branches:
+#              only: master
 
