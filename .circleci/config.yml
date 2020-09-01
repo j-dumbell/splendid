@@ -64,10 +64,10 @@ jobs:
           name: Build & push image
           command: |
             cd server &&
-            heroku container:push web -a splendid-server
+            heroku container:push web -a << parameters.app-name >>
       - run:
           name: Deploy image
-          command: heroku container:release web -a splendid-server
+          command: heroku container:release web -a << parameters.app-name >>
 
 workflows:
   version: 2.1
