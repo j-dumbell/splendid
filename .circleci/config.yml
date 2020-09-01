@@ -49,15 +49,15 @@ jobs:
     machine:
       image: ubuntu-1604:201903-01
     working_directory: ~/repo
-    environment:
-      HEROKU_API_KEY: $HEROKU_SERVER_API_KEY
     steps:
       - heroku/install
       - heroku/check-authentication
       - checkout
       - run:
           name: Login to Heroku Docker image registry
-          command: heroku container:login
+          command: |
+            export HEROKU_API_KEY=$HEROKU_SERVER_API_KEY &&
+            heroku container:login
       - run:
           name: Build & push image
           command: |
