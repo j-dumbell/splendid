@@ -55,9 +55,7 @@ jobs:
       - checkout
       - run:
           name: Login to Heroku Docker image registry
-          command: |
-            export HEROKU_API_KEY=$HEROKU_SERVER_API_KEY &&
-            heroku container:login
+          command: heroku container:login
       - run:
           name: Build & push image
           command: |
