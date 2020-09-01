@@ -81,9 +81,9 @@ workflows:
           app-name: splendid-server
           requires:
             - build-and-test-server
-#          filters:
-#            branches:
-#              only: master
+          filters:
+            branches:
+              only: master
 
       - build-and-test-client:
           filters:
@@ -93,7 +93,6 @@ workflows:
           app-name: splendid-client
           requires:
             - build-and-test-client
-#          filters:
-#            branches:
-#              only: master
-
+          filters:
+            branches:
+              only: master
