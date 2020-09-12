@@ -23,7 +23,7 @@ func TestMoveResources(t *testing.T) {
 	cost2 := map[Resource]int{Black: 6, Red: 1}
 	_, _, err := MoveResources(fromBank, toBank, cost2)
 	if err == nil {
-		t.Errorf("no can't afford error")
+		t.Errorf("expect error, nil returned")
 	}
 
 }

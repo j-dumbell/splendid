@@ -36,7 +36,7 @@ func MapResource(s string) Resource {
 }
 
 // MoveResources moves <cost>  from <fromBank> to <toBank>, returning error if <fromBank> can't afford.
-func MoveResources(fromBank map[Resource]int, toBank map[Resource]int, cost map[Resource]int) (map[Resource]int, map[Resource]int, error) {
+func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, map[Resource]int, error) {
 	for res, amount := range cost {
 		fromBank[res] -= amount
 		if fromBank[res] < 0 {
