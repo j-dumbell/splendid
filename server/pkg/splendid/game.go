@@ -40,24 +40,20 @@ func lastCards(cards []Card, index int) ([]Card, error) {
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
 func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
+	//To do - refactor once lobbies implemented
 	activePlayer := &g.Players[g.ActivePlayerIndex]
 	if playerName != activePlayer.Name {
 		return errors.New("not active player")
 	}
-	card, err := GetCard(g.Board.Decks, cardID, capacity)
+	card, cardErr := GetCard(g.Board.Decks, cardID, capacity)
 	tier := card.Tier
-	if err != nil {
-		return err
+	if cardErr != nil {
+		return cardErr
 	}
-	newPBank := activePlayer.Bank
-	newGBank := g.Board.Bank
-	for res, cost := range card.Cost {
-		newAmount := activePlayer.Bank[res] - cost
-		if newAmount < 0 {
-			return errors.New("can't afford")
-		}
-		newPBank[res] = newAmount
-		newGBank[res] = g.Board.Bank[res] + cost
+
+	newPBank, newGBank, resErr := MoveResources(activePlayer.Bank, g.Board.Bank, card.Cost)
+	if resErr != nil {
+		return resErr
 	}
 	activePlayer.Bank = newPBank
 	g.Board.Bank = newGBank

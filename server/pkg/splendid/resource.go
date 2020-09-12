@@ -1,5 +1,10 @@
 package splendid
 
+import (
+	"errors"
+	"fmt"
+)
+
 // Resource represents currency within a game
 type Resource struct {
 	Name string
@@ -28,4 +33,16 @@ func MapResource(s string) Resource {
 	default:
 		panic("Unknown resource")
 	}
+}
+
+// MoveResources moves <cost>  from <fromBank> to <toBank>, returning error if <fromBank> can't afford.
+func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, map[Resource]int, error) {
+	for res, amount := range cost {
+		fromBank[res] -= amount
+		if fromBank[res] < 0 {
+			return nil, nil, errors.New(fmt.Sprintf("can't afford %v: %v", res, amount))
+		}
+		toBank[res] += amount
+	}
+	return fromBank, toBank, nil
 }
