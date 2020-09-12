@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  heroku: circleci/heroku@1.2.2
+
 jobs:
   build-and-test-server:
     docker:
@@ -42,10 +45,54 @@ jobs:
           command: |
             cd client && yarn build
 
+  deploy-heroku:
+    machine:
+      image: ubuntu-1604:201903-01
+    parameters:
+      app-name:
+        description: The Heroku app name.
+        type: string
+    working_directory: ~/repo
+    steps:
+      - heroku/install
+      - heroku/check-authentication
+      - checkout
+      - run:
+          name: Login to Heroku Docker image registry
+          command: heroku container:login
+      - run:
+          name: Build & push image
+          command: |
+            cd server &&
+            heroku container:push web -a << parameters.app-name >>
+      - run:
+          name: Deploy image
+          command: heroku container:release web -a << parameters.app-name >>
+
 workflows:
   version: 2.1
   build_test_deploy:
     jobs:
-      - build-and-test-server
-      - build-and-test-client
+      - build-and-test-server:
+          filters:
+            branches:
+              ignore: master
+      - deploy-heroku:
+          app-name: splendid-server
+          requires:
+            - build-and-test-server
+          filters:
+            branches:
+              only: master
 
+      - build-and-test-client:
+          filters:
+            branches:
+              ignore: master
+      - deploy-heroku:
+          app-name: splendid-client
+          requires:
+            - build-and-test-client
+          filters:
+            branches:
+              only: master
