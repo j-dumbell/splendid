@@ -6,16 +6,14 @@ import (
 )
 
 // Resource represents currency within a game
-type Resource struct {
-	Name string
-}
+type Resource string
 
-var Black = Resource{Name: "Black"}
-var White = Resource{Name: "White"}
-var Red = Resource{Name: "Red"}
-var Blue = Resource{Name: "Blue"}
-var Green = Resource{Name: "Green"}
-var Yellow = Resource{Name: "Yellow"}
+var Black Resource = "Black"
+var White Resource = "White"
+var Red Resource = "Red"
+var Blue Resource = "Blue"
+var Green Resource = "Green"
+var Yellow Resource = "Yellow"
 
 // MapResource maps a string to a Resource
 func MapResource(s string) Resource {
