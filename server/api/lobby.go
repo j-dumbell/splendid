@@ -13,11 +13,24 @@ import (
 
 // Lobby is a collection of websocket connections
 type Lobby struct {
-	Clients map[string]*websocket.Conn
-	Game    splendid.Game
+	Clients 	map[*Client]bool
+	broadcast 	chan []byte
+	join 		chan *Client
+	leave 		chan *Client
+	Game    	splendid.Game
 }
 
-// JoinGame action values
+// NewLobby instantiates a blank Lobby
+func NewLobby(g splendid.Game) Lobby {
+	return Lobby{
+		Clients: make(map[*Client]bool),
+		broadcast: make(chan []byte),
+		join: make(chan *Client),
+		leave: make(chan *Client),
+		Game: g,
+	}
+}
+
 type JoinGame struct {
 	Name string `json:"name"`
 }
@@ -65,12 +78,4 @@ func (l *Lobby) HandleAction(p Payload) error {
 	}
 
 	return err
-}
-
-// NewLobby instantiates a blank Lobby
-func NewLobby(g splendid.Game) Lobby {
-	return Lobby{
-		Clients: map[string]*websocket.Conn{},
-		Game:    g,
-	}
 }
