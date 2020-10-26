@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"time"
-
 	"golang.org/x/net/websocket"
 
 	"github.com/j-dumbell/splendid/server/config"
@@ -41,20 +40,10 @@ type BuyCard struct {
 	CardID int    `json:"cardId"`
 }
 
-// AddClient adds a websocket connection to a Lobby
-func (l *Lobby) AddClient(ws *websocket.Conn) {
-	l.Clients[ws.RemoteAddr().String()] = ws
-}
-
-// RemoveClient removes a websocket connection to a Lobby
-func (l *Lobby) RemoveClient(ws *websocket.Conn) {
-	delete(l.Clients, ws.RemoteAddr().String())
-}
-
 // Broadcast sends a message to all clients in a Lobby
 func (l *Lobby) Broadcast(r Response) {
-	for _, conn := range l.Clients {
-		websocket.JSON.Send(conn, r)
+	for client, _ := range l.Clients {
+		websocket.JSON.Send(client.conn, r)
 	}
 }
 
@@ -78,4 +67,10 @@ func (l *Lobby) HandleAction(p Payload) error {
 	}
 
 	return err
+}
+
+// WebSocket handles a websocket connection
+func (l *Lobby) HandleWs(ws *websocket.Conn) {
+	client := &Client{lobby: l, conn: ws, send: make(chan Response)}
+	client.lobby.join <- client
 }

@@ -18,6 +18,6 @@ func main() {
 	lobby := api.NewLobby(game)
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
 	http.HandleFunc("/health", api.Health)
-	http.Handle("/", websocket.Handler(api.WebSocket(lobby)))
+	http.Handle("/", websocket.Handler(lobby.HandleWs))
 	http.ListenAndServe(":"+strconv.Itoa(config.Port), nil)
 }
