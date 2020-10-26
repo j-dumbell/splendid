@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"time"
+
 	"golang.org/x/net/websocket"
 
 	"github.com/j-dumbell/splendid/server/config"
@@ -12,21 +13,21 @@ import (
 
 // Lobby is a collection of websocket connections
 type Lobby struct {
-	Clients 	map[*Client]bool
-	broadcast 	chan []byte
-	join 		chan *Client
-	leave 		chan *Client
-	Game    	splendid.Game
+	Clients   map[*Client]bool
+	broadcast chan Payload
+	join      chan *Client
+	leave     chan *Client
+	Game      splendid.Game
 }
 
 // NewLobby instantiates a blank Lobby
 func NewLobby(g splendid.Game) Lobby {
 	return Lobby{
-		Clients: make(map[*Client]bool),
-		broadcast: make(chan []byte),
-		join: make(chan *Client),
-		leave: make(chan *Client),
-		Game: g,
+		Clients:   make(map[*Client]bool),
+		broadcast: make(chan Payload),
+		join:      make(chan *Client),
+		leave:     make(chan *Client),
+		Game:      g,
 	}
 }
 
@@ -43,7 +44,7 @@ type BuyCard struct {
 
 // Broadcast sends a message to all clients in a Lobby
 func (l *Lobby) Broadcast(r Response) {
-	for client, _ := range l.Clients {
+	for client := range l.Clients {
 		websocket.JSON.Send(client.conn, r)
 	}
 }
@@ -74,4 +75,6 @@ func (l *Lobby) HandleAction(p Payload) error {
 func (l *Lobby) HandleWs(ws *websocket.Conn) {
 	client := &Client{lobby: l, conn: ws, send: make(chan Response)}
 	client.lobby.join <- client
+
+	go client.ReadPump()
 }
