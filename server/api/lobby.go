@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"time"
-
 	"golang.org/x/net/websocket"
 
 	"github.com/j-dumbell/splendid/server/config"
@@ -13,8 +12,22 @@ import (
 
 // Lobby is a collection of websocket connections
 type Lobby struct {
-	Clients map[string]*websocket.Conn
-	Game    splendid.Game
+	Clients 	map[*Client]bool
+	broadcast 	chan []byte
+	join 		chan *Client
+	leave 		chan *Client
+	Game    	splendid.Game
+}
+
+// NewLobby instantiates a blank Lobby
+func NewLobby(g splendid.Game) Lobby {
+	return Lobby{
+		Clients: make(map[*Client]bool),
+		broadcast: make(chan []byte),
+		join: make(chan *Client),
+		leave: make(chan *Client),
+		Game: g,
+	}
 }
 
 // JoinGame action values
@@ -28,20 +41,10 @@ type BuyCard struct {
 	CardID int    `json:"cardId"`
 }
 
-// AddClient adds a websocket connection to a Lobby
-func (l *Lobby) AddClient(ws *websocket.Conn) {
-	l.Clients[ws.RemoteAddr().String()] = ws
-}
-
-// RemoveClient removes a websocket connection to a Lobby
-func (l *Lobby) RemoveClient(ws *websocket.Conn) {
-	delete(l.Clients, ws.RemoteAddr().String())
-}
-
 // Broadcast sends a message to all clients in a Lobby
 func (l *Lobby) Broadcast(r Response) {
-	for _, conn := range l.Clients {
-		websocket.JSON.Send(conn, r)
+	for client, _ := range l.Clients {
+		websocket.JSON.Send(client.conn, r)
 	}
 }
 
@@ -67,10 +70,8 @@ func (l *Lobby) HandleAction(p Payload) error {
 	return err
 }
 
-// NewLobby instantiates a blank Lobby
-func NewLobby(g splendid.Game) Lobby {
-	return Lobby{
-		Clients: map[string]*websocket.Conn{},
-		Game:    g,
-	}
+// WebSocket handles a websocket connection
+func (l *Lobby) HandleWs(ws *websocket.Conn) {
+	client := &Client{lobby: l, conn: ws, send: make(chan Response)}
+	client.lobby.join <- client
 }
