@@ -30,6 +30,7 @@ func NewLobby(g splendid.Game) Lobby {
 	}
 }
 
+// JoinGame action values
 type JoinGame struct {
 	Name string `json:"name"`
 }
