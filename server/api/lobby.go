@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -67,7 +68,6 @@ func (l *Lobby) HandleAction(p Payload) error {
 		json.Unmarshal(p.Values, &b)
 		err = l.Game.BuyCard(b.Name, b.CardID, config.DeckCapacity)
 	}
-
 	return err
 }
 
@@ -77,4 +77,19 @@ func (l *Lobby) HandleWs(ws *websocket.Conn) {
 	client.lobby.join <- client
 
 	go client.ReadPump()
+}
+
+func (l *Lobby) Run() {
+	for {
+		payload := <-l.broadcast
+		err := l.HandleAction(payload)
+		for client := range l.Clients {
+			response := Response{
+				Timestamp: time.Now().String(),
+				Game:      fmt.Sprintf("%+v", l.Game),
+				Errors:    err,
+			}
+			client.send <- response
+		}
+	}
 }

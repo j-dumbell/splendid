@@ -16,6 +16,7 @@ func main() {
 	decks, elites := splendid.CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
 	game := splendid.NewGame(decks, elites)
 	lobby := api.NewLobby(game)
+	go lobby.Run()
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
 	http.HandleFunc("/health", api.Health)
 	http.Handle("/", websocket.Handler(lobby.HandleWs))
