@@ -14,6 +14,7 @@ type Client struct {
 
 func (c *Client) ReadPump() {
 	defer func() {
+		fmt.Println("defer called")
 		c.lobby.leave <- c
 		c.conn.Close()
 	}()

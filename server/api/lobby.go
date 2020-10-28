@@ -60,16 +60,43 @@ func (l *Lobby) HandleAction(p Payload) error {
 	return err
 }
 
+<<<<<<< HEAD
+=======
+// WebSocket handles a websocket connection
+func (l *Lobby) HandleWs(ws *websocket.Conn) {
+	client := &Client{lobby: l, conn: ws, send: make(chan Response, 256)}
+	fmt.Println(client)
+	client.lobby.join <- client
+	fmt.Println("HandleWS client")
+	go client.ReadPump()
+}
+
+>>>>>>> 85070b9... debugging
 func (l *Lobby) Run() {
+	fmt.Println("starting l.Run")
 	for {
+<<<<<<< HEAD
 		payload := <-l.broadcast
 		err := l.HandleAction(payload)
 		for client := range l.Clients {
 			response := Response{
 				Timestamp: time.Now().String(),
 				Errors:    err,
+=======
+		select {
+		case payload := <-l.broadcast:
+			fmt.Println(payload)
+			err := l.HandleAction(payload)
+			for client := range l.Clients {
+				response := Response{
+					Timestamp: time.Now().String(),
+					Game:      fmt.Sprintf("%+v", l.Game),
+					Errors:    err,
+				}
+				client.send <- response
+>>>>>>> 85070b9... debugging
 			}
-			client.send <- response
 		}
+		fmt.Println("lobby.run() for loop end")
 	}
 }
