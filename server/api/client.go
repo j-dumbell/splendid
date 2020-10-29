@@ -29,6 +29,7 @@ func (c *Client) ReadPump() {
 			fmt.Printf("ws read error: %v", err)
 			break
 		}
+		fmt.Println(p)
 		c.lobby.broadcast <- p
 	}
 }
