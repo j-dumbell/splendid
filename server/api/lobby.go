@@ -5,23 +5,22 @@ import (
 	"time"
 
 	"golang.org/x/net/websocket"
-
 )
 
 // Lobby is a collection of websocket connections
 type Lobby struct {
-	Clients   map[*Client]bool
+	clients   map[*Client]bool
 	broadcast chan Payload
-	Join      chan *Client
+	join      chan *Client
 	leave     chan *Client
 }
 
 // NewLobby instantiates a blank Lobby
 func NewLobby() Lobby {
 	return Lobby{
-		Clients:   make(map[*Client]bool),
+		clients:   make(map[*Client]bool),
 		broadcast: make(chan Payload),
-		Join:      make(chan *Client),
+		join:      make(chan *Client),
 		leave:     make(chan *Client),
 	}
 }
@@ -39,7 +38,7 @@ type BuyCard struct {
 
 // Broadcast sends a message to all clients in a Lobby
 func (l *Lobby) Broadcast(r Response) {
-	for client := range l.Clients {
+	for client := range l.clients {
 		websocket.JSON.Send(client.conn, r)
 	}
 }
@@ -60,43 +59,30 @@ func (l *Lobby) HandleAction(p Payload) error {
 	return err
 }
 
-<<<<<<< HEAD
-=======
-// WebSocket handles a websocket connection
+// HandleWs handles a websocket connection
 func (l *Lobby) HandleWs(ws *websocket.Conn) {
 	client := &Client{lobby: l, conn: ws, send: make(chan Response, 256)}
-	fmt.Println(client)
 	client.lobby.join <- client
-	fmt.Println("HandleWS client")
-	go client.ReadPump()
+	client.ReadPump()
 }
 
->>>>>>> 85070b9... debugging
+// Run puts messages on all client's `send` channels
 func (l *Lobby) Run() {
-	fmt.Println("starting l.Run")
 	for {
-<<<<<<< HEAD
-		payload := <-l.broadcast
-		err := l.HandleAction(payload)
-		for client := range l.Clients {
-			response := Response{
-				Timestamp: time.Now().String(),
-				Errors:    err,
-=======
 		select {
+		case conn := <-l.join:
+			l.clients[conn] = true
+		case conn := <-l.leave:
+			delete(l.clients, conn)
 		case payload := <-l.broadcast:
-			fmt.Println(payload)
 			err := l.HandleAction(payload)
-			for client := range l.Clients {
+			for client := range l.clients {
 				response := Response{
 					Timestamp: time.Now().String(),
-					Game:      fmt.Sprintf("%+v", l.Game),
 					Errors:    err,
 				}
 				client.send <- response
->>>>>>> 85070b9... debugging
 			}
 		}
-		fmt.Println("lobby.run() for loop end")
 	}
 }
