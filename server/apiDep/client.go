@@ -18,7 +18,6 @@ func (c *Client) ReadPump() {
 		c.conn.Close()
 	}()
 
-	fmt.Println("Hello, I am starting pumping")
 	for {
 		var p Payload
 		err := websocket.JSON.Receive(c.conn, &p)

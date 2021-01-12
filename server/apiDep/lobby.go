@@ -12,7 +12,7 @@ import (
 type Lobby struct {
 	Clients   map[*Client]bool
 	broadcast chan Payload
-	Join      chan *Client
+	join      chan *Client
 	leave     chan *Client
 }
 
@@ -21,7 +21,7 @@ func NewLobby() Lobby {
 	return Lobby{
 		Clients:   make(map[*Client]bool),
 		broadcast: make(chan Payload),
-		Join:      make(chan *Client),
+		join:      make(chan *Client),
 		leave:     make(chan *Client),
 	}
 }
