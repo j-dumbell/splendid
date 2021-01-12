@@ -18,9 +18,11 @@ func (c *Client) ReadPump() {
 		c.conn.Close()
 	}()
 
+	fmt.Println("Hello, I am starting pumping")
 	for {
 		var p Payload
 		err := websocket.JSON.Receive(c.conn, &p)
+		fmt.Println(p)
 		if err != nil {
 			fmt.Printf("ws read error: %v", err)
 			break

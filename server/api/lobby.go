@@ -2,33 +2,27 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"golang.org/x/net/websocket"
 
-	"github.com/j-dumbell/splendid/server/config"
-	"github.com/j-dumbell/splendid/server/pkg/splendid"
-	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
 // Lobby is a collection of websocket connections
 type Lobby struct {
 	Clients   map[*Client]bool
 	broadcast chan Payload
-	join      chan *Client
+	Join      chan *Client
 	leave     chan *Client
-	Game      splendid.Game
 }
 
 // NewLobby instantiates a blank Lobby
-func NewLobby(g splendid.Game) Lobby {
+func NewLobby() Lobby {
 	return Lobby{
 		Clients:   make(map[*Client]bool),
 		broadcast: make(chan Payload),
-		join:      make(chan *Client),
+		Join:      make(chan *Client),
 		leave:     make(chan *Client),
-		Game:      g,
 	}
 }
 
@@ -58,25 +52,12 @@ func (l *Lobby) HandleAction(p Payload) error {
 	case "join_game":
 		var j JoinGame
 		json.Unmarshal(p.Values, &j)
-		player := splendid.NewPlayer(j.Name)
-		l.Game.AddPlayer(player, config.MaxPlayersDefault)
 	case "start_game":
-		shuffledPlayers := util.Shuffle(l.Game.Players, time.Now().Unix())
-		l.Game.Players = shuffledPlayers.([]splendid.Player)
 	case "buy_card":
 		var b BuyCard
 		json.Unmarshal(p.Values, &b)
-		err = l.Game.BuyCard(b.Name, b.CardID, config.DeckCapacity)
 	}
 	return err
-}
-
-// WebSocket handles a websocket connection
-func (l *Lobby) HandleWs(ws *websocket.Conn) {
-	client := &Client{lobby: l, conn: ws, send: make(chan Response)}
-	client.lobby.join <- client
-
-	go client.ReadPump()
 }
 
 func (l *Lobby) Run() {
@@ -86,7 +67,6 @@ func (l *Lobby) Run() {
 		for client := range l.Clients {
 			response := Response{
 				Timestamp: time.Now().String(),
-				Game:      fmt.Sprintf("%+v", l.Game),
 				Errors:    err,
 			}
 			client.send <- response
