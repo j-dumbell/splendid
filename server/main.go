@@ -5,19 +5,16 @@ import (
 	"net/http"
 	"strconv"
 
-	"golang.org/x/net/websocket"
-
 	"github.com/j-dumbell/splendid/server/api"
 	"github.com/j-dumbell/splendid/server/config"
-	"github.com/j-dumbell/splendid/server/pkg/splendid"
+	"golang.org/x/net/websocket"
 )
 
 func main() {
-	decks, elites := splendid.CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
-	game := splendid.NewGame(decks, elites)
-	lobby := api.NewLobby(game)
+	allClients := make(map[*api.Client]bool)
+	allLobbies := make(map[string]*api.Lobby)
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
-	http.HandleFunc("/health", api.Health)
-	http.Handle("/", websocket.Handler(lobby.HandleWs))
+	wsHandler := api.MkWsHandler(allClients, allLobbies)
+	http.Handle("/", websocket.Handler(wsHandler))
 	http.ListenAndServe(":"+strconv.Itoa(config.Port), nil)
 }

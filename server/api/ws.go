@@ -1,18 +1,14 @@
 package api
 
 import (
-	"encoding/json"
+	"golang.org/x/net/websocket"
 )
 
-// Payload represents the received JSON
-type Payload struct {
-	Action string          `json:"action"`
-	Values json.RawMessage `json:"value"`
-}
-
-// Response represents the JSON response
-type Response struct {
-	Timestamp string `json:"timestamp"`
-	Game      string `json:"game"`
-	Errors    error  `json:"errors"`
+// MkWsHandler handles the incoming websocket connection
+func MkWsHandler(allClients map[*Client]bool, allLobbies map[string]*Lobby) func(ws *websocket.Conn) {
+	return func(ws *websocket.Conn) {
+		client := &Client{conn: ws}
+		allClients[client] = true
+		client.ReadPump(allClients, allLobbies)
+	}
 }
