@@ -4,7 +4,8 @@ import (
 	"math/rand"
 )
 
-func RandId(n int, seed int64) string {
+// RandID generates a random alphanumeric string of length n
+func RandID(n int, seed int64) string {
 	r := rand.New(rand.NewSource(seed))
 	runes := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	id := make([]rune, n)

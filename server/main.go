@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"golang.org/x/net/websocket"
 	"github.com/j-dumbell/splendid/server/api"
 	"github.com/j-dumbell/splendid/server/config"
+	"golang.org/x/net/websocket"
 )
 
 func main() {

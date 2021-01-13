@@ -1,28 +1,29 @@
 package api
 
-import(
-	"golang.org/x/net/websocket"
-	"fmt"
+import (
 	"encoding/json"
-	"github.com/j-dumbell/splendid/server/pkg/util"
+	"fmt"
 	"time"
+
+	"github.com/j-dumbell/splendid/server/pkg/util"
+	"golang.org/x/net/websocket"
 )
 
-
-type Client struct{
+type Client struct {
 	conn  *websocket.Conn
 	Lobby *Lobby
 }
 
-type Payload struct{
-	Action string `json:"action"`
+type Payload struct {
+	Action string          `json:"action"`
 	Params json.RawMessage `json:"params"`
 }
 
 type Join struct {
-	Id string `json:"id"`
+	ID string `json:"id"`
 }
 
+// ReadPump handles a Client's incoming messages
 func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lobby) {
 	defer func() {
 		delete(allClients, c)
@@ -35,7 +36,7 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 		err := websocket.JSON.Receive(c.conn, &p)
 		if p.Action == "create" {
 			lobby := NewLobby()
-			lobbyID := util.RandId(6, time.Now().UnixNano())
+			lobbyID := util.RandID(6, time.Now().UnixNano())
 			allLobbies[lobbyID] = &lobby
 			fmt.Printf("created lobby %v", lobbyID)
 			lobby.Clients[c] = true
@@ -45,9 +46,9 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 			delete(c.Lobby.Clients, c)
 			var j Join
 			err = json.Unmarshal(p.Params, &j)
-			lobby, exists := allLobbies[j.Id]
+			lobby, exists := allLobbies[j.ID]
 			if !exists {
-				fmt.Printf("gameid %v does not exist", j.Id)
+				fmt.Printf("gameid %v does not exist", j.ID)
 			}
 			lobby.Clients[c] = true
 			c.Lobby = lobby
