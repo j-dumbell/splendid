@@ -23,18 +23,14 @@ type Join struct {
 	ID string `json:"id"`
 }
 
-type Chat struct {
-	Message string `json:"message"`
-}
-
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lobby) {
+func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	defer func() {
-		delete(allClients, c)
 		if c.Lobby != nil {
 			delete(c.Lobby.Clients, c)
 		}
 	}()
+
 	for {
 		var p Payload
 		err := websocket.JSON.Receive(c.conn, &p)
@@ -47,6 +43,7 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 		switch p.Action {
 		case "create":
 			lobby := NewLobby()
+			go lobby.Run()
 			lobbyID := util.RandID(6, time.Now().UnixNano())
 			allLobbies[lobbyID] = &lobby
 			fmt.Printf("created lobby %v", lobbyID)
@@ -64,6 +61,16 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 			lobby.Clients[c] = true
 			c.Lobby = lobby
 			fmt.Println("joined lobby")
+
+		default:
+			fmt.Println(c.Lobby)
+			if c.Lobby != nil {
+				fmt.Println("broadcasting")
+				c.Lobby.Broadcast <- p
+				fmt.Println("broadcasted")
+			} else {
+				fmt.Println("not in lobby")
+			}
 		}
 	}
 }
