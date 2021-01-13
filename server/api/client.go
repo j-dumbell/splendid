@@ -3,26 +3,53 @@ package api
 import(
 	"golang.org/x/net/websocket"
 	"fmt"
+	"encoding/json"
 )
 
 
 type Client struct{
 	conn  *websocket.Conn
-	
+	Lobby *Lobby
 }
 
 type Payload struct{
-	Message string `json:"message"`
+	Action string `json:"action"`
+	Params json.RawMessage `json:"params"`
 }
 
-func (c *Client) ReadPump(allClients map[*Client]bool) {
+type Join struct {
+	Id string `json:"id"`
+}
+
+func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lobby) {
 	defer func() {
 		delete(allClients, c)
+		if c.Lobby != nil {
+			delete(c.Lobby.Clients, c)
+		}
 	}()
 	for {
 		var p Payload
 		err := websocket.JSON.Receive(c.conn, &p)
-		fmt.Println(p)
+		if p.Action == "create" {
+			lobby := NewLobby()
+			fmt.Println("creating lobby")
+			allLobbies["abc123"] = &lobby
+			lobby.Clients[c] = true
+			c.Lobby = &lobby
+		}
+		if p.Action == "join" {
+			delete(c.Lobby.Clients, c)
+			var j Join
+			err = json.Unmarshal(p.Params, &j)
+			lobby, exists := allLobbies[j.Id]
+			if !exists {
+				fmt.Printf("gameid %v does not exist", j.Id)
+			}
+			lobby.Clients[c] = true
+			c.Lobby = lobby
+			fmt.Println("joined lobby")
+		}
 		if err != nil {
 			fmt.Printf("ws read error: %v", err)
 			break
