@@ -23,6 +23,10 @@ type Join struct {
 	ID string `json:"id"`
 }
 
+type Chat struct {
+	Message string `json:"message"`
+}
+
 // ReadPump handles a Client's incoming messages
 func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lobby) {
 	defer func() {
@@ -34,18 +38,25 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 	for {
 		var p Payload
 		err := websocket.JSON.Receive(c.conn, &p)
-		if p.Action == "create" {
+
+		if err != nil {
+			fmt.Printf("ws read error: %v", err)
+			break
+		}
+
+		switch p.Action {
+		case "create":
 			lobby := NewLobby()
 			lobbyID := util.RandID(6, time.Now().UnixNano())
 			allLobbies[lobbyID] = &lobby
 			fmt.Printf("created lobby %v", lobbyID)
 			lobby.Clients[c] = true
 			c.Lobby = &lobby
-		}
-		if p.Action == "join" {
+
+		case "join":
 			delete(c.Lobby.Clients, c)
 			var j Join
-			err = json.Unmarshal(p.Params, &j)
+			json.Unmarshal(p.Params, &j)
 			lobby, exists := allLobbies[j.ID]
 			if !exists {
 				fmt.Printf("gameid %v does not exist", j.ID)
@@ -53,10 +64,6 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 			lobby.Clients[c] = true
 			c.Lobby = lobby
 			fmt.Println("joined lobby")
-		}
-		if err != nil {
-			fmt.Printf("ws read error: %v", err)
-			break
 		}
 	}
 }
