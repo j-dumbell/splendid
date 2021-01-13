@@ -4,6 +4,8 @@ import(
 	"golang.org/x/net/websocket"
 	"fmt"
 	"encoding/json"
+	"github.com/j-dumbell/splendid/server/pkg/util"
+	"time"
 )
 
 
@@ -33,8 +35,9 @@ func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lo
 		err := websocket.JSON.Receive(c.conn, &p)
 		if p.Action == "create" {
 			lobby := NewLobby()
-			fmt.Println("creating lobby")
-			allLobbies["abc123"] = &lobby
+			lobbyID := util.RandId(6, time.Now().UnixNano())
+			allLobbies[lobbyID] = &lobby
+			fmt.Printf("created lobby %v", lobbyID)
 			lobby.Clients[c] = true
 			c.Lobby = &lobby
 		}
