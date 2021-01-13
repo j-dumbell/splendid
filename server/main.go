@@ -11,7 +11,10 @@ import (
 )
 
 func main() {
+	allClients := make(map[*api.Client]bool)
+	// allLobbies := make(map[string]api.Lobby)
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
-	http.Handle("/", websocket.Handler(api.WsHandler))
+	wsHandler := api.MkWsHandler(allClients)
+	http.Handle("/", websocket.Handler(wsHandler))
 	http.ListenAndServe(":"+strconv.Itoa(config.Port), nil)
 }

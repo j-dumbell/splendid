@@ -8,13 +8,17 @@ import(
 
 type Client struct{
 	conn  *websocket.Conn
+	
 }
 
 type Payload struct{
 	Message string `json:"message"`
 }
 
-func (c *Client) ReadPump() {
+func (c *Client) ReadPump(allClients map[*Client]bool) {
+	defer func() {
+		delete(allClients, c)
+	}()
 	for {
 		var p Payload
 		err := websocket.JSON.Receive(c.conn, &p)
