@@ -9,9 +9,14 @@ import (
 	"golang.org/x/net/websocket"
 )
 
+type Response struct {
+	Message string
+}
+
 type Client struct {
 	conn  *websocket.Conn
 	Lobby *Lobby
+	send  chan Response
 }
 
 type Payload struct {
@@ -49,7 +54,9 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			fmt.Printf("Client %v joined lobbyId %v\n", c, lobbyID)
 
 		case "join":
-			delete(c.Lobby.Clients, c)
+			if c.Lobby != nil {
+				delete(c.Lobby.Clients, c)
+			}
 			var j Join
 			json.Unmarshal(p.Params, &j)
 			lobby, exists := allLobbies[j.ID]
@@ -68,5 +75,15 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 				fmt.Printf("Client %v not in any lobby\n", c)
 			}
 		}
+	}
+}
+
+func (c *Client) WritePump() {
+	fmt.Println("Starting Writepump")
+	for {
+		r := <-c.send
+		fmt.Printf("Sending message: %v\n", r.Message)
+		websocket.JSON.Send(c.conn, r)
+		fmt.Printf("Sent message: %v\n", r.Message)
 	}
 }
