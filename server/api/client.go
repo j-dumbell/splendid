@@ -3,9 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
-	"github.com/j-dumbell/splendid/server/pkg/util"
 	"golang.org/x/net/websocket"
 )
 
@@ -44,14 +42,11 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 
 		switch p.Action {
 		case "create":
-			lobby := NewLobby()
-			go lobby.Run()
-			lobbyID := util.RandID(6, time.Now().UnixNano())
-			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobbyID)
-			allLobbies[lobbyID] = &lobby
-			lobby.Clients[c] = true
+			lobby := NewLobby(c)
+			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobby.id)
 			c.Lobby = &lobby
-			fmt.Printf("Client %v joined lobbyId %v\n", c, lobbyID)
+			allLobbies[lobby.id] = &lobby
+			go lobby.Run()
 
 		case "join":
 			if c.Lobby != nil {
