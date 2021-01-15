@@ -36,7 +36,7 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 		err := websocket.JSON.Receive(c.conn, &p)
 
 		if err != nil {
-			fmt.Printf("ws read error: %v", err)
+			fmt.Printf("ws read error: %v\n", err)
 			break
 		}
 
@@ -46,7 +46,7 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			go lobby.Run()
 			lobbyID := util.RandID(6, time.Now().UnixNano())
 			allLobbies[lobbyID] = &lobby
-			fmt.Printf("created lobby %v", lobbyID)
+			fmt.Printf("created lobby %v\n", lobbyID)
 			lobby.Clients[c] = true
 			c.Lobby = &lobby
 
@@ -56,11 +56,12 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			json.Unmarshal(p.Params, &j)
 			lobby, exists := allLobbies[j.ID]
 			if !exists {
-				fmt.Printf("gameid %v does not exist", j.ID)
+				fmt.Printf("gameid %v does not exist\n", j.ID)
+			} else {
+				lobby.Clients[c] = true
+				c.Lobby = lobby
+				fmt.Println("joined lobby")
 			}
-			lobby.Clients[c] = true
-			c.Lobby = lobby
-			fmt.Println("joined lobby")
 
 		default:
 			fmt.Println(c.Lobby)
