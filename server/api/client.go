@@ -3,15 +3,18 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
-	"github.com/j-dumbell/splendid/server/pkg/util"
 	"golang.org/x/net/websocket"
 )
+
+type Response struct {
+	Message string
+}
 
 type Client struct {
 	conn  *websocket.Conn
 	Lobby *Lobby
+	send  chan Response
 }
 
 type Payload struct {
@@ -24,39 +27,58 @@ type Join struct {
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(allClients map[*Client]bool, allLobbies map[string]*Lobby) {
+func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	defer func() {
-		delete(allClients, c)
 		if c.Lobby != nil {
+			c.conn.Close()
 			delete(c.Lobby.Clients, c)
 		}
 	}()
+
 	for {
 		var p Payload
-		err := websocket.JSON.Receive(c.conn, &p)
-		if p.Action == "create" {
-			lobby := NewLobby()
-			lobbyID := util.RandID(6, time.Now().UnixNano())
-			allLobbies[lobbyID] = &lobby
-			fmt.Printf("created lobby %v", lobbyID)
-			lobby.Clients[c] = true
+		// TODO handle errors properly
+		websocket.JSON.Receive(c.conn, &p)
+
+		switch p.Action {
+		case "create":
+			lobby := NewLobby(c)
+			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobby.id)
 			c.Lobby = &lobby
-		}
-		if p.Action == "join" {
-			delete(c.Lobby.Clients, c)
+			allLobbies[lobby.id] = &lobby
+			go lobby.Run()
+
+		case "join":
+			if c.Lobby != nil {
+				delete(c.Lobby.Clients, c)
+			}
 			var j Join
-			err = json.Unmarshal(p.Params, &j)
+			json.Unmarshal(p.Params, &j)
 			lobby, exists := allLobbies[j.ID]
 			if !exists {
-				fmt.Printf("gameid %v does not exist", j.ID)
+				fmt.Printf("Lobby %v does not exist\n", j.ID)
+			} else {
+				lobby.Clients[c] = true
+				c.Lobby = lobby
+				fmt.Printf("Joined lobby %v\n", lobby)
 			}
-			lobby.Clients[c] = true
-			c.Lobby = lobby
-			fmt.Println("joined lobby")
+
+		default:
+			if c.Lobby != nil {
+				c.Lobby.Broadcast <- p
+			} else {
+				fmt.Printf("Client %v not in any lobby\n", c)
+			}
 		}
-		if err != nil {
-			fmt.Printf("ws read error: %v", err)
-			break
-		}
+	}
+}
+
+func (c *Client) WritePump() {
+	fmt.Println("Starting Writepump")
+	for {
+		r := <-c.send
+		fmt.Printf("Sending message: %v\n", r.Message)
+		websocket.JSON.Send(c.conn, r)
+		fmt.Printf("Sent message: %v\n", r.Message)
 	}
 }

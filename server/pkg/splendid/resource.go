@@ -38,7 +38,7 @@ func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, m
 	for res, amount := range cost {
 		fromBank[res] -= amount
 		if fromBank[res] < 0 {
-			return nil, nil, errors.New(fmt.Sprintf("can't afford %v: %v", res, amount))
+			return nil, nil, errors.New(fmt.Sprintf("can't afford %v: %v\n", res, amount))
 		}
 		toBank[res] += amount
 	}
