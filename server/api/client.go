@@ -46,9 +46,9 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			go lobby.Run()
 			lobbyID := util.RandID(6, time.Now().UnixNano())
 			allLobbies[lobbyID] = &lobby
-			fmt.Printf("created lobby %v\n", lobbyID)
 			lobby.Clients[c] = true
 			c.Lobby = &lobby
+			fmt.Printf("created lobby %v\n", lobbyID)
 
 		case "join":
 			delete(c.Lobby.Clients, c)
@@ -64,9 +64,10 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			}
 
 		default:
-			fmt.Println(c.Lobby)
+			
 			if c.Lobby != nil {
 				fmt.Println("broadcasting")
+				fmt.Println(c.Lobby.Broadcast)
 				c.Lobby.Broadcast <- p
 				fmt.Println("broadcasted")
 			} else {
