@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -18,19 +19,11 @@ func NewLobby() Lobby {
 }
 
 func (l *Lobby) Run() {
-	fmt.Println("Starting lobby.run")
+	fmt.Printf("Running lobby %v\n", l)
 	for {
-		fmt.Println("Starting for loop")
-		fmt.Println(l.Broadcast)
 		p := <-l.Broadcast
-		fmt.Println(p)
-
-		// select {
-		// case p := <-l.Broadcast:
-		// 	fmt.Println(p)
-		// 	var c Chat
-		// 	json.Unmarshal(p.Params, &c)
-		// 	fmt.Println(c)
-		// }
+		var c Chat
+		json.Unmarshal(p.Params, &c)
+		fmt.Printf("Chat received: %v", c.Message)
 	}
 }

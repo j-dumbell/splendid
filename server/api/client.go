@@ -27,28 +27,26 @@ type Join struct {
 func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	defer func() {
 		if c.Lobby != nil {
+			c.conn.Close()
 			delete(c.Lobby.Clients, c)
 		}
 	}()
 
 	for {
 		var p Payload
-		err := websocket.JSON.Receive(c.conn, &p)
-
-		if err != nil {
-			fmt.Printf("ws read error: %v\n", err)
-			break
-		}
+		// TODO handle errors properly
+		websocket.JSON.Receive(c.conn, &p)
 
 		switch p.Action {
 		case "create":
 			lobby := NewLobby()
 			go lobby.Run()
 			lobbyID := util.RandID(6, time.Now().UnixNano())
+			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobbyID)
 			allLobbies[lobbyID] = &lobby
 			lobby.Clients[c] = true
 			c.Lobby = &lobby
-			fmt.Printf("created lobby %v\n", lobbyID)
+			fmt.Printf("Client %v joined lobbyId %v\n", c, lobbyID)
 
 		case "join":
 			delete(c.Lobby.Clients, c)
@@ -56,22 +54,18 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			json.Unmarshal(p.Params, &j)
 			lobby, exists := allLobbies[j.ID]
 			if !exists {
-				fmt.Printf("gameid %v does not exist\n", j.ID)
+				fmt.Printf("Lobby %v does not exist\n", j.ID)
 			} else {
 				lobby.Clients[c] = true
 				c.Lobby = lobby
-				fmt.Println("joined lobby")
+				fmt.Printf("Joined lobby %v\n", lobby)
 			}
 
 		default:
-			
 			if c.Lobby != nil {
-				fmt.Println("broadcasting")
-				fmt.Println(c.Lobby.Broadcast)
 				c.Lobby.Broadcast <- p
-				fmt.Println("broadcasted")
 			} else {
-				fmt.Println("not in lobby")
+				fmt.Printf("Client %v not in any lobby\n", c)
 			}
 		}
 	}
