@@ -37,28 +37,16 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 
 	for {
 		var p Payload
+		var err error
+
 		// TODO handle errors properly
-		websocket.JSON.Receive(c.conn, &p)
+		err = websocket.JSON.Receive(c.conn, &p)
 
 		switch p.Action {
 		case "create":
-			lobby := NewLobby()
-			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobby.id)
-			go lobby.Run()
-			lobby.join <- c
-
+			create(c)
 		case "join":
-			if c.lobby != nil {
-				c.lobby.exit <- c
-			}
-			var j Join
-			json.Unmarshal(p.Params, &j)
-			lobby, exists := allLobbies[j.ID]
-			if !exists {
-				fmt.Printf("Lobby %v does not exist\n", j.ID)
-			} else {
-				lobby.join <- c
-			}
+			err = join(c, p, allLobbies)
 		case "exit":
 			if c.lobby != nil {
 				c.lobby.exit <- c
@@ -67,8 +55,12 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			if c.lobby != nil {
 				c.lobby.broadcast <- p
 			} else {
-				fmt.Printf("Client %v not in any lobby\n", c)
+				err = fmt.Errorf("client %v not in any lobby", c)
 			}
+		}
+
+		if err != nil {
+			c.send <- Response{Message: err.Error()}
 		}
 	}
 }
