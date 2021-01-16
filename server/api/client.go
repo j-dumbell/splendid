@@ -27,7 +27,7 @@ type Join struct {
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
+func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 	defer func() {
 		if c.lobby != nil {
 			c.lobby.exit <- c
@@ -38,15 +38,13 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	for {
 		var p Payload
 		var err error
-
-		// TODO handle errors properly
 		err = websocket.JSON.Receive(c.conn, &p)
 
 		switch p.Action {
 		case "create":
-			create(c)
+			create(c, allLobbies)
 		case "join":
-			err = join(c, p, allLobbies)
+			err = join(c, p, allLobbies, maxPlayers)
 		case "exit":
 			if c.lobby != nil {
 				c.lobby.exit <- c
