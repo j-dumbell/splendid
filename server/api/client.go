@@ -13,7 +13,7 @@ type Response struct {
 
 type Client struct {
 	conn  *websocket.Conn
-	Lobby *Lobby
+	lobby *Lobby
 	send  chan Response
 }
 
@@ -29,8 +29,8 @@ type Join struct {
 // ReadPump handles a Client's incoming messages
 func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	defer func() {
-		if c.Lobby != nil {
-			c.Lobby.exit <- c
+		if c.lobby != nil {
+			c.lobby.exit <- c
 		}
 		c.conn.Close()
 	}()
@@ -48,8 +48,8 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			lobby.join <- c
 
 		case "join":
-			if c.Lobby != nil {
-				c.Lobby.exit <- c
+			if c.lobby != nil {
+				c.lobby.exit <- c
 			}
 			var j Join
 			json.Unmarshal(p.Params, &j)
@@ -60,12 +60,12 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 				lobby.join <- c
 			}
 		case "exit":
-			if c.Lobby != nil {
-				c.Lobby.exit <- c
+			if c.lobby != nil {
+				c.lobby.exit <- c
 			}
 		default:
-			if c.Lobby != nil {
-				c.Lobby.Broadcast <- p
+			if c.lobby != nil {
+				c.lobby.broadcast <- p
 			} else {
 				fmt.Printf("Client %v not in any lobby\n", c)
 			}
