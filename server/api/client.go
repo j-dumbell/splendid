@@ -7,14 +7,15 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type Response struct {
-	Message string
-}
-
 type Client struct {
 	conn  *websocket.Conn
 	lobby *Lobby
 	send  chan Response
+}
+
+type Response struct {
+	Category string			`json:"category"`
+	Body json.RawMessage	`json:"body"`
 }
 
 type Payload struct {
@@ -24,6 +25,10 @@ type Payload struct {
 
 type Join struct {
 	ID string `json:"id"`
+}
+
+type ResponseError struct {
+	Message string		`json:"message"`
 }
 
 // ReadPump handles a Client's incoming messages
@@ -58,17 +63,19 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 		}
 
 		if err != nil {
-			c.send <- Response{Message: err.Error()}
+			r := ResponseError{Message: err.Error()}
+			b, _ := json.Marshal(r)
+			c.send <- Response{
+				Category: "error", 
+				Body: b,
+			}
 		}
 	}
 }
 
 func (c *Client) WritePump() {
-	fmt.Println("Starting Writepump")
 	for {
 		r := <-c.send
-		fmt.Printf("Sending message: %v\n", r.Message)
 		websocket.JSON.Send(c.conn, r)
-		fmt.Printf("Sent message: %v\n", r.Message)
 	}
 }

@@ -20,6 +20,10 @@ type Chat struct {
 	Message string `json:"message"`
 }
 
+type ResponseChat struct {
+	Message string `json:"message"`
+}
+
 func NewLobby() Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
@@ -32,7 +36,6 @@ func NewLobby() Lobby {
 }
 
 func (l *Lobby) Run() {
-	fmt.Printf("Running lobby %v\n", l)
 	for {
 		select {
 		case p := <-l.broadcast:
@@ -43,7 +46,8 @@ func (l *Lobby) Run() {
 				fmt.Printf("Chat received: %v\n", c.Message)
 
 				for client := range l.clients {
-					r := Response{Message: c.Message}
+					rc, _ := json.Marshal(ResponseChat{Message: c.Message})
+					r := Response{Category: "chat", Body: rc}
 					client.send <- r
 				}
 			}
