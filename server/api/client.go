@@ -30,9 +30,9 @@ type Join struct {
 func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	defer func() {
 		if c.Lobby != nil {
-			c.conn.Close()
-			delete(c.Lobby.Clients, c)
+			c.Lobby.exit <- c
 		}
+		c.conn.Close()
 	}()
 
 	for {
@@ -42,15 +42,14 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 
 		switch p.Action {
 		case "create":
-			lobby := NewLobby(c)
+			lobby := NewLobby()
 			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobby.id)
-			c.Lobby = &lobby
-			allLobbies[lobby.id] = &lobby
 			go lobby.Run()
+			lobby.join <- c
 
 		case "join":
 			if c.Lobby != nil {
-				delete(c.Lobby.Clients, c)
+				c.Lobby.exit <- c
 			}
 			var j Join
 			json.Unmarshal(p.Params, &j)
@@ -58,11 +57,12 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 			if !exists {
 				fmt.Printf("Lobby %v does not exist\n", j.ID)
 			} else {
-				lobby.Clients[c] = true
-				c.Lobby = lobby
-				fmt.Printf("Joined lobby %v\n", lobby)
+				lobby.join <- c
 			}
-
+		case "exit":
+			if c.Lobby != nil {
+				c.Lobby.exit <- c
+			}
 		default:
 			if c.Lobby != nil {
 				c.Lobby.Broadcast <- p

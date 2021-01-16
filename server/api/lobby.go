@@ -12,37 +12,48 @@ type Lobby struct {
 	id        string
 	Clients   map[*Client]bool
 	Broadcast chan (Payload)
+	exit 	  chan (*Client)
+	join	  chan (*Client)
 }
 
 type Chat struct {
 	Message string `json:"message"`
 }
 
-func NewLobby(c *Client) Lobby {
+func NewLobby() Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
-
 	return Lobby{
 		id:        lobbyID,
-		Clients:   map[*Client]bool{c: true},
+		Clients:   make(map[*Client]bool),
 		Broadcast: make(chan Payload),
+		exit: 	   make(chan *Client),
+		join:	   make(chan *Client),
 	}
 }
 
 func (l *Lobby) Run() {
 	fmt.Printf("Running lobby %v\n", l)
 	for {
-		p := <-l.Broadcast
+		select {
+		case p := <-l.Broadcast:
+			switch p.Action {
+			case "chat":
+				var c Chat
+				json.Unmarshal(p.Params, &c)
+				fmt.Printf("Chat received: %v\n", c.Message)
 
-		switch p.Action {
-		case "chat":
-			var c Chat
-			json.Unmarshal(p.Params, &c)
-			fmt.Printf("Chat received: %v", c.Message)
-
-			for client := range l.Clients {
-				r := Response{Message: c.Message}
-				client.send <- r
+				for client := range l.Clients {
+					r := Response{Message: c.Message}
+					client.send <- r
+				}
 			}
+		case c := <-l.exit:
+			fmt.Printf("Removing client %v from lobby %v\n", c, l.id)
+			delete(l.Clients, c)
+		case c := <-l.join:
+			l.Clients[c] = true
+			c.Lobby = l
+			fmt.Printf("Client %v joined lobby %v\n", c, l.id)
 		}
 	}
 }
