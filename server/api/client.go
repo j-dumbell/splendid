@@ -45,8 +45,8 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 		}
 
 		if err != nil {
-			r := ResponseError{Message: err.Error()}
-			b, _ := json.Marshal(r)
+			re := ResponseError{Message: err.Error()}
+			b, _ := json.Marshal(re)
 			c.send <- Response{
 				Category: "error",
 				Body:     b,
