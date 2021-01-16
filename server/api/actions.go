@@ -17,7 +17,7 @@ func join(c *Client, p Payload, allLobbies map[string]*Lobby, maxPlayers int) er
 	if c.lobby != nil {
 		c.lobby.exit <- c
 	}
-	var j Join
+	var j PayloadJoin
 	json.Unmarshal(p.Params, &j)
 	l, exists := allLobbies[j.ID]
 	if !exists {

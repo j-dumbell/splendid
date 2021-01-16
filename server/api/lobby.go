@@ -16,14 +16,6 @@ type Lobby struct {
 	join      chan (*Client)
 }
 
-type Chat struct {
-	Message string `json:"message"`
-}
-
-type ResponseChat struct {
-	Message string `json:"message"`
-}
-
 func NewLobby() Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
@@ -41,7 +33,7 @@ func (l *Lobby) Run() {
 		case p := <-l.broadcast:
 			switch p.Action {
 			case "chat":
-				var c Chat
+				var c PayloadChat
 				json.Unmarshal(p.Params, &c)
 				fmt.Printf("Chat received: %v\n", c.Message)
 
