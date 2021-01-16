@@ -12,6 +12,7 @@ type Lobby struct {
 	id        string
 	Clients   map[*Client]bool
 	Broadcast chan (Payload)
+	exit 	  chan (*Client)
 }
 
 type Chat struct {
@@ -25,24 +26,29 @@ func NewLobby(c *Client) Lobby {
 		id:        lobbyID,
 		Clients:   map[*Client]bool{c: true},
 		Broadcast: make(chan Payload),
+		exit: 	   make(chan *Client),
 	}
 }
 
 func (l *Lobby) Run() {
 	fmt.Printf("Running lobby %v\n", l)
 	for {
-		p := <-l.Broadcast
+		select {
+		case p := <-l.Broadcast:
+			switch p.Action {
+			case "chat":
+				var c Chat
+				json.Unmarshal(p.Params, &c)
+				fmt.Printf("Chat received: %v\n", c.Message)
 
-		switch p.Action {
-		case "chat":
-			var c Chat
-			json.Unmarshal(p.Params, &c)
-			fmt.Printf("Chat received: %v", c.Message)
-
-			for client := range l.Clients {
-				r := Response{Message: c.Message}
-				client.send <- r
+				for client := range l.Clients {
+					r := Response{Message: c.Message}
+					client.send <- r
+				}
 			}
+		case c := <-l.exit:
+			fmt.Printf("Removing client %v from lobby %v\n", c, l.id)
+			delete(l.Clients, c)
 		}
 	}
 }

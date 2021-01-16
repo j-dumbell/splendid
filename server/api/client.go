@@ -30,9 +30,9 @@ type Join struct {
 func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 	defer func() {
 		if c.Lobby != nil {
-			c.conn.Close()
-			delete(c.Lobby.Clients, c)
+			c.Lobby.exit <- c
 		}
+		c.conn.Close()
 	}()
 
 	for {
@@ -62,7 +62,10 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
 				c.Lobby = lobby
 				fmt.Printf("Joined lobby %v\n", lobby)
 			}
-
+		case "exit":
+			if c.Lobby != nil {
+				c.Lobby.exit <- c
+			}
 		default:
 			if c.Lobby != nil {
 				c.Lobby.Broadcast <- p
