@@ -4,11 +4,11 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-// MkWsHandler handles the incoming websocket connection
-func MkWsHandler(allLobbies map[string]*Lobby) func(ws *websocket.Conn) {
+// MkWsHandler returns a websocket handler
+func MkWsHandler(allLobbies map[string]*Lobby, maxPlayers int) func(ws *websocket.Conn) {
 	return func(ws *websocket.Conn) {
-		client := &Client{conn: ws, send: make(chan Response)}
-		go client.ReadPump(allLobbies)
-		client.WritePump()
+		c := &Client{conn: ws, send: make(chan Response)}
+		go c.ReadPump(allLobbies, maxPlayers)
+		c.WritePump()
 	}
 }

@@ -13,7 +13,7 @@ type Response struct {
 
 type Client struct {
 	conn  *websocket.Conn
-	Lobby *Lobby
+	lobby *Lobby
 	send  chan Response
 }
 
@@ -27,48 +27,38 @@ type Join struct {
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(allLobbies map[string]*Lobby) {
+func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 	defer func() {
-		if c.Lobby != nil {
-			c.Lobby.exit <- c
+		if c.lobby != nil {
+			c.lobby.exit <- c
 		}
 		c.conn.Close()
 	}()
 
 	for {
 		var p Payload
-		// TODO handle errors properly
-		websocket.JSON.Receive(c.conn, &p)
+		var err error
+		err = websocket.JSON.Receive(c.conn, &p)
 
 		switch p.Action {
 		case "create":
-			lobby := NewLobby()
-			fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobby.id)
-			go lobby.Run()
-			lobby.join <- c
-
+			create(c, allLobbies)
 		case "join":
-			if c.Lobby != nil {
-				c.Lobby.exit <- c
-			}
-			var j Join
-			json.Unmarshal(p.Params, &j)
-			lobby, exists := allLobbies[j.ID]
-			if !exists {
-				fmt.Printf("Lobby %v does not exist\n", j.ID)
-			} else {
-				lobby.join <- c
-			}
+			err = join(c, p, allLobbies, maxPlayers)
 		case "exit":
-			if c.Lobby != nil {
-				c.Lobby.exit <- c
+			if c.lobby != nil {
+				c.lobby.exit <- c
 			}
 		default:
-			if c.Lobby != nil {
-				c.Lobby.Broadcast <- p
+			if c.lobby != nil {
+				c.lobby.broadcast <- p
 			} else {
-				fmt.Printf("Client %v not in any lobby\n", c)
+				err = fmt.Errorf("client %v not in any lobby", c)
 			}
+		}
+
+		if err != nil {
+			c.send <- Response{Message: err.Error()}
 		}
 	}
 }
