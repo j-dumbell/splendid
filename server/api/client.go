@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 
 	"golang.org/x/net/websocket"
 )
@@ -39,13 +40,7 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 				c.lobby.exit <- c
 			}
 		case "chat":
-			if c.lobby != nil {
-				err = fmt.Errorf("client %v not in any lobby", c)
-			} else {
-				var pc PayloadChat
-				json.Unmarshal(p.Params, &pc)
-				c.lobby.broadcast <- pc
-			}
+			err = chat(c, p.Params)
 		default:
 			err = fmt.Errorf("unrecognised action %v", p.Action)
 		}
@@ -57,10 +52,10 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 				Category: "error",
 				Body:     b,
 			}
-		} else {
+		}
+		if !reflect.DeepEqual(res, Response{}) {
 			c.send <- res
 		}
-
 	}
 }
 

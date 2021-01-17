@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -11,7 +10,7 @@ import (
 type Lobby struct {
 	id        string
 	clients   map[*Client]bool
-	broadcast chan (PayloadChat)
+	broadcast chan (Response)
 	exit      chan (*Client)
 	join      chan (*Client)
 }
@@ -21,7 +20,7 @@ func NewLobby() Lobby {
 	return Lobby{
 		id:        lobbyID,
 		clients:   make(map[*Client]bool),
-		broadcast: make(chan PayloadChat),
+		broadcast: make(chan Response),
 		exit:      make(chan *Client),
 		join:      make(chan *Client),
 	}
@@ -37,11 +36,9 @@ func (l *Lobby) Run() {
 			l.clients[c] = true
 			c.lobby = l
 			fmt.Printf("Client %v joined lobby %v\n", c, l.id)
-		case c := <-l.broadcast:
+		case res := <-l.broadcast:
 			for client := range l.clients {
-				rc, _ := json.Marshal(ResponseChat{Message: c.Message})
-				r := Response{Category: "chat", Body: rc}
-				client.send <- r
+				client.send <- res
 			}
 		}
 	}

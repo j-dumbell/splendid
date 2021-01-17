@@ -14,7 +14,7 @@ func create(c *Client, allLobbies map[string]*Lobby) Response {
 	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
 	return Response{
 		Category: "create",
-		Body: rj,
+		Body:     rj,
 	}
 }
 
@@ -35,8 +35,15 @@ func join(c *Client, p Payload, allLobbies map[string]*Lobby, maxPlayers int) (R
 	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
 	resp := Response{
 		Category: "join",
-		Body: rj,
+		Body:     rj,
 	}
 	return resp, nil
-	
+}
+
+func chat(c *Client, p json.RawMessage) error {
+	if c.lobby != nil {
+		c.lobby.broadcast <- Response{Category: "chat", Body: p}
+		return nil
+	}
+	return fmt.Errorf("client %v not in any lobby", c)
 }
