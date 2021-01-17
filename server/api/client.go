@@ -25,23 +25,29 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 	for {
 		var p Payload
 		var err error
+		var res Response
+
 		err = websocket.JSON.Receive(c.conn, &p)
 
 		switch p.Action {
 		case "create":
-			create(c, allLobbies)
+			res = create(c, allLobbies)
 		case "join":
-			err = join(c, p, allLobbies, maxPlayers)
+			res, err = join(c, p, allLobbies, maxPlayers)
 		case "exit":
 			if c.lobby != nil {
 				c.lobby.exit <- c
 			}
-		default:
+		case "chat":
 			if c.lobby != nil {
-				c.lobby.broadcast <- p
-			} else {
 				err = fmt.Errorf("client %v not in any lobby", c)
+			} else {
+				var pc PayloadChat
+				json.Unmarshal(p.Params, &pc)
+				c.lobby.broadcast <- pc
 			}
+		default:
+			err = fmt.Errorf("unrecognised action %v", p.Action)
 		}
 
 		if err != nil {
@@ -51,7 +57,10 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 				Category: "error",
 				Body:     b,
 			}
+		} else {
+			c.send <- res
 		}
+
 	}
 }
 
