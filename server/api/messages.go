@@ -29,3 +29,7 @@ type ResponseError struct {
 type ResponseChat struct {
 	Message string `json:"message"`
 }
+
+type ResponseJoin struct {
+	ID string `json:"lobbyId"`
+}
