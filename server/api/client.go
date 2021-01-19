@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"golang.org/x/net/websocket"
@@ -45,12 +44,7 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 		}
 
 		if err != nil {
-			re := ResponseError{Message: err.Error()}
-			b, _ := json.Marshal(re)
-			c.send <- Response{
-				Category: "error",
-				Body:     b,
-			}
+			c.send <- mkErrorResponse(p.Action, err)
 		}
 	}
 }

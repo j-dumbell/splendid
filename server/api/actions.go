@@ -36,7 +36,7 @@ func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 
 func chat(c *Client, p json.RawMessage) error {
 	if c.lobby != nil {
-		c.lobby.broadcast <- Response{Category: "chat", Body: p}
+		c.lobby.broadcast <- Response{Action: "chat", Ok: true, Details: p}
 		return nil
 	}
 	return fmt.Errorf("client \"%v\" not in any lobby", c.name)

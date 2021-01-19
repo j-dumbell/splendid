@@ -5,8 +5,9 @@ import (
 )
 
 type Response struct {
-	Category string          `json:"category"`
-	Body     json.RawMessage `json:"body"`
+	Action  string          `json:"action"`
+	Ok      bool            `json:"ok"`
+	Details json.RawMessage `json:"details"`
 }
 
 type Payload struct {
@@ -27,14 +28,10 @@ type PayloadChat struct {
 	Message string `json:"message"`
 }
 
-type ResponseError struct {
-	Message string `json:"message"`
-}
-
-type ResponseChat struct {
-	Message string `json:"message"`
-}
-
 type ResponseJoin struct {
 	ID string `json:"lobbyId"`
+}
+
+type ReponseDetails struct {
+	Message string `json:"message"`
 }
