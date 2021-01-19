@@ -5,39 +5,29 @@ import (
 	"fmt"
 )
 
-func create(c *Client, allLobbies map[string]*Lobby) Response {
+func create(c *Client, allLobbies map[string]*Lobby) {
 	l := NewLobby()
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
 	go l.Run()
 	l.join <- c
-	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
-	return Response{
-		Category: "create",
-		Body:     rj,
-	}
 }
 
-func join(c *Client, p Payload, allLobbies map[string]*Lobby, maxPlayers int) (Response, error) {
+func join(c *Client, p Payload, allLobbies map[string]*Lobby, maxPlayers int) error {
 	if c.lobby != nil {
-		c.lobby.exit <- c
+		fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
 	}
 	var j PayloadJoin
 	json.Unmarshal(p.Params, &j)
 	l, exists := allLobbies[j.ID]
 	if !exists {
-		return Response{}, fmt.Errorf("lobby %v does not exist", j.ID)
+		return fmt.Errorf("lobby \"%v\" does not exist", j.ID)
 	}
 	if len(l.clients) >= maxPlayers {
-		return Response{}, fmt.Errorf("lobby %v is full", l.id)
+		return fmt.Errorf("lobby \"%v\" is full", l.id)
 	}
 	l.join <- c
-	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
-	resp := Response{
-		Category: "join",
-		Body:     rj,
-	}
-	return resp, nil
+	return nil
 }
 
 func chat(c *Client, p json.RawMessage) error {

@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"reflect"
 
 	"golang.org/x/net/websocket"
 )
@@ -26,15 +25,14 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 	for {
 		var p Payload
 		var err error
-		var res Response
 
 		err = websocket.JSON.Receive(c.conn, &p)
 
 		switch p.Action {
 		case "create":
-			res = create(c, allLobbies)
+			create(c, allLobbies)
 		case "join":
-			res, err = join(c, p, allLobbies, maxPlayers)
+			err = join(c, p, allLobbies, maxPlayers)
 		case "exit":
 			if c.lobby != nil {
 				c.lobby.exit <- c
@@ -52,9 +50,6 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 				Category: "error",
 				Body:     b,
 			}
-		}
-		if !reflect.DeepEqual(res, Response{}) {
-			c.send <- res
 		}
 	}
 }
