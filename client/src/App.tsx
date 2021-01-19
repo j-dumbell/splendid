@@ -1,27 +1,25 @@
 import React from "react";
-import JSONPretty from "react-json-pretty";
 
 import "./App.css";
 
-import { useWebSocket } from "./hooks/websocket";
-import { MessageForm } from "./component/MessageForm";
+import { useWebSocket, WsResponse, WsStatus } from "./hooks/websocket";
+import Actions from "./component/Actions";
+import ChatHistory from "./component/ChatHistory";
 
 function App() {
-  const [loading, error, data, send] = useWebSocket("/");
+  const [status, error, actions] = useWebSocket("/");
+  const actionHistory = actions as WsResponse[];
+
   return (
     <>
       <h1>Splendid</h1>
-      <MessageForm send={send} />
-      <JSONPretty
-        data={{ loading, error, data }}
-        theme={{
-          main: "color:#66d9ef;",
-          key: "color:#f92672;",
-          string: "color:#fd971f;",
-          value: "color:#a6e22e;",
-          boolean: "color:#ac81fe;",
-        }}
-      />
+      <div style={{ display: "flex" }}>
+        <div style={{ flex: 1 }}>
+          <h2>Server {error ? `errored: ${error}` : status}</h2>
+          <Actions actions={actionHistory} status={status as WsStatus} />
+        </div>
+        <ChatHistory actions={actionHistory} />
+      </div>
     </>
   );
 }

@@ -1,11 +1,12 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { sendJSON } from "../../../hooks/websocket";
 
-export const MessageForm = ({ send }: { send: (message: any) => void }) => (
+const SendChatForm = () => (
   <Formik
     initialValues={{ message: "" }}
     onSubmit={(values, { resetForm, setSubmitting }) => {
-      send(values);
+      sendJSON({ action: "chat", params: values });
       resetForm();
       setSubmitting(false);
     }}
@@ -15,9 +16,11 @@ export const MessageForm = ({ send }: { send: (message: any) => void }) => (
         <Field type="text" name="message" placeholder="message" />
         <ErrorMessage name="message" component="div" />
         <button type="submit" disabled={isSubmitting}>
-          send
+          Send Message
         </button>
       </Form>
     )}
   </Formik>
 );
+
+export default SendChatForm;
