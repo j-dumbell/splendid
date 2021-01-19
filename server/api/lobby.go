@@ -35,7 +35,7 @@ func (l *Lobby) Run() {
 
 		select {
 		case client = <-l.exit:
-			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client, l.id)
+			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
 			delete(l.clients, client)
 			res = Response{
 				Category: "exit",
@@ -43,7 +43,7 @@ func (l *Lobby) Run() {
 		case client = <-l.join:
 			l.clients[client] = true
 			client.lobby = l
-			fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client, l.id)
+			fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 			rj, _ := json.Marshal(ResponseJoin{ID: l.id})
 			res = Response{
 				Category: "join",
