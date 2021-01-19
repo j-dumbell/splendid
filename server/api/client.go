@@ -31,9 +31,9 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 
 		switch p.Action {
 		case "create":
-			create(c, p, allLobbies)
+			create(c, p.Params, allLobbies)
 		case "join":
-			err = join(c, p, allLobbies, maxPlayers)
+			err = join(c, p.Params, allLobbies, maxPlayers)
 		case "exit":
 			if c.lobby != nil {
 				c.lobby.exit <- c
