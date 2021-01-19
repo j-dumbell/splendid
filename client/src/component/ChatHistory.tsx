@@ -7,8 +7,8 @@ type ChatHistoryProps = {
 
 const ChatHistory = ({ actions }: ChatHistoryProps) => {
   const messages = actions
-    .filter((m) => m.category === "chat")
-    .map((m) => m.body?.message) as string[];
+    .filter((m) => m.action === "chat")
+    .map((m) => m.details?.message) as string[];
 
   return messages.length ? (
     <div style={{ flex: "1" }}>

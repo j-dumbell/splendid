@@ -4,8 +4,9 @@ import config from "../config";
 
 export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse = {
-  category: "create" | "join" | "exit" | "chat";
-  body: Record<string, unknown>;
+  action: "create" | "join" | "exit" | "chat";
+  ok: boolean;
+  details: Record<string, unknown>;
 };
 
 export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));

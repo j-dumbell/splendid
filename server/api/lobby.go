@@ -38,7 +38,8 @@ func (l *Lobby) Run() {
 			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
 			delete(l.clients, client)
 			res = Response{
-				Category: "exit",
+				Action: "exit",
+				Ok:     true,
 			}
 		case client = <-l.join:
 			l.clients[client] = true
@@ -46,8 +47,9 @@ func (l *Lobby) Run() {
 			fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 			rj, _ := json.Marshal(ResponseJoin{ID: l.id})
 			res = Response{
-				Category: "join",
-				Body:     rj,
+				Action:  "join",
+				Ok:      true,
+				Details: rj,
 			}
 		case message := <-l.broadcast:
 			for c := range l.clients {
