@@ -15,7 +15,7 @@ func create(c *Client, allLobbies map[string]*Lobby) {
 
 func join(c *Client, p Payload, allLobbies map[string]*Lobby, maxPlayers int) error {
 	if c.lobby != nil {
-		fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
+		return fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
 	}
 	var j PayloadJoin
 	json.Unmarshal(p.Params, &j)

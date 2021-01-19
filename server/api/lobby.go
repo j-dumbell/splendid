@@ -32,6 +32,7 @@ func (l *Lobby) Run() {
 	for {
 		var res Response
 		var client *Client
+
 		select {
 		case client = <-l.exit:
 			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client, l.id)
