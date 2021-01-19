@@ -11,6 +11,7 @@ type Client struct {
 	conn  *websocket.Conn
 	lobby *Lobby
 	send  chan Response
+	name  string
 }
 
 // ReadPump handles a Client's incoming messages
@@ -30,7 +31,7 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 
 		switch p.Action {
 		case "create":
-			create(c, allLobbies)
+			create(c, p, allLobbies)
 		case "join":
 			err = join(c, p, allLobbies, maxPlayers)
 		case "exit":

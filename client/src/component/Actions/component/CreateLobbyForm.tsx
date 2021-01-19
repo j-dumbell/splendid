@@ -2,11 +2,11 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { sendJSON } from "../../../hooks/websocket";
 
-export const JoinLobbyForm = () => (
+export const CreateLobbyForm = () => (
   <Formik
-    initialValues={{ id: "", name: "" }}
+    initialValues={{ name: "" }}
     onSubmit={(values, { resetForm, setSubmitting }) => {
-      sendJSON({ action: "join", params: values });
+      sendJSON({ action: "create", params: values });
       resetForm();
       setSubmitting(false);
     }}
@@ -15,14 +15,12 @@ export const JoinLobbyForm = () => (
       <Form>
         <Field type="text" name="name" placeholder="name" />
         <ErrorMessage name="name" component="div" />
-        <Field type="text" name="id" placeholder="id" />
-        <ErrorMessage name="id" component="div" />
         <button type="submit" disabled={isSubmitting}>
-          Join Lobby
+          Create Lobby
         </button>
       </Form>
     )}
   </Formik>
 );
 
-export default JoinLobbyForm;
+export default CreateLobbyForm;

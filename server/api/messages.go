@@ -14,8 +14,13 @@ type Payload struct {
 	Params json.RawMessage `json:"params"`
 }
 
+type PayloadCreate struct {
+	Name string `json:"name"`
+}
+
 type PayloadJoin struct {
-	ID string `json:"id"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type PayloadChat struct {

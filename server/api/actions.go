@@ -5,11 +5,14 @@ import (
 	"fmt"
 )
 
-func create(c *Client, allLobbies map[string]*Lobby) {
+func create(c *Client, p Payload, allLobbies map[string]*Lobby) {
 	l := NewLobby()
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
 	go l.Run()
+	var pc PayloadCreate
+	json.Unmarshal(p.Params, &pc)
+	c.name = pc.Name
 	l.join <- c
 }
 
@@ -19,6 +22,7 @@ func join(c *Client, p Payload, allLobbies map[string]*Lobby, maxPlayers int) er
 	}
 	var j PayloadJoin
 	json.Unmarshal(p.Params, &j)
+	c.name = j.Name
 	l, exists := allLobbies[j.ID]
 	if !exists {
 		return fmt.Errorf("lobby \"%v\" does not exist", j.ID)
@@ -35,5 +39,5 @@ func chat(c *Client, p json.RawMessage) error {
 		c.lobby.broadcast <- Response{Category: "chat", Body: p}
 		return nil
 	}
-	return fmt.Errorf("client %v not in any lobby", c)
+	return fmt.Errorf("client \"%v\" not in any lobby", c.name)
 }
