@@ -32,7 +32,7 @@ func TestCreateLobby(t *testing.T) {
 	if errDecode := json.Unmarshal(msg[:n], &r); errDecode != nil {
 		t.Fatalf("%v", errDecode)
 	}
-	if r.Category != "create" {
-		t.Errorf("unexpected response category.  Received %v, expected create", r.Category)
+	if r.Category != "join" {
+		t.Errorf("unexpected response category.  Received %v, expected join", r.Category)
 	}
 }
