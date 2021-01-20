@@ -13,7 +13,7 @@ const SendChatForm = () => (
   >
     {({ isSubmitting }) => (
       <Form>
-        <Field type="text" name="message" placeholder="message" />
+        <Field type="text" name="message" placeholder="message" required />
         <ErrorMessage name="message" component="div" />
         <button type="submit" disabled={isSubmitting}>
           Send Message

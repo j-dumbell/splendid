@@ -13,7 +13,7 @@ export const CreateLobbyForm = () => (
   >
     {({ isSubmitting }) => (
       <Form>
-        <Field type="text" name="name" placeholder="name" />
+        <Field type="text" name="name" placeholder="name" required />
         <ErrorMessage name="name" component="div" />
         <button type="submit" disabled={isSubmitting}>
           Create Lobby

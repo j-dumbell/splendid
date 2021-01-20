@@ -13,9 +13,9 @@ export const JoinLobbyForm = () => (
   >
     {({ isSubmitting }) => (
       <Form>
-        <Field type="text" name="name" placeholder="name" />
+        <Field type="text" name="name" placeholder="name" required />
         <ErrorMessage name="name" component="div" />
-        <Field type="text" name="id" placeholder="id" />
+        <Field type="text" name="id" placeholder="id" required />
         <ErrorMessage name="id" component="div" />
         <button type="submit" disabled={isSubmitting}>
           Join Lobby
