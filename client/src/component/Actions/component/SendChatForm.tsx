@@ -1,10 +1,10 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { sendJSON } from "../../../hooks/useWebsocket";
-import { useLobbyId } from "../../../hooks/useCookie";
+import { useCookie } from "../../../hooks/useCookie";
 
 const SendChatForm = () => {
-  const [lobbyId] = useLobbyId();
+  const [lobbyId] = useCookie("lobbyId");
   if (!lobbyId) {
     return null;
   }

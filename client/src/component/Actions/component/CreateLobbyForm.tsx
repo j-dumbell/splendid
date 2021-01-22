@@ -5,17 +5,19 @@ import { useCookie } from "../../../hooks/useCookie";
 
 export const CreateLobbyForm = () => {
   const [lobbyId] = useCookie("lobbyId");
+  const [username, setUsername] = useCookie("username");
   if (lobbyId) {
     return null;
   }
 
   return (
     <Formik
-      initialValues={{ name: "" }}
+      initialValues={{ name: username || "" }}
       onSubmit={(values, { resetForm, setSubmitting }) => {
         sendJSON({ action: "create", params: values });
         resetForm();
         setSubmitting(false);
+        setUsername(values.name);
       }}
     >
       {({ isSubmitting }) => (

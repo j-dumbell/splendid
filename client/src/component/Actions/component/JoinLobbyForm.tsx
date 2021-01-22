@@ -5,17 +5,20 @@ import { useCookie } from "../../../hooks/useCookie";
 
 export const JoinLobbyForm = () => {
   const [lobbyId] = useCookie("lobbyId");
+  const [username, setUsername] = useCookie("username");
+
   if (lobbyId) {
     return null;
   }
   
   return (
     <Formik
-      initialValues={{ id: "", name: "" }}
+      initialValues={{ id: "", name: username || "" }}
       onSubmit={(values, { resetForm, setSubmitting }) => {
         sendJSON({ action: "join", params: values });
         resetForm();
         setSubmitting(false);
+        setUsername(values.name);
       }}
     >
       {({ isSubmitting }) => (
