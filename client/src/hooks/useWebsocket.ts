@@ -26,17 +26,20 @@ export const useWebSocket = (path: string) => {
       setError(errorMessage);
       return;
     }
+
     if (!socket) {
       setStatus("loading");
       const url = new URL(`ws://${config.apiUrl}${path}`);
       socket = new WebSocket(url.toString());
       (window as any).ws = socket;
     }
+
     socket.onopen = () => setStatus("open");
     socket.onclose = () => setStatus("closed");
     socket.onmessage = ({ data }) => {
       const response = JSON.parse(data) as WsResponse;
       setActions((actions) => actions.concat(response));
+
       switch (response.action) {
         case "join":
           setLobbyId(response?.details?.lobbyId);

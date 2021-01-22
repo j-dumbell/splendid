@@ -5,6 +5,7 @@ import { useCookie } from "../../../hooks/useCookie";
 
 const SendChatForm = () => {
   const [lobbyId] = useCookie("lobbyId");
+  
   if (!lobbyId) {
     return null;
   }

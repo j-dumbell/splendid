@@ -4,7 +4,7 @@ import { useBeforeunload } from "react-beforeunload";
 export const useCookie = (cookieName: string) => {
   const [cookies, setCookie, removeCookie] = useCookies([cookieName]);
   const cookie = cookies[cookieName];
-  useBeforeunload(() => removeCookie(cookieName));
+  useBeforeunload(() => removeCookie('lobbyId'));
   return [
     cookie,
     (value: string) => setCookie(cookieName, value),
