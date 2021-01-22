@@ -37,6 +37,7 @@ func (l *Lobby) Run() {
 		case client = <-l.exit:
 			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
 			delete(l.clients, client)
+			client.lobby = nil
 			res = Response{
 				Action: "exit",
 				Ok:     true,

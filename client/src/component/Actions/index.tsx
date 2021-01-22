@@ -1,9 +1,13 @@
 import React from "react";
 
-import { sendJSON, WsResponse, WsStatus } from "../../hooks/websocket";
+import { WsResponse, WsStatus } from "../../hooks/useWebsocket";
+import { useCookie } from "../../hooks/useCookie";
+
+import NameForm from "./component/NameForm";
 import SendChatForm from "./component/SendChatForm";
 import JoinLobbyForm from "./component/JoinLobbyForm";
 import CreateLobbyForm from "./component/CreateLobbyForm";
+import ExitLobbyButton from "./component/ExitLobbyButton";
 import LatestResponse from "./component/LatestResponse";
 
 type ActionProps = {
@@ -11,15 +15,23 @@ type ActionProps = {
   status: WsStatus;
 };
 
-const Actions = ({ actions, status }: ActionProps) =>
-  status === "open" ? (
+const Actions = ({ actions, status }: ActionProps) => {
+  const [username] = useCookie("username");
+
+  return status === "open" ? (
     <>
+      <NameForm />
+      {username && (
+        <>
+          <CreateLobbyForm />
+          <JoinLobbyForm />
+        </>
+      )}
+      <ExitLobbyButton />
       <SendChatForm />
-      <JoinLobbyForm />
-      <CreateLobbyForm />
-      <button onClick={() => sendJSON({ action: "exit" })}>Exit Lobby</button>
       <LatestResponse actions={actions} />
     </>
   ) : null;
+};
 
 export default Actions;

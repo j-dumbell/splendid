@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 
-import { useWebSocket, WsResponse, WsStatus } from "./hooks/websocket";
+import { useWebSocket, WsResponse, WsStatus } from "./hooks/useWebsocket";
 import Actions from "./component/Actions";
 import ChatHistory from "./component/ChatHistory";
 

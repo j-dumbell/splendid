@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import config from "../config";
+import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse = {
@@ -17,26 +18,37 @@ export const useWebSocket = (path: string) => {
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
   const [actions, setActions] = useState<WsResponse[]>([]);
+  const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
 
   useEffect(() => {
-    setStatus("loading");
     if (!config.apiUrl) {
       const errorMessage = "apiUrl not set";
       setError(errorMessage);
       return;
     }
+
     if (!socket) {
+      setStatus("loading");
       const url = new URL(`ws://${config.apiUrl}${path}`);
       socket = new WebSocket(url.toString());
       (window as any).ws = socket;
     }
+
     socket.onopen = () => setStatus("open");
     socket.onclose = () => setStatus("closed");
     socket.onmessage = ({ data }) => {
       const response = JSON.parse(data) as WsResponse;
       setActions((actions) => actions.concat(response));
+
+      switch (response.action) {
+        case "join":
+          setLobbyId(response?.details?.lobbyId);
+          break;
+        case "exit":
+          removeLobbyId();
+      }
     };
-  }, [path]);
+  }, [path, actions, setLobbyId, removeLobbyId]);
 
   return [status, error, actions];
 };
