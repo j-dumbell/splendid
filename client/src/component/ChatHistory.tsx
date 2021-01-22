@@ -1,5 +1,6 @@
 import React from "react";
-import { WsResponse } from "../hooks/websocket";
+
+import { WsResponse } from "../hooks/useWebsocket";
 
 type ChatHistoryProps = {
   actions: WsResponse[];
@@ -14,8 +15,8 @@ const ChatHistory = ({ actions }: ChatHistoryProps) => {
     <div style={{ flex: "1" }}>
       <h2>Chat History</h2>
       <div style={{ color: "#fff" }}>
-        {messages.map((m) => (
-          <p>{m}</p>
+        {messages.map((m, i) => (
+          <p key={i}>{m}</p>
         ))}
       </div>
     </div>

@@ -13,6 +13,8 @@
     "formik": "^2.1.5",
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
+    "react-beforeunload": "^2.4.0",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-json-pretty": "^2.2.0",
     "react-scripts": "3.4.1",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.7",
+    "@types/react-beforeunload": "^2.1.0",
     "@types/react-json-pretty": "^2.2.0"
   }
 }

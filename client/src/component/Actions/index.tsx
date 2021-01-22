@@ -1,9 +1,10 @@
 import React from "react";
 
-import { sendJSON, WsResponse, WsStatus } from "../../hooks/websocket";
+import { WsResponse, WsStatus } from "../../hooks/useWebsocket";
 import SendChatForm from "./component/SendChatForm";
 import JoinLobbyForm from "./component/JoinLobbyForm";
 import CreateLobbyForm from "./component/CreateLobbyForm";
+import ExitLobbyButton from "./component/ExitLobbyButton";
 import LatestResponse from "./component/LatestResponse";
 
 type ActionProps = {
@@ -17,7 +18,7 @@ const Actions = ({ actions, status }: ActionProps) =>
       <SendChatForm />
       <JoinLobbyForm />
       <CreateLobbyForm />
-      <button onClick={() => sendJSON({ action: "exit" })}>Exit Lobby</button>
+      <ExitLobbyButton />
       <LatestResponse actions={actions} />
     </>
   ) : null;
