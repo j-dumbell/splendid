@@ -1,10 +1,10 @@
 import React from "react";
 
 import { sendJSON } from "../../../hooks/useWebsocket";
-import { useLobbyId } from "../../../hooks/useLobbyId";
+import { useCookie } from "../../../hooks/useCookie";
 
 const ExitLobbyButton = () => {
-  const [lobbyId] = useLobbyId();
+  const [lobbyId] = useCookie("lobbyId");
   if (!lobbyId) {
     return null;
   }

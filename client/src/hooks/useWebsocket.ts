@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import config from "../config";
-import { useLobbyId } from "./useLobbyId";
+import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse = {
@@ -18,7 +18,7 @@ export const useWebSocket = (path: string) => {
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
   const [actions, setActions] = useState<WsResponse[]>([]);
-  const [, setLobbyId, removeLobbyId] = useLobbyId();
+  const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
 
   useEffect(() => {
     if (!config.apiUrl) {
