@@ -39,20 +39,20 @@ func TestGame_BuyCard(t *testing.T) {
 	err1 := g1.BuyCard(3, 2, 2)
 	expErr := "not active player"
 	if err1.Error() != expErr {
-		t.Fatalf("incorrect error returned.  Actual: \"%v\".  Expected: \"%v\"", err1.Error(), expErr)
+		t.Fatalf("incorrect error returned: \nActual: %v \nExpected: %v", err1.Error(), expErr)
 	}
 	if !reflect.DeepEqual(g1, g) {
-		t.Fatalf("incorrect game.  Actual: \"%v\"", g1)
+		t.Fatalf("incorrect game: \nActual: %v \nExpected: %v", g1, g)
 	}
 
 	g2.BuyCard(1, 6, 2)
 	expGBank := map[Resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5}
 	expPBank := map[Resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3}
 	if !(reflect.DeepEqual(g2.Board.Bank, expGBank)) {
-		t.Fatalf("incorrect game bank.  Actual: \"%v\".  Expected: \"%v\"", g2.Board.Bank, expGBank)
+		t.Fatalf("incorrect game bank: \nActual: %v \nExpected: %v", g2.Board.Bank, expGBank)
 	}
-	if reflect.DeepEqual(g2.Players[0].Bank, expPBank) {
-		t.Fatalf("incorrect player bank.  Actual: \"%v\".  Expected: \"%v\"", g2.Players[0].Bank, expPBank)
+	if !reflect.DeepEqual(g2.Players[0].Bank, expPBank) {
+		t.Fatalf("incorrect player bank: \nActual: %v \nExpected: %v", g2.Players[0].Bank, expPBank)
 	}
 }
 
