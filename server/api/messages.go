@@ -37,6 +37,6 @@ type ReponseDetails struct {
 }
 
 type PayloadGame struct {
-	Client *Client
+	ID     int
 	Params json.RawMessage
 }

@@ -1,6 +1,7 @@
 package splendid
 
 import (
+	"encoding/json"
 	"errors"
 )
 
@@ -10,6 +11,10 @@ type Game struct {
 	ActivePlayerIndex int
 	Board             Board
 	Turn              int
+}
+
+func EmptyGame() Game {
+	return Game{}
 }
 
 // NewGame instantiates a new Game
@@ -75,4 +80,8 @@ func (g *Game) NextPlayer() {
 	if newIndex == 0 {
 		g.Turn += 1
 	}
+}
+
+func (g *Game) HandleAction(id int, params json.RawMessage) map[int]json.RawMessage {
+	return nil
 }

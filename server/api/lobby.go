@@ -20,17 +20,19 @@ type Lobby struct {
 }
 
 type Game interface {
-	handleAction(PayloadGame)
+	HandleAction(int, json.RawMessage) map[int]json.RawMessage
 }
 
-func NewLobby() Lobby {
+func NewLobby(g Game) Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
-		id:        lobbyID,
-		clients:   make(map[int]*Client),
-		broadcast: make(chan Response),
-		exit:      make(chan *Client),
-		join:      make(chan *Client),
+		id:          lobbyID,
+		clients:     make(map[int]*Client),
+		broadcast:   make(chan Response),
+		exit:        make(chan *Client),
+		join:        make(chan *Client),
+		gameActions: make(chan PayloadGame),
+		game:        g,
 	}
 }
 
@@ -63,9 +65,9 @@ func (l *Lobby) Run() {
 				c.send <- message
 			}
 		case ga := <-l.gameActions:
-			l.game.handleAction(ga)
+			l.game.HandleAction(ga.ID, ga.Params)
 		}
-		
+
 		if !reflect.DeepEqual(res, Response{}) {
 			client.send <- res
 		}
