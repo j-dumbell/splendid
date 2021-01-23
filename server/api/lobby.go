@@ -65,7 +65,7 @@ func (l *Lobby) Run() {
 				c.send <- message
 			}
 		case ga := <-l.gameActions:
-			l.game.HandleAction(ga.ID, ga.Params)
+			l.game.HandleAction(ga.id, ga.params)
 		}
 
 		if !reflect.DeepEqual(res, Response{}) {
