@@ -23,7 +23,7 @@ type Game interface {
 	HandleAction(int, json.RawMessage) map[int]json.RawMessage
 }
 
-func NewLobby(g Game) Lobby {
+func NewLobby(newGame func() Game) Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
 		id:          lobbyID,
@@ -32,7 +32,7 @@ func NewLobby(g Game) Lobby {
 		exit:        make(chan *Client),
 		join:        make(chan *Client),
 		gameActions: make(chan PayloadGame),
-		game:        g,
+		game:        newGame(),
 	}
 }
 

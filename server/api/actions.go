@@ -5,8 +5,8 @@ import (
 	"fmt"
 )
 
-func create(g Game, c *Client, p json.RawMessage, allLobbies map[string]*Lobby) {
-	l := NewLobby(g)
+func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[string]*Lobby) {
+	l := NewLobby(newGame)
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
 	go l.Run()

@@ -13,10 +13,6 @@ type Game struct {
 	Turn              int
 }
 
-func EmptyGame() Game {
-	return Game{}
-}
-
 // NewGame instantiates a new Game
 func NewGame(d map[int][]Card, e []Elite) Game {
 	return Game{

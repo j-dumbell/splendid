@@ -11,12 +11,18 @@ import (
 	"golang.org/x/net/websocket"
 )
 
+type gameName string
+
+var splendidGame gameName = "splendid"
+
+var nameToGame = map[gameName]func()api.Game{
+	splendidGame: func() api.Game{return &splendid.Game{}},
+}
+
 func main() {
-	var interfaceGame api.Game
-	interfaceGame = &splendid.Game{}
 	allLobbies := make(map[string]*api.Lobby)
 	fmt.Println("Starting on port " + strconv.Itoa(config.Port))
-	wsHandler := api.MkWsHandler(interfaceGame, allLobbies, config.MaxPlayersDefault)
+	wsHandler := api.MkWsHandler(nameToGame[splendidGame], allLobbies, config.MaxPlayersDefault)
 	http.Handle("/", websocket.Handler(wsHandler))
 	http.ListenAndServe(":"+strconv.Itoa(config.Port), nil)
 }

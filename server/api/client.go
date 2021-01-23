@@ -15,7 +15,7 @@ type Client struct {
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(g Game, allLobbies map[string]*Lobby, maxPlayers int) {
+func (c *Client) ReadPump(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) {
 	defer func() {
 		if c.lobby != nil {
 			c.lobby.exit <- c
@@ -31,7 +31,7 @@ func (c *Client) ReadPump(g Game, allLobbies map[string]*Lobby, maxPlayers int) 
 
 		switch p.Action {
 		case "create":
-			create(g, c, p.Params, allLobbies)
+			create(newGame, c, p.Params, allLobbies)
 		case "join":
 			err = join(c, p.Params, allLobbies, maxPlayers)
 		case "exit":
