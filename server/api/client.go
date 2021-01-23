@@ -39,6 +39,12 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 			}
 		case "chat":
 			err = chat(c, p.Params)
+		case "game":
+			pg := PayloadGame{
+				Client: c,
+				Params: p.Params,
+			}
+			c.lobby.gameActions <- pg
 		default:
 			err = fmt.Errorf("unrecognised action %v", p.Action)
 		}

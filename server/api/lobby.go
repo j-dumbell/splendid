@@ -10,12 +10,23 @@ import (
 )
 
 type Lobby struct {
-	id        string
-	clients   map[*Client]bool
-	broadcast chan (Response)
-	exit      chan (*Client)
-	join      chan (*Client)
+	id          string
+	clients     map[*Client]bool
+	broadcast   chan (Response)
+	exit        chan (*Client)
+	join        chan (*Client)
+	gameActions chan (PayloadGame)
+	game        Game
 }
+
+type Game interface {
+	handleAction(PayloadGame)
+}
+
+// type ClientPlayer struct {
+// 	playerName Ssring
+// 	client     Client
+// }
 
 func NewLobby() Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
@@ -56,8 +67,10 @@ func (l *Lobby) Run() {
 			for c := range l.clients {
 				c.send <- message
 			}
+		case ga := <-l.gameActions:
+			l.game.handleAction(ga)
 		}
-
+		
 		if !reflect.DeepEqual(res, Response{}) {
 			client.send <- res
 		}
