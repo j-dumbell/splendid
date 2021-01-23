@@ -11,6 +11,7 @@ type Client struct {
 	lobby *Lobby
 	send  chan Response
 	name  string
+	id    int
 }
 
 // ReadPump handles a Client's incoming messages
