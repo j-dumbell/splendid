@@ -6,20 +6,19 @@ import (
 )
 
 func TestGame_AddPlayer(t *testing.T) {
-	p1 := Player{ID: 1}
-	p2 := Player{ID: 2}
-	g := Game{Players: []Player{p1}}
+	g := Game{Players: []Player{{ID: 1, Bank: emptyBank}}}
 
 	g1 := g
-	g1.AddPlayer(p2, 4)
-	if !reflect.DeepEqual(g1.Players, []Player{p1, p2}) {
-		t.Fail()
+	g1.AddPlayer(2)
+	expected := []Player{{ID: 1, Bank: emptyBank}, {ID: 2, Bank: emptyBank}}
+	if !reflect.DeepEqual(g1.Players, expected) {
+		t.Fatalf("unexpected players: \nExpected: %v \nReceived: %v", expected, g1.Players)
 	}
 
 	g2 := g
-	err := g2.AddPlayer(p2, 1)
+	err := g2.AddPlayer(1)
 	if err == nil {
-		t.Fail()
+		t.Fatalf("error not thrown.  Player already in game")
 	}
 }
 

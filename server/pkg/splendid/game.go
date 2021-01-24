@@ -31,7 +31,7 @@ func (g *Game) AddPlayer(id int) error {
 	}
 	for _, player := range g.Players {
 		if player.ID == id {
-			return fmt.Errorf("player id \"%v\" already in game", %v)
+			return fmt.Errorf("player id \"%v\" already in game", id)
 		}
 	}
 	player := NewPlayer(id)
