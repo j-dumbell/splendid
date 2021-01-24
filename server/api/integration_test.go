@@ -12,6 +12,8 @@ import (
 type mockGame struct{}
 
 func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]json.RawMessage { return nil }
+func (mG *mockGame) AddPlayer(i int) error                                         { return nil }
+func (mG *mockGame) RemovePlayer(i int) error                                      { return nil }
 
 func emptyGame() Game { return &mockGame{} }
 

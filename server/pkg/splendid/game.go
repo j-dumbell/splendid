@@ -3,6 +3,9 @@ package splendid
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+
+	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
 // Game represents the state of a current game
@@ -22,11 +25,31 @@ func NewGame(d map[int][]Card, e []Elite) Game {
 }
 
 // AddPlayer adds the provided player to game, as long as there's space
-func (g *Game) AddPlayer(player Player, max int) error {
-	if len(g.Players) >= max {
+func (g *Game) AddPlayer(id int) error {
+	if len(g.Players) >= config.MaxPlayersDefault {
 		return errors.New("game full")
 	}
+	for _, player := range g.Players {
+		if player.ID == id {
+			return fmt.Errorf("player id \"%v\" already in game", id)
+		}
+	}
+	player := NewPlayer(id)
 	g.Players = append(g.Players, player)
+	return nil
+}
+
+// RemovePlayer removes the player ID from the game.
+func (g *Game) RemovePlayer(id int) error {
+	var newPlayers []Player
+	for _, player := range g.Players {
+		if player.ID != id {
+			newPlayers = append(newPlayers, player)
+		}
+	}
+	if len(newPlayers) == len(g.Players) {
+		return fmt.Errorf("player \"%v\" doesn't exist", id)
+	}
 	return nil
 }
 
@@ -46,7 +69,7 @@ func lastCards(cards []Card, index int) ([]Card, error) {
 func (g *Game) BuyCard(playerId int, cardID int, capacity int) error {
 	//To do - refactor once lobbies implemented
 	activePlayer := &g.Players[g.ActivePlayerIndex]
-	if playerId != activePlayer.id {
+	if playerId != activePlayer.ID {
 		return errors.New("not active player")
 	}
 	card, cardErr := GetCard(g.Board.Decks, cardID, capacity)
@@ -62,9 +85,9 @@ func (g *Game) BuyCard(playerId int, cardID int, capacity int) error {
 	activePlayer.Bank = newPBank
 	g.Board.Bank = newGBank
 
-	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], activePlayer.ActiveHand)
+	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], activePlayer.Purchased)
 	g.Board.Decks[tier] = newDeck
-	activePlayer.ActiveHand = newHand
+	activePlayer.Purchased = newHand
 	g.NextPlayer()
 	return nil
 }

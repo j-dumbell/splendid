@@ -21,6 +21,8 @@ type Lobby struct {
 
 type Game interface {
 	HandleAction(int, json.RawMessage) map[int]json.RawMessage
+	AddPlayer(int) error
+	RemovePlayer(int) error
 }
 
 func NewLobby(newGame func() Game) Lobby {
@@ -68,8 +70,8 @@ func (l *Lobby) Run() {
 			idToResponse := l.game.HandleAction(ga.id, ga.params)
 			for id, message := range idToResponse {
 				response := Response{
-					Action: "game",
-					Ok: true,
+					Action:  "game",
+					Ok:      true,
 					Details: message,
 				}
 				l.clients[id].send <- response
