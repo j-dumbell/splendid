@@ -26,12 +26,15 @@ func NewGame(d map[int][]Card, e []Elite) Game {
 
 // AddPlayer adds the provided player to game, as long as there's space
 func (g *Game) AddPlayer(id int) error {
+	if g.Turn > 0 {
+		return errors.New("game already started")
+	}
 	if len(g.Players) >= config.MaxPlayersDefault {
 		return errors.New("game full")
 	}
 	for _, player := range g.Players {
 		if player.ID == id {
-			return fmt.Errorf("player id \"%v\" already in game", id)
+			return nil
 		}
 	}
 	player := NewPlayer(id)
@@ -97,7 +100,7 @@ func (g *Game) NextPlayer() {
 	newIndex := (g.ActivePlayerIndex + 1) % len(g.Players)
 	g.ActivePlayerIndex = newIndex
 	if newIndex == 0 {
-		g.Turn += 1
+		g.Turn++
 	}
 }
 

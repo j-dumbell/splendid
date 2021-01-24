@@ -23,6 +23,7 @@ type Game interface {
 	HandleAction(int, json.RawMessage) map[int]json.RawMessage
 	AddPlayer(int) error
 	RemovePlayer(int) error
+	HasStarted() bool
 }
 
 func NewLobby(newGame func() Game) Lobby {
@@ -72,7 +73,9 @@ func (l *Lobby) joinLobby(client *Client) Response {
 	}
 	l.clients[client.id] = client
 	client.lobby = l
-	l.game.AddPlayer(client.id)
+	if err := l.game.AddPlayer(client.id); err != nil {
+		return mkErrorResponse("join", err)
+	}
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
 	return Response{
