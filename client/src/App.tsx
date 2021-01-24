@@ -5,6 +5,7 @@ import "./App.css";
 import { useWebSocket, WsResponse, WsStatus } from "./hooks/useWebsocket";
 import Actions from "./component/Actions";
 import ChatHistory from "./component/ChatHistory";
+import Splendid from "./component/Splendid";
 
 function App() {
   const [status, error, actions] = useWebSocket("/");
@@ -20,6 +21,7 @@ function App() {
         </div>
         <ChatHistory actions={actionHistory} />
       </div>
+      <Splendid />
     </>
   );
 }
