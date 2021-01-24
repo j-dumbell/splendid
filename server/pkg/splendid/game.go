@@ -3,6 +3,9 @@ package splendid
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+
+	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
 // Game represents the state of a current game
@@ -22,11 +25,31 @@ func NewGame(d map[int][]Card, e []Elite) Game {
 }
 
 // AddPlayer adds the provided player to game, as long as there's space
-func (g *Game) AddPlayer(player Player, max int) error {
-	if len(g.Players) >= max {
+func (g *Game) AddPlayer(id int) error {
+	if len(g.Players) >= config.MaxPlayersDefault {
 		return errors.New("game full")
 	}
+	for _, player := range g.Players {
+		if player.ID == id {
+			return fmt.errorf("player id \"%v\" already in game", %v)
+		}
+	}
+	player := NewPlayer(id)
 	g.Players = append(g.Players, player)
+	return nil
+}
+
+// RemovePlayer removes the player ID from the game.
+func (g *Game) RemovePlayer(id int) error {
+	var newPlayers []Player
+	for _, player := range g.Players {
+		if player.ID != id {
+			newPlayers = append(newPlayers, player)
+		}
+	}
+	if len(newPlayers) == len(g.Players) {
+		return fmt.Errorf("player \"%v\" doesn't exist", id)
+	}
 	return nil
 }
 
