@@ -2,8 +2,8 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/j-dumbell/splendid/server/pkg/util"
@@ -40,28 +40,14 @@ func NewLobby(newGame func() Game) Lobby {
 
 func (l *Lobby) Run() {
 	for {
-		var res Response
-		var client *Client
 
 		select {
-		case client = <-l.exit:
-			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
-			delete(l.clients, client.id)
-			client.lobby = nil
-			res = Response{
-				Action: "exit",
-				Ok:     true,
-			}
-		case client = <-l.join:
-			l.clients[client.id] = client
-			client.lobby = l
-			fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
-			rj, _ := json.Marshal(ResponseJoin{ID: l.id})
-			res = Response{
-				Action:  "join",
-				Ok:      true,
-				Details: rj,
-			}
+		case client := <-l.join:
+			res := l.joinLobby(client)
+			client.send <- res
+		case client := <-l.exit:
+			res := l.exitLobby(client)
+			client.send <- res
 		case message := <-l.broadcast:
 			for _, c := range l.clients {
 				c.send <- message
@@ -77,9 +63,32 @@ func (l *Lobby) Run() {
 				l.clients[id].send <- response
 			}
 		}
+	}
+}
 
-		if !reflect.DeepEqual(res, Response{}) {
-			client.send <- res
-		}
+func (l *Lobby) joinLobby(client *Client) Response {
+	if _, exists := l.clients[client.id]; exists {
+		return mkErrorResponse("join", errors.New("already in lobby"))
+	}
+	l.clients[client.id] = client
+	client.lobby = l
+	l.game.AddPlayer(client.id)
+	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
+	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
+	return Response{
+		Action:  "join",
+		Ok:      true,
+		Details: rj,
+	}
+}
+
+func (l *Lobby) exitLobby(client *Client) Response {
+	fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
+	delete(l.clients, client.id)
+	l.game.RemovePlayer(client.id)
+	client.lobby = nil
+	return Response{
+		Action: "exit",
+		Ok:     true,
 	}
 }
