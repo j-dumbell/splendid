@@ -35,3 +35,8 @@ type ResponseJoin struct {
 type ReponseDetails struct {
 	Message string `json:"message"`
 }
+
+type PayloadGame struct {
+	id     int
+	params json.RawMessage
+}

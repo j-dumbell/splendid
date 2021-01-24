@@ -11,10 +11,11 @@ type Client struct {
 	lobby *Lobby
 	send  chan Response
 	name  string
+	id    int
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
+func (c *Client) ReadPump(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) {
 	defer func() {
 		if c.lobby != nil {
 			c.lobby.exit <- c
@@ -30,7 +31,7 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 
 		switch p.Action {
 		case "create":
-			create(c, p.Params, allLobbies)
+			create(newGame, c, p.Params, allLobbies)
 		case "join":
 			err = join(c, p.Params, allLobbies, maxPlayers)
 		case "exit":
@@ -39,6 +40,12 @@ func (c *Client) ReadPump(allLobbies map[string]*Lobby, maxPlayers int) {
 			}
 		case "chat":
 			err = chat(c, p.Params)
+		case "game":
+			pg := PayloadGame{
+				id: c.id,
+				params: p.Params,
+			}
+			c.lobby.gameActions <- pg
 		default:
 			err = fmt.Errorf("unrecognised action %v", p.Action)
 		}

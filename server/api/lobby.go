@@ -10,21 +10,29 @@ import (
 )
 
 type Lobby struct {
-	id        string
-	clients   map[*Client]bool
-	broadcast chan (Response)
-	exit      chan (*Client)
-	join      chan (*Client)
+	id          string
+	clients     map[int]*Client
+	broadcast   chan (Response)
+	exit        chan (*Client)
+	join        chan (*Client)
+	gameActions chan (PayloadGame)
+	game        Game
 }
 
-func NewLobby() Lobby {
+type Game interface {
+	HandleAction(int, json.RawMessage) map[int]json.RawMessage
+}
+
+func NewLobby(newGame func() Game) Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
-		id:        lobbyID,
-		clients:   make(map[*Client]bool),
-		broadcast: make(chan Response),
-		exit:      make(chan *Client),
-		join:      make(chan *Client),
+		id:          lobbyID,
+		clients:     make(map[int]*Client),
+		broadcast:   make(chan Response),
+		exit:        make(chan *Client),
+		join:        make(chan *Client),
+		gameActions: make(chan PayloadGame),
+		game:        newGame(),
 	}
 }
 
@@ -36,14 +44,14 @@ func (l *Lobby) Run() {
 		select {
 		case client = <-l.exit:
 			fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
-			delete(l.clients, client)
+			delete(l.clients, client.id)
 			client.lobby = nil
 			res = Response{
 				Action: "exit",
 				Ok:     true,
 			}
 		case client = <-l.join:
-			l.clients[client] = true
+			l.clients[client.id] = client
 			client.lobby = l
 			fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 			rj, _ := json.Marshal(ResponseJoin{ID: l.id})
@@ -53,8 +61,18 @@ func (l *Lobby) Run() {
 				Details: rj,
 			}
 		case message := <-l.broadcast:
-			for c := range l.clients {
+			for _, c := range l.clients {
 				c.send <- message
+			}
+		case ga := <-l.gameActions:
+			idToResponse := l.game.HandleAction(ga.id, ga.params)
+			for id, message := range idToResponse {
+				response := Response{
+					Action: "game",
+					Ok: true,
+					Details: message,
+				}
+				l.clients[id].send <- response
 			}
 		}
 

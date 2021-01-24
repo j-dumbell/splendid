@@ -9,8 +9,14 @@ import (
 	"golang.org/x/net/websocket"
 )
 
+type mockGame struct{}
+
+func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]json.RawMessage { return nil }
+
+func emptyGame() Game { return &mockGame{} }
+
 func TestCreateLobby(t *testing.T) {
-	wsHandler := MkWsHandler(map[string]*Lobby{}, 2)
+	wsHandler := MkWsHandler(emptyGame, map[string]*Lobby{}, 2)
 	s := httptest.NewServer(websocket.Handler(wsHandler))
 	defer s.Close()
 

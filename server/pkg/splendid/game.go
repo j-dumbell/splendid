@@ -1,6 +1,7 @@
 package splendid
 
 import (
+	"encoding/json"
 	"errors"
 )
 
@@ -42,10 +43,10 @@ func lastCards(cards []Card, index int) ([]Card, error) {
 }
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
-func (g *Game) BuyCard(playerName string, cardID int, capacity int) error {
+func (g *Game) BuyCard(playerId int, cardID int, capacity int) error {
 	//To do - refactor once lobbies implemented
 	activePlayer := &g.Players[g.ActivePlayerIndex]
-	if playerName != activePlayer.Name {
+	if playerId != activePlayer.id {
 		return errors.New("not active player")
 	}
 	card, cardErr := GetCard(g.Board.Decks, cardID, capacity)
@@ -75,4 +76,8 @@ func (g *Game) NextPlayer() {
 	if newIndex == 0 {
 		g.Turn += 1
 	}
+}
+
+func (g *Game) HandleAction(id int, params json.RawMessage) map[int]json.RawMessage {
+	return nil
 }
