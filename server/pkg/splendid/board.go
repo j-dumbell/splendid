@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/j-dumbell/splendid/server/config"
+	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
