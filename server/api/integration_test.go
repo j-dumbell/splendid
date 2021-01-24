@@ -6,20 +6,23 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/j-dumbell/splendid/server/pkg/splendid"
 	"golang.org/x/net/websocket"
 )
 
-type gameName string
+type mockGame struct {
+	someParam int
+}
 
-var SplendidGame gameName = "splendid"
+func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]json.RawMessage {
+	return nil
+}
 
-var nameToGame = map[gameName]func() Game{
-	SplendidGame: func() Game { return &splendid.Game{} },
+func emptyGame() Game {
+	return &mockGame{}
 }
 
 func TestCreateLobby(t *testing.T) {
-	wsHandler := MkWsHandler(nameToGame[SplendidGame], map[string]*Lobby{}, 2)
+	wsHandler := MkWsHandler(emptyGame, map[string]*Lobby{}, 2)
 	s := httptest.NewServer(websocket.Handler(wsHandler))
 	defer s.Close()
 
