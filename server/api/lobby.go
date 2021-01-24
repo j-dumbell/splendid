@@ -65,7 +65,15 @@ func (l *Lobby) Run() {
 				c.send <- message
 			}
 		case ga := <-l.gameActions:
-			l.game.HandleAction(ga.id, ga.params)
+			idToResponse := l.game.HandleAction(ga.id, ga.params)
+			for id, message := range idToResponse {
+				response := Response{
+					Action: "game",
+					Ok: true,
+					Details: message,
+				}
+				l.clients[id].send <- response
+			}
 		}
 
 		if !reflect.DeepEqual(res, Response{}) {

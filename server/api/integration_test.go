@@ -6,11 +6,20 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/j-dumbell/splendid/server/pkg/splendid"
 	"golang.org/x/net/websocket"
 )
 
+type gameName string
+
+var SplendidGame gameName = "splendid"
+
+var nameToGame = map[gameName]func() Game{
+	SplendidGame: func() Game { return &splendid.Game{} },
+}
+
 func TestCreateLobby(t *testing.T) {
-	wsHandler := MkWsHandler(map[string]*Lobby{}, 2)
+	wsHandler := MkWsHandler(nameToGame[SplendidGame], map[string]*Lobby{}, 2)
 	s := httptest.NewServer(websocket.Handler(wsHandler))
 	defer s.Close()
 
