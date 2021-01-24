@@ -9,17 +9,11 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type mockGame struct {
-	someParam int
-}
+type mockGame struct{}
 
-func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]json.RawMessage {
-	return nil
-}
+func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]json.RawMessage { return nil }
 
-func emptyGame() Game {
-	return &mockGame{}
-}
+func emptyGame() Game { return &mockGame{} }
 
 func TestCreateLobby(t *testing.T) {
 	wsHandler := MkWsHandler(emptyGame, map[string]*Lobby{}, 2)
