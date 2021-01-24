@@ -6,8 +6,8 @@ import (
 )
 
 func TestGame_AddPlayer(t *testing.T) {
-	p1 := Player{id: 1}
-	p2 := Player{id: 2}
+	p1 := Player{ID: 1}
+	p2 := Player{ID: 2}
 	g := Game{Players: []Player{p1}}
 
 	g1 := g
@@ -24,8 +24,8 @@ func TestGame_AddPlayer(t *testing.T) {
 }
 
 func TestGame_BuyCard(t *testing.T) {
-	p1 := Player{id: 1, Bank: map[Resource]int{Blue: 3, Red: 3, Black: 3, Green: 3, White: 3}}
-	p2 := Player{id: 2}
+	p1 := Player{ID: 1, Bank: map[Resource]int{Blue: 3, Red: 3, Black: 3, Green: 3, White: 3}}
+	p2 := Player{ID: 2}
 	deck1 := []Card{{ID: 1}, {ID: 2}, {ID: 3}}
 	deck2 := []Card{{ID: 4}, {ID: 5}, {ID: 6, Cost: map[Resource]int{Blue: 2, Red: 1}}}
 	deck3 := []Card{{ID: 7}, {ID: 8}, {ID: 9}}
@@ -57,7 +57,7 @@ func TestGame_BuyCard(t *testing.T) {
 }
 
 func TestGame_NextPlayer(t *testing.T) {
-	players := []Player{{id: 1}, {id: 2}}
+	players := []Player{{ID: 1}, {ID: 2}}
 	g1 := Game{Players: players, ActivePlayerIndex: 0, Turn: 1}
 	g1.NextPlayer()
 	if g1.ActivePlayerIndex != 1 || g1.Turn != 1 {

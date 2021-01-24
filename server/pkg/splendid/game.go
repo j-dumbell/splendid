@@ -46,7 +46,7 @@ func lastCards(cards []Card, index int) ([]Card, error) {
 func (g *Game) BuyCard(playerId int, cardID int, capacity int) error {
 	//To do - refactor once lobbies implemented
 	activePlayer := &g.Players[g.ActivePlayerIndex]
-	if playerId != activePlayer.id {
+	if playerId != activePlayer.ID {
 		return errors.New("not active player")
 	}
 	card, cardErr := GetCard(g.Board.Decks, cardID, capacity)
@@ -62,9 +62,9 @@ func (g *Game) BuyCard(playerId int, cardID int, capacity int) error {
 	activePlayer.Bank = newPBank
 	g.Board.Bank = newGBank
 
-	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], activePlayer.ActiveHand)
+	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], activePlayer.Purchased)
 	g.Board.Decks[tier] = newDeck
-	activePlayer.ActiveHand = newHand
+	activePlayer.Purchased = newHand
 	g.NextPlayer()
 	return nil
 }
