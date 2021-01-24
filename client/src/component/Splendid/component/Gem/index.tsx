@@ -11,9 +11,10 @@ import { Resource } from "../../domain";
 
 type Props = {
   colour: Resource;
+  mini?: boolean;
 };
 
-const Gem = ({ colour }: Props) => {
+const Gem = ({ colour, mini }: Props) => {
   const assetMap = {
     black: Onyx,
     white: Diamond,
@@ -22,7 +23,13 @@ const Gem = ({ colour }: Props) => {
     green: Emerald,
     yellow: Citrine,
   };
-  return <img src={assetMap[colour]} alt={`${colour} gem`} style={{ width: "50px" }} />;
+  return (
+    <img
+      src={assetMap[colour]}
+      alt={`${colour} gem`}
+      style={{ width: mini ? "20px" : "50px" }}
+    />
+  );
 };
 
 export default Gem;
