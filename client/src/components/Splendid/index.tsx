@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 import fixtures from "./gameFixtures.json";
 
@@ -7,25 +8,29 @@ import Card from "./Card";
 import Elite from "./Elite";
 import ResourceList from "./ResourceList";
 
+const ResourceContainer = styled(FlexContainer)`
+  color: white;
+`;
+
 const Splendid = () => (
   <FlexContainer column>
-    <FlexContainer style={{ color: "white" }}>
+    <ResourceContainer>
       <ResourceList resourceList={fixtures.board.bank} />
-    </FlexContainer>
+    </ResourceContainer>
     <FlexContainer>
-      {fixtures.board.elites.map((elite) => (
-        <Elite {...(elite as any)} />
+      {fixtures.board.elites.map((elite: any, i) => (
+        <Elite key={`elite-${i}`} {...elite} />
       ))}
     </FlexContainer>
     <div>
       {Object.keys(fixtures.board.decks)
         .reverse()
-        .map((tier) => {
+        .map((tier, i) => {
           const cards = (fixtures.board.decks as any)[tier];
           return (
-            <FlexContainer>
-              {cards.map((card: any) => (
-                <Card {...card} />
+            <FlexContainer key={`card-container-${i}`}>
+              {cards.map((card: any, j: number) => (
+                <Card key={`card-${j}`} {...card} />
               ))}
             </FlexContainer>
           );

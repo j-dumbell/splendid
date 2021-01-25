@@ -3,6 +3,7 @@ import React from "react";
 import FlexContainer from "../../common/FlexContainer";
 import Image from "../../common/Image";
 import ResourceList from "../ResourceList";
+import EliteContainer from "./styled";
 import Crown from "./crown.svg";
 
 type EliteProps = {
@@ -12,18 +13,7 @@ type EliteProps = {
 };
 
 const Elite = ({ points, cost }: EliteProps) => (
-  <FlexContainer
-    column
-    justify="space-between"
-    style={{
-      backgroundColor: "white",
-      margin: "5px",
-      padding: "5px",
-      width: "113px",
-      height: "113px",
-      borderRadius: "5px",
-    }}
-  >
+  <EliteContainer column justify="space-between">
     <FlexContainer justify="space-between">
       {points}
       <Image src={Crown} alt="crown" width="30px" />
@@ -31,7 +21,7 @@ const Elite = ({ points, cost }: EliteProps) => (
     <div>
       <ResourceList resourceList={cost} hideEmpty mini />
     </div>
-  </FlexContainer>
+  </EliteContainer>
 );
 
 export default Elite;

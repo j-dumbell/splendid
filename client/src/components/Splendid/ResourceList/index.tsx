@@ -10,9 +10,9 @@ type Props = {
 
 const ResourceList = ({ resourceList, hideEmpty, mini }: Props) => {
   const keys: ResourceType[] = ["black", "white", "red", "blue", "green", "yellow"];
-  const resources = keys.map((key) =>
+  const resources = keys.map((key, i) =>
     hideEmpty && !resourceList[key] ? null : (
-      <div>
+      <div key={`resource-${i}`}>
         <Resource resourceType={key} mini={mini} />
         {resourceList[key]}
       </div>

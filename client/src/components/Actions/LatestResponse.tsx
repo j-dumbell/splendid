@@ -1,8 +1,7 @@
 import React from "react";
 import JSONPretty from "react-json-pretty";
 
-import { WsResponse } from "../../../hooks/useWebsocket";
-import WrappedPreformatted from "./styled";
+import { WsResponse } from "../../hooks/useWebsocket";
 
 type LatestResponseProps = {
   actions: WsResponse[];
@@ -18,10 +17,10 @@ const jsonTheme = {
 
 const LatestResponse = ({ actions }: LatestResponseProps) =>
   actions.length ? (
-    <WrappedPreformatted>
+    <>
       <h2>Latest Response</h2>
       <JSONPretty data={actions.slice(-1)} theme={jsonTheme} />
-    </WrappedPreformatted>
+    </>
   ) : null;
 
 export default LatestResponse;
