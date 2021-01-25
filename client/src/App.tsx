@@ -3,9 +3,9 @@ import React from "react";
 import "./App.css";
 
 import { useWebSocket, WsResponse, WsStatus } from "./hooks/useWebsocket";
-import Actions from "./component/Actions";
-import ChatHistory from "./component/ChatHistory";
-import Splendid from "./component/Splendid";
+import Actions from "./components/Actions";
+import ChatHistory from "./components/ChatHistory";
+import Splendid from "./components/Splendid";
 
 function App() {
   const [status, error, actions] = useWebSocket("/");

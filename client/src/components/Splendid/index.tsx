@@ -1,14 +1,14 @@
 import React from "react";
 
 import fixtures from "./gameFixtures.json";
-import Bank from "./component/Bank";
-import Card from "./component/Card";
-import Elite from "./component/Elite";
+import Card from "./Card";
+import Elite from "./Elite";
+import ResourceList from "./ResourceList";
 
 const Splendid = () => (
   <div style={{ display: "flex", flexDirection: "column" }}>
     <div style={{ display: "flex", color: "white" }}>
-      <Bank bank={fixtures.board.bank} />
+      <ResourceList resourceList={fixtures.board.bank} />
     </div>
     <div style={{ display: "flex" }}>
       {fixtures.board.elites.map(elite => <Elite {...elite as any} />)}

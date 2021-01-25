@@ -1,7 +1,7 @@
 import React from "react";
 
-import { sendJSON } from "../../../hooks/useWebsocket";
-import { useCookie } from "../../../hooks/useCookie";
+import { sendJSON } from "../../hooks/useWebsocket";
+import { useCookie } from "../../hooks/useCookie";
 
 const ExitLobbyButton = () => {
   const [lobbyId] = useCookie("lobbyId");

@@ -1,7 +1,7 @@
 import React from "react";
 
-import Bank from "./Bank";
-import Crown from "../assets/crown.svg";
+import ResourceList from "../ResourceList";
+import Crown from "./crown.svg";
 
 type EliteProps = {
   id: number;
@@ -25,10 +25,10 @@ const Elite = ({ points, cost }: EliteProps) => (
   >
     <div style={{ display: "flex", justifyContent: "space-between" }}>
       {points}
-      <img src={Crown} alt="crown"  style={{ width: "30px" }} />
+      <img src={Crown} alt="crown" style={{ width: "30px" }} />
     </div>
     <div>
-      <Bank bank={cost} hideEmpty mini />
+      <ResourceList resourceList={cost} hideEmpty mini />
     </div>
   </div>
 );

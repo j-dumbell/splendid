@@ -1,7 +1,8 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { sendJSON } from "../../../hooks/useWebsocket";
-import { useCookie } from "../../../hooks/useCookie";
+
+import { sendJSON } from "../../hooks/useWebsocket";
+import { useCookie } from "../../hooks/useCookie";
 
 const SendChatForm = () => {
   const [lobbyId] = useCookie("lobbyId");

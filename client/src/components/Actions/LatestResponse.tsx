@@ -1,7 +1,7 @@
 import React from "react";
 import JSONPretty from "react-json-pretty";
 
-import { WsResponse } from "../../../hooks/useWebsocket";
+import { WsResponse } from "../../hooks/useWebsocket";
 
 type LatestResponseProps = {
   actions: WsResponse[];

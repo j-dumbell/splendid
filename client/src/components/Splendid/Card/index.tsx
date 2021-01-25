@@ -1,13 +1,13 @@
 import React from "react";
-import { Resource } from "../domain";
-import Gem from "./Gem";
-import Bank from "./Bank";
+import { ResourceType } from "./Resource";
+import Gem from "./Resource";
+import ResourceList from "./ResourceList";
 
 type CardProps = {
   id: number;
   tier: number;
   points: number;
-  income: Resource;
+  income: ResourceType;
   cost: Record<string, number>;
 };
 
@@ -32,10 +32,10 @@ const Card = ({ tier, points, income, cost }: CardProps) => (
     }}
   >
     <div style={{ display: "flex", justifyContent: "space-between" }}>
-      {points} <Gem colour={income} mini />
+      {points} <Gem resourceType={income} mini />
     </div>
     <div>
-      <Bank bank={cost} hideEmpty mini />
+      <ResourceList resourceList={cost} hideEmpty mini />
     </div>
   </div>
 );

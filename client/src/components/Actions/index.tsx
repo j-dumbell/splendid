@@ -3,12 +3,12 @@ import React from "react";
 import { WsResponse, WsStatus } from "../../hooks/useWebsocket";
 import { useCookie } from "../../hooks/useCookie";
 
-import NameForm from "./component/NameForm";
-import SendChatForm from "./component/SendChatForm";
-import JoinLobbyForm from "./component/JoinLobbyForm";
-import CreateLobbyForm from "./component/CreateLobbyForm";
-import ExitLobbyButton from "./component/ExitLobbyButton";
-import LatestResponse from "./component/LatestResponse";
+import NameForm from "./NameForm";
+import SendChatForm from "./SendChatForm";
+import JoinLobbyForm from "./JoinLobbyForm";
+import CreateLobbyForm from "./CreateLobbyForm";
+import ExitLobbyButton from "./ExitLobbyButton";
+import LatestResponse from "./LatestResponse";
 
 type ActionProps = {
   actions: WsResponse[];

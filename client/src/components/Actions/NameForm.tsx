@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useCookie } from "../../../hooks/useCookie";
+import { useCookie } from "../../hooks/useCookie";
 
 export const NameForm = () => {
   const [lobbyId] = useCookie("lobbyId");
