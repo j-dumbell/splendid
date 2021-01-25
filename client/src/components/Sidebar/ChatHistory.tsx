@@ -1,7 +1,7 @@
 import React from "react";
 
-import { WsResponse } from "../hooks/useWebsocket";
-import Text from "./common/Text";
+import { WsResponse } from "../../hooks/useWebsocket";
+import Text from "../common/Text";
 
 type ChatHistoryProps = {
   actions: WsResponse[];
@@ -13,7 +13,7 @@ const ChatHistory = ({ actions }: ChatHistoryProps) => {
     .map((m) => m.details?.message) as string[];
 
   return messages.length ? (
-    <div style={{ flex: "1" }}>
+    <>
       <h2>Chat History</h2>
       <div>
         {messages.map((m, i) => (
@@ -22,7 +22,7 @@ const ChatHistory = ({ actions }: ChatHistoryProps) => {
           </Text>
         ))}
       </div>
-    </div>
+    </>
   ) : null;
 };
 

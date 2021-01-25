@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 import FlexContainer from "../../common/FlexContainer";
 
@@ -18,9 +18,7 @@ const CardContainer = styled(FlexContainer)`
   width: 80px;
   height: 120px;
   border-radius: 5px;
-  ${({ tier }: Props) => css`
-    background-color: ${tierColours[tier]};
-  `}
+  background-color: ${({ tier }: Props) => tierColours[tier]};
 `;
 
 export default CardContainer;

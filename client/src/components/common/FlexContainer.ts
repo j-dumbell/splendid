@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 type Props = {
   column?: boolean;
+  reverse?: boolean;
   justify?: string;
 };
 

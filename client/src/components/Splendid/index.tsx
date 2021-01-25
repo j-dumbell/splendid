@@ -13,7 +13,7 @@ const ResourceContainer = styled(FlexContainer)`
 `;
 
 const Splendid = () => (
-  <FlexContainer column>
+  <FlexContainer column style={{ marginLeft: "50px" }}>
     <ResourceContainer>
       <ResourceList resourceList={fixtures.board.bank} />
     </ResourceContainer>

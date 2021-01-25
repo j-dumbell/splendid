@@ -1,6 +1,6 @@
 import React from "react";
 
-import Resource, { ResourceType } from "../Resource";
+import Resource, { resourceTypes } from "../Resource";
 
 type Props = {
   resourceList: Record<string, number>;
@@ -9,15 +9,17 @@ type Props = {
 };
 
 const ResourceList = ({ resourceList, hideEmpty, mini }: Props) => {
-  const keys: ResourceType[] = ["black", "white", "red", "blue", "green", "yellow"];
-  const resources = keys.map((key, i) =>
-    hideEmpty && !resourceList[key] ? null : (
+  const resources = resourceTypes.map((resourceType, i) => {
+    if (hideEmpty && !resourceList[resourceType]) {
+      return null;
+    }
+    return (
       <div key={`resource-${i}`}>
-        <Resource resourceType={key} mini={mini} />
-        {resourceList[key]}
+        <Resource resourceType={resourceType} mini={mini} />
+        {resourceList[resourceType]}
       </div>
-    )
-  );
+    );
+  });
   return <>{resources}</>;
 };
 

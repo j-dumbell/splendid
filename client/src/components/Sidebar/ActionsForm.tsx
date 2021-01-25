@@ -15,7 +15,7 @@ type ActionProps = {
   status: WsStatus;
 };
 
-const Actions = ({ actions, status }: ActionProps) => {
+const ActionsForm = ({ actions, status }: ActionProps) => {
   const [username] = useCookie("username");
 
   return status === "open" ? (
@@ -34,4 +34,4 @@ const Actions = ({ actions, status }: ActionProps) => {
   ) : null;
 };
 
-export default Actions;
+export default ActionsForm;
