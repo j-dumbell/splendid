@@ -1,6 +1,6 @@
 import React from "react";
 
-import Resource, { ResourceType } from "./Resource";
+import Resource, { ResourceType } from "../Resource";
 
 type Props = {
   resourceList: Record<string, number>;

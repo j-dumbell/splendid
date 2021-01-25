@@ -1,7 +1,8 @@
 import React from "react";
-import { ResourceType } from "./Resource";
-import Gem from "./Resource";
-import ResourceList from "./ResourceList";
+
+import FlexContainer from "../../common/FlexContainer";
+import Resource, { ResourceType } from "../Resource";
+import ResourceList from "../ResourceList";
 
 type CardProps = {
   id: number;
@@ -18,26 +19,25 @@ const tiers: Record<string, string> = {
 };
 
 const Card = ({ tier, points, income, cost }: CardProps) => (
-  <div
+  <FlexContainer
+    column
+    justify="space-between"
     style={{
       margin: "5px",
       padding: "5px",
-      display: "flex",
-      justifyContent: "space-between",
-      flexDirection: "column",
       backgroundColor: tiers[tier],
       width: "80px",
       height: "120px",
       borderRadius: "5px",
     }}
   >
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
-      {points} <Gem resourceType={income} mini />
-    </div>
+    <FlexContainer justify="space-between">
+      {points} <Resource resourceType={income} mini />
+    </FlexContainer>
     <div>
       <ResourceList resourceList={cost} hideEmpty mini />
     </div>
-  </div>
+  </FlexContainer>
 );
 
 export default Card;
