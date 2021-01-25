@@ -1,13 +1,13 @@
 import React from "react";
 
-import Ruby from "./ruby.svg";
-import Diamond from "./diamond.svg";
-import Emerald from "./emerald.svg";
-import Onyx from "./onyx.svg";
-import Sapphire from "./sapphire.svg";
-import Citrine from "./citrine.svg";
+import Ruby from "../assets/ruby.svg";
+import Diamond from "../assets/diamond.svg";
+import Emerald from "../assets/emerald.svg";
+import Onyx from "../assets/onyx.svg";
+import Sapphire from "../assets/sapphire.svg";
+import Citrine from "../assets/citrine.svg";
 
-import { Resource } from "../../domain";
+import { Resource } from "../domain";
 
 type Props = {
   colour: Resource;

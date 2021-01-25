@@ -1,7 +1,7 @@
 import React from "react";
 
 import Bank from "./Bank";
-import Crown from "./crown.svg";
+import Crown from "../assets/crown.svg";
 
 type EliteProps = {
   id: number;
