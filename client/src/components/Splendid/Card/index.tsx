@@ -16,7 +16,7 @@ type CardProps = {
 const Card = ({ tier, points, income, cost }: CardProps) => (
   <CardContainer column justify="space-between" tier={tier}>
     <FlexContainer justify="space-between">
-      {points} <Resource resourceType={income} mini />
+      <div>{Boolean(points) && points}</div> <Resource resourceType={income} mini />
     </FlexContainer>
     <div>
       <ResourceList resourceList={cost} hideEmpty mini />
