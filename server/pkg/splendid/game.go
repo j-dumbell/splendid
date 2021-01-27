@@ -109,8 +109,6 @@ type Payload struct {
 	GameParams json.RawMessage `json:"gameParams"`
 }
 
-type ErrorMessage string `json:"errorMessage"`
-
 func (g *Game) HandleAction(id int, params json.RawMessage) (map[int]json.RawMessage, bool) {
 	var payload Payload
 	json.Unmarshal(params, &payload)
@@ -120,8 +118,8 @@ func (g *Game) HandleAction(id int, params json.RawMessage) (map[int]json.RawMes
 		fmt.Println("starting game")
 		return map[int]json.RawMessage{id: nil}, true
 	default:
-		var errMsg = "unrecognized action"
-		e, _ := json.Marshal(errMesg)
-		return map[int]json.RawMessage{id: e}, false
+		// var errMsg ErrorMessage = "unrecognized action"
+		// e, _ := json.Marshal(errMesg)
+		// return map[int]json.RawMessage{id: e}, false
 	}
 }

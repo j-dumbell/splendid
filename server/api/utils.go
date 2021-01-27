@@ -2,12 +2,14 @@ package api
 
 import (
 	"encoding/json"
+
+	"github.com/j-dumbell/splendid/server/api/messages"
 )
 
-func mkErrorResponse(action string, err error) Response {
-	details := ReponseDetails{Message: err.Error()}
+func mkErrorResponse(action string, err error) messages.Response {
+	details := messages.ReponseDetails{Message: err.Error()}
 	d, _ := json.Marshal(details)
-	return Response{
+	return messages.Response{
 		Action:  action,
 		Ok:      false,
 		Details: d,

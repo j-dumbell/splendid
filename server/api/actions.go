@@ -3,6 +3,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/j-dumbell/splendid/server/api/messages"
 )
 
 func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[string]*Lobby) {
@@ -10,7 +12,7 @@ func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[st
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
 	go l.Run()
-	var pc PayloadCreate
+	var pc messages.PayloadCreate
 	json.Unmarshal(p, &pc)
 	c.name = pc.Name
 	l.join <- c
@@ -20,7 +22,7 @@ func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 	if c.lobby != nil {
 		return fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
 	}
-	var j PayloadJoin
+	var j messages.PayloadJoin
 	json.Unmarshal(p, &j)
 	c.name = j.Name
 	l, exists := allLobbies[j.ID]
@@ -36,7 +38,7 @@ func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 
 func chat(c *Client, p json.RawMessage) error {
 	if c.lobby != nil {
-		c.lobby.broadcast <- Response{Action: "chat", Ok: true, Details: p}
+		c.lobby.broadcast <- messages.Response{Action: "chat", Ok: true, Details: p}
 		return nil
 	}
 	return fmt.Errorf("client \"%v\" not in any lobby", c.name)

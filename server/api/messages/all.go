@@ -1,4 +1,4 @@
-package api
+package messages
 
 import (
 	"encoding/json"
@@ -37,6 +37,6 @@ type ReponseDetails struct {
 }
 
 type PayloadGame struct {
-	id     int
-	params json.RawMessage
+	Id     int
+	Params json.RawMessage
 }
