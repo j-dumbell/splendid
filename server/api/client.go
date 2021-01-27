@@ -42,9 +42,9 @@ func (c *Client) ReadPump(newGame func() Game, allLobbies map[string]*Lobby, max
 		case "chat":
 			err = chat(c, p.Params)
 		case "game":
-			pg := messages.PayloadGame{
-				Id:     c.id,
-				Params: p.Params,
+			pg := messages.GameParams{
+				ClientID: c.id,
+				Params:   p.Params,
 			}
 			c.lobby.gameActions <- pg
 		default:

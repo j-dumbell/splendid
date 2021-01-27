@@ -12,9 +12,9 @@ func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[st
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
 	go l.Run()
-	var pc messages.PayloadCreate
-	json.Unmarshal(p, &pc)
-	c.name = pc.Name
+	var createParams messages.CreateParams
+	json.Unmarshal(p, &createParams)
+	c.name = createParams.Name
 	l.join <- c
 }
 
@@ -22,12 +22,12 @@ func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 	if c.lobby != nil {
 		return fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
 	}
-	var j messages.PayloadJoin
-	json.Unmarshal(p, &j)
-	c.name = j.Name
-	l, exists := allLobbies[j.ID]
+	var joinParams messages.JoinParams
+	json.Unmarshal(p, &joinParams)
+	c.name = joinParams.Name
+	l, exists := allLobbies[joinParams.LobbyID]
 	if !exists {
-		return fmt.Errorf("lobby \"%v\" does not exist", j.ID)
+		return fmt.Errorf("lobby \"%v\" does not exist", joinParams.LobbyID)
 	}
 	if len(l.clients) >= maxPlayers {
 		return fmt.Errorf("lobby \"%v\" is full", l.id)
@@ -36,6 +36,7 @@ func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 	return nil
 }
 
+// TODO - json.RawMessage type could be garbled.  Use proper type instead?
 func chat(c *Client, p json.RawMessage) error {
 	if c.lobby != nil {
 		c.lobby.broadcast <- messages.Response{Action: "chat", Ok: true, Details: p}

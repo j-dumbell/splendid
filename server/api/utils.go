@@ -7,7 +7,7 @@ import (
 )
 
 func mkErrorResponse(action string, err error) messages.Response {
-	details := messages.ReponseDetails{Message: err.Error()}
+	details := messages.MessageParams{Message: err.Error()}
 	d, _ := json.Marshal(details)
 	return messages.Response{
 		Action:  action,

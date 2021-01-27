@@ -121,5 +121,6 @@ func (g *Game) HandleAction(id int, params json.RawMessage) (map[int]json.RawMes
 		// var errMsg ErrorMessage = "unrecognized action"
 		// e, _ := json.Marshal(errMesg)
 		// return map[int]json.RawMessage{id: e}, false
+		return nil, false
 	}
 }

@@ -16,7 +16,7 @@ type Lobby struct {
 	broadcast   chan (messages.Response)
 	exit        chan (*Client)
 	join        chan (*Client)
-	gameActions chan (messages.PayloadGame)
+	gameActions chan (messages.GameParams)
 	game        Game
 }
 
@@ -34,7 +34,7 @@ func NewLobby(newGame func() Game) Lobby {
 		broadcast:   make(chan messages.Response),
 		exit:        make(chan *Client),
 		join:        make(chan *Client),
-		gameActions: make(chan messages.PayloadGame),
+		gameActions: make(chan messages.GameParams),
 		game:        newGame(),
 	}
 }
@@ -54,7 +54,7 @@ func (l *Lobby) Run() {
 				c.send <- message
 			}
 		case ga := <-l.gameActions:
-			idToResponse, ok := l.game.HandleAction(ga.Id, ga.Params)
+			idToResponse, ok := l.game.HandleAction(ga.ClientID, ga.Params)
 			for id, message := range idToResponse {
 				response := messages.Response{
 					Action:  "game",
@@ -77,7 +77,7 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	l.clients[client.id] = client
 	client.lobby = l
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
-	rj, _ := json.Marshal(messages.ResponseJoin{ID: l.id})
+	rj, _ := json.Marshal(messages.JoinParams{LobbyID: l.id, Name: client.name})
 	return messages.Response{
 		Action:  "join",
 		Ok:      true,
