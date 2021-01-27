@@ -4,9 +4,38 @@
   "players": [
     {
       "id": 1,
-      "purchased": [],
-      "reservedVisible": [],
-      "reservedHidden": [],
+      "name": "Van",
+      "purchased": [
+        {
+          "id": 1,
+          "tier": 2,
+          "points": 1,
+          "cost": {
+            "black": 1,
+            "green": 1
+          },
+          "income": "red"
+        }
+      ],
+      "reservedVisible": [
+        {
+          "id": 7,
+          "tier": 2,
+          "points": 1,
+          "cost": {
+            "red": 3
+          },
+          "income": "red"
+        }
+      ],
+      "reservedHidden": [
+        {
+          "tier": 2
+        },
+        {
+          "tier": 3
+        }
+      ],
       "bank": {
         "black": 2,
         "white": 0,
@@ -18,9 +47,33 @@
     },
     {
       "id": 2,
+      "name": "James",
       "purchased": [],
-      "reservedVisible": [],
-      "reservedHidden": [],
+      "reservedVisible": [
+        {
+          "id": 1,
+          "tier": 3,
+          "points": 3,
+          "cost": {
+            "black": 2,
+            "blue": 1,
+            "red": 1
+          },
+          "income": "blue"
+        }
+      ],
+      "reservedHidden": [
+        {
+          "id": 8,
+          "tier": 2,
+          "points": 0,
+          "cost": {
+            "red": 3,
+            "green": 1
+          },
+          "income": "green"
+        }
+      ],
       "bank": {
         "black": 0,
         "white": 3,
