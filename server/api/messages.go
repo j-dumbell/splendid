@@ -38,6 +38,5 @@ type ReponseDetails struct {
 
 type PayloadGame struct {
 	id     int
-	gameAction string
 	params json.RawMessage
 }

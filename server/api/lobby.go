@@ -20,10 +20,9 @@ type Lobby struct {
 }
 
 type Game interface {
-	HandleAction(int, json.RawMessage) map[int]json.RawMessage
+	HandleAction(int, json.RawMessage) (map[int]json.RawMessage, bool)
 	AddPlayer(int) error
 	RemovePlayer(int) error
-	HasStarted() bool
 }
 
 func NewLobby(newGame func() Game) Lobby {
@@ -54,11 +53,11 @@ func (l *Lobby) Run() {
 				c.send <- message
 			}
 		case ga := <-l.gameActions:
-			idToResponse := l.game.HandleAction(ga.id, ga.params)
+			idToResponse, ok := l.game.HandleAction(ga.id, ga.params)
 			for id, message := range idToResponse {
 				response := Response{
 					Action:  "game",
-					Ok:      true,
+					Ok:      ok,
 					Details: message,
 				}
 				l.clients[id].send <- response
@@ -71,11 +70,11 @@ func (l *Lobby) joinLobby(client *Client) Response {
 	if _, exists := l.clients[client.id]; exists {
 		return mkErrorResponse("join", errors.New("already in lobby"))
 	}
-	l.clients[client.id] = client
-	client.lobby = l
 	if err := l.game.AddPlayer(client.id); err != nil {
 		return mkErrorResponse("join", err)
 	}
+	l.clients[client.id] = client
+	client.lobby = l
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
 	return Response{
