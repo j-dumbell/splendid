@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
@@ -109,18 +110,15 @@ type Payload struct {
 	GameParams json.RawMessage `json:"gameParams"`
 }
 
-func (g *Game) HandleAction(id int, params json.RawMessage) (map[int]json.RawMessage, bool) {
+func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.GameResponse {
 	var payload Payload
 	json.Unmarshal(params, &payload)
 
 	switch payload.GameAction {
 	case "startGame":
 		fmt.Println("starting game")
-		return map[int]json.RawMessage{id: nil}, true
+		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: true}}
 	default:
-		// var errMsg ErrorMessage = "unrecognized action"
-		// e, _ := json.Marshal(errMesg)
-		// return map[int]json.RawMessage{id: e}, false
-		return nil, false
+		return nil
 	}
 }

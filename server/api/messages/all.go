@@ -38,3 +38,9 @@ type GameParams struct {
 	ClientID int
 	Params   json.RawMessage
 }
+
+// GameResponse is the client level response from a game
+type GameResponse struct {
+	Ok      bool
+	Details json.RawMessage
+}
