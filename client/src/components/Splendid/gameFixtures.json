@@ -7,6 +7,16 @@
       "name": "Van",
       "purchased": [
         {
+          "id": 4,
+          "tier": 1,
+          "points": 0,
+          "cost": {
+            "blue": 1,
+            "green": 2
+          },
+          "income": "black"
+        },
+        {
           "id": 1,
           "tier": 2,
           "points": 1,
@@ -28,14 +38,7 @@
           "income": "red"
         }
       ],
-      "reservedHidden": [
-        {
-          "tier": 2
-        },
-        {
-          "tier": 3
-        }
-      ],
+      "reservedHidden": [{ "tier": 2 }, { "tier": 3 }],
       "bank": {
         "black": 2,
         "white": 0,
@@ -48,7 +51,37 @@
     {
       "id": 2,
       "name": "James",
-      "purchased": [],
+      "purchased": [
+        {
+          "id": 10,
+          "tier": 1,
+          "points": 2,
+          "cost": {
+            "white": 5,
+            "green": 3
+          },
+          "income": "white"
+        },
+        {
+          "id": 2,
+          "tier": 1,
+          "points": 0,
+          "cost": {
+            "red": 1,
+            "green": 2
+          },
+          "income": "red"
+        },
+        {
+          "id": 3,
+          "tier": 2,
+          "points": 0,
+          "cost": {
+            "blue": 5
+          },
+          "income": "green"
+        }
+      ],
       "reservedVisible": [
         {
           "id": 1,

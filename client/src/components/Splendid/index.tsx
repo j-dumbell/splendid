@@ -38,37 +38,35 @@ const Splendid = () => (
           })}
       </div>
     </div>
-    <div>
-      <h2>Players</h2>
+    <div style={{ marginLeft: "50px" }}>
       {fixtures.players.map((player, i) => (
-        <div key={`player-${i}`}>
-          <h3>
-            {i === fixtures.activePlayerIndex && ">>"} {player.name}
-          </h3>
-          {player.purchased.length > 0 && (
-            <div>
-              <h4>Purchased</h4>
-              <FlexContainer>
-                {(player.purchased as any[]).map((card: any, j) => (
-                  <Card key={`player-purchased-card-${j}`} {...card} />
-                ))}
-              </FlexContainer>
-            </div>
-          )}
-          {player.reservedVisible.length + player.reservedHidden.length > 0 && (
-            <div>
-              <h4>Reserved</h4>
-              <FlexContainer>
-                {(player.reservedVisible as any[]).map((card: any, j) => (
-                  <Card key={`player-reserved-vis-card-${j}`} {...card} />
-                ))}
-                {(player.reservedHidden as any[]).map((card: any, j) => (
-                  <Card key={`player-reserved-hid-card-${j}`} {...card} />
-                ))}
-              </FlexContainer>
-            </div>
-          )}
-        </div>
+        <FlexContainer
+          column
+          key={`player-${i}`}
+          style={{
+            padding: "10px",
+            border: `${i === fixtures.activePlayerIndex && "solid 2px white"}`
+          }
+          }
+        >
+          <h2>{player.name}</h2>
+          <ResourceContainer>
+            <ResourceList resourceList={player.bank} />
+          </ResourceContainer>
+          <FlexContainer>
+            {(player.purchased as any[]).map((card: any, j) => (
+              <Card key={`player-purchased-card-${j}`} {...card} />
+            ))}
+            <FlexContainer style={{ opacity: 0.3 }}>
+              {(player.reservedVisible as any[]).map((card: any, j) => (
+                <Card key={`player-reserved-vis-card-${j}`} {...card} />
+              ))}
+              {(player.reservedHidden as any[]).map((card: any, j) => (
+                <Card key={`player-reserved-hid-card-${j}`} {...card} />
+              ))}
+            </FlexContainer>
+          </FlexContainer>
+        </FlexContainer>
       ))}
     </div>
   </FlexContainer>
