@@ -112,13 +112,18 @@ type Payload struct {
 
 func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.GameResponse {
 	var payload Payload
-	json.Unmarshal(params, &payload)
+	err := json.Unmarshal(params, &payload)
+	if err != nil {
+		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized message"})
+		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+	}
 
 	switch payload.GameAction {
 	case "startGame":
 		fmt.Println("starting game")
 		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: true}}
 	default:
-		return nil
+		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized action"})
+		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
 	}
 }
