@@ -1,11 +1,12 @@
 import React from "react";
 
-import FlexContainer from "../common/FlexContainer";
-import Card from "./Card";
-import ResourceList from "./ResourceList";
+import { SplendidPlayer } from "../domain";
+import FlexContainer from "../../common/FlexContainer";
+import Card from "../Card";
+import ResourceList from "../ResourceList";
 
 type Props = {
-  players: any[];
+  players: SplendidPlayer[];
   activePlayerIndex: number;
 };
 
@@ -25,14 +26,14 @@ const Players = ({ players, activePlayerIndex }: Props) => (
           <ResourceList resourceList={player.bank} />
         </FlexContainer>
         <FlexContainer>
-          {(player.purchased as any[]).map((card: any, j) => (
+          {player.purchased.map((card, j) => (
             <Card key={`player-purchased-card-${j}`} {...card} />
           ))}
           <FlexContainer style={{ opacity: 0.3 }}>
-            {(player.reservedVisible as any[]).map((card: any, j) => (
+            {player.reservedVisible.map((card, j) => (
               <Card key={`player-reserved-vis-card-${j}`} {...card} />
             ))}
-            {(player.reservedHidden as any[]).map((card: any, j) => (
+            {player.reservedHidden.map((card, j) => (
               <Card key={`player-reserved-hid-card-${j}`} {...card} />
             ))}
           </FlexContainer>

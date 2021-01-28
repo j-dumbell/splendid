@@ -1,18 +1,15 @@
 import React from "react";
 
+import { SplendidElite } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Image from "../../common/Image";
 import ResourceList from "../ResourceList";
 import EliteContainer from "./styled";
 import Crown from "./crown.svg";
 
-type EliteProps = {
-  id: number;
-  points: number;
-  cost: Record<string, number>;
-};
+type Props = SplendidElite;
 
-const Elite = ({ points, cost }: EliteProps) => (
+const Elite = ({ points, cost }: Props) => (
   <EliteContainer column justify="space-between">
     <FlexContainer justify="space-between">
       {points}

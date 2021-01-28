@@ -1,6 +1,7 @@
 import React from "react";
 
-import Resource, { resourceTypes } from "../Resource";
+import { splendidResource } from "../domain";
+import Resource from "../Resource";
 
 type Props = {
   resourceList: Record<string, number>;
@@ -9,7 +10,7 @@ type Props = {
 };
 
 const ResourceList = ({ resourceList, hideEmpty, mini }: Props) => {
-  const resources = resourceTypes.map((resourceType, i) => {
+  const resources = splendidResource.map((resourceType, i) => {
     if (hideEmpty && !resourceList[resourceType]) {
       return null;
     }

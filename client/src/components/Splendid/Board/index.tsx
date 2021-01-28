@@ -1,15 +1,12 @@
 import React from "react";
 
-import FlexContainer from "../common/FlexContainer";
-import Card from "./Card";
-import Elite from "./Elite";
-import ResourceList from "./ResourceList";
+import { SplendidBoard } from "../domain";
+import FlexContainer from "../../common/FlexContainer";
+import Card from "../Card";
+import Elite from "../Elite";
+import ResourceList from "../ResourceList";
 
-type Props = {
-  elites: any[];
-  decks: Record<string, any[]>;
-  bank: any;
-};
+type Props = SplendidBoard;
 
 const Board = ({ elites, decks, bank }: Props) => (
   <div>

@@ -1,19 +1,14 @@
 import React from "react";
 
+import { SplendidCard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
-import Resource, { ResourceType } from "../Resource";
+import Resource from "../Resource";
 import ResourceList from "../ResourceList";
 import CardContainer from "./styled";
 
-type CardProps = {
-  id?: number;
-  tier: number;
-  points?: number;
-  income?: ResourceType;
-  cost?: Record<string, number>;
-};
+type Props = SplendidCard;
 
-const Card = ({ tier, points, income, cost }: CardProps) => (
+const Card = ({ tier, points, income, cost }: Props) => (
   <CardContainer column justify="space-between" tier={tier}>
     <FlexContainer justify="space-between">
       <div>{Boolean(points) && points}</div> {income && <Resource resourceType={income} mini />}
