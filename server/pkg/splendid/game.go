@@ -4,9 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
+	"github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
+	"github.com/j-dumbell/splendid/server/pkg/util"
 )
+
+var decks, elites = CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
 
 // Game represents the state of a current game
 type Game struct {
@@ -16,22 +21,28 @@ type Game struct {
 	Turn              int
 }
 
-// NewGame instantiates a new Game
-func NewGame(d map[int][]Card, e []Elite) Game {
-	return Game{
-		ActivePlayerIndex: 0,
-		Board:             NewBoard(d, e),
+// StartGame starts the game
+func (g *Game) StartGame(decks map[int][]Card, elites []Elite) error {
+	if numPlayers := len(g.Players); numPlayers <= 1 {
+		return fmt.Errorf("not enough players to start. %v in game, 2 or more required", len(g.Players))
 	}
+	g.Turn = 1
+	g.Players = util.Shuffle(g.Players, time.Now().Unix()).([]Player)
+	g.Board = NewBoard(decks, elites)
+	return nil
 }
 
 // AddPlayer adds the provided player to game, as long as there's space
 func (g *Game) AddPlayer(id int) error {
+	if g.Turn > 0 {
+		return errors.New("game already started")
+	}
 	if len(g.Players) >= config.MaxPlayersDefault {
 		return errors.New("game full")
 	}
 	for _, player := range g.Players {
 		if player.ID == id {
-			return fmt.Errorf("player id \"%v\" already in game", id)
+			return fmt.Errorf("player id %v already in game", id)
 		}
 	}
 	player := NewPlayer(id)
@@ -97,10 +108,30 @@ func (g *Game) NextPlayer() {
 	newIndex := (g.ActivePlayerIndex + 1) % len(g.Players)
 	g.ActivePlayerIndex = newIndex
 	if newIndex == 0 {
-		g.Turn += 1
+		g.Turn++
 	}
 }
 
-func (g *Game) HandleAction(id int, params json.RawMessage) map[int]json.RawMessage {
-	return nil
+type Payload struct {
+	GameAction string          `json:"gameAction"`
+	GameParams json.RawMessage `json:"gameParams"`
+}
+
+func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.GameResponse {
+	var payload Payload
+	err := json.Unmarshal(params, &payload)
+	if err != nil {
+		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized message"})
+		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+	}
+
+	switch payload.GameAction {
+	case "startGame":
+		fmt.Println("starting game")
+		g.StartGame(decks, elites)
+		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: true}}
+	default:
+		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized action"})
+		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+	}
 }

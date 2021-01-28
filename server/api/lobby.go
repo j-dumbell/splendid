@@ -6,21 +6,22 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
 type Lobby struct {
 	id          string
 	clients     map[int]*Client
-	broadcast   chan (Response)
+	broadcast   chan (messages.Response)
 	exit        chan (*Client)
 	join        chan (*Client)
-	gameActions chan (PayloadGame)
+	gameActions chan (messages.GameParams)
 	game        Game
 }
 
 type Game interface {
-	HandleAction(int, json.RawMessage) map[int]json.RawMessage
+	HandleAction(int, json.RawMessage) map[int]messages.GameResponse
 	AddPlayer(int) error
 	RemovePlayer(int) error
 }
@@ -30,10 +31,10 @@ func NewLobby(newGame func() Game) Lobby {
 	return Lobby{
 		id:          lobbyID,
 		clients:     make(map[int]*Client),
-		broadcast:   make(chan Response),
+		broadcast:   make(chan messages.Response),
 		exit:        make(chan *Client),
 		join:        make(chan *Client),
-		gameActions: make(chan PayloadGame),
+		gameActions: make(chan messages.GameParams),
 		game:        newGame(),
 	}
 }
@@ -53,12 +54,12 @@ func (l *Lobby) Run() {
 				c.send <- message
 			}
 		case ga := <-l.gameActions:
-			idToResponse := l.game.HandleAction(ga.id, ga.params)
-			for id, message := range idToResponse {
-				response := Response{
+			idToResponse := l.game.HandleAction(ga.ClientID, ga.Params)
+			for id, gameResponse := range idToResponse {
+				response := messages.Response{
 					Action:  "game",
-					Ok:      true,
-					Details: message,
+					Ok:      gameResponse.Ok,
+					Details: gameResponse.Details,
 				}
 				l.clients[id].send <- response
 			}
@@ -66,28 +67,30 @@ func (l *Lobby) Run() {
 	}
 }
 
-func (l *Lobby) joinLobby(client *Client) Response {
+func (l *Lobby) joinLobby(client *Client) messages.Response {
 	if _, exists := l.clients[client.id]; exists {
 		return mkErrorResponse("join", errors.New("already in lobby"))
 	}
+	if err := l.game.AddPlayer(client.id); err != nil {
+		return mkErrorResponse("join", err)
+	}
 	l.clients[client.id] = client
 	client.lobby = l
-	l.game.AddPlayer(client.id)
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
-	rj, _ := json.Marshal(ResponseJoin{ID: l.id})
-	return Response{
+	rj, _ := json.Marshal(messages.JoinParams{LobbyID: l.id, Name: client.name})
+	return messages.Response{
 		Action:  "join",
 		Ok:      true,
 		Details: rj,
 	}
 }
 
-func (l *Lobby) exitLobby(client *Client) Response {
+func (l *Lobby) exitLobby(client *Client) messages.Response {
 	fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
 	delete(l.clients, client.id)
 	l.game.RemovePlayer(client.id)
 	client.lobby = nil
-	return Response{
+	return messages.Response{
 		Action: "exit",
 		Ok:     true,
 	}
