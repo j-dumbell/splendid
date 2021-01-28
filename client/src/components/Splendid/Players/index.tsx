@@ -23,18 +23,18 @@ const Players = ({ players, activePlayerIndex }: Props) => (
       >
         <h2>{player.name}</h2>
         <FlexContainer color="white">
-          <ResourceList resourceList={player.bank} />
+          <ResourceList resourceList={player.bank} purchased={player.purchased} />
         </FlexContainer>
         <FlexContainer>
           {player.purchased.map((card, j) => (
-            <Card key={`player-purchased-card-${j}`} {...card} />
+            <Card key={`player-purchased-card-${j}`} mini {...card} />
           ))}
           <FlexContainer style={{ opacity: 0.3 }}>
             {player.reservedVisible.map((card, j) => (
-              <Card key={`player-reserved-vis-card-${j}`} {...card} />
+              <Card key={`player-reserved-vis-card-${j}`} mini {...card} />
             ))}
             {player.reservedHidden.map((card, j) => (
-              <Card key={`player-reserved-hid-card-${j}`} {...card} />
+              <Card key={`player-reserved-hid-card-${j}`} mini {...card} />
             ))}
           </FlexContainer>
         </FlexContainer>

@@ -13,10 +13,10 @@ const Elite = ({ points, cost }: Props) => (
   <EliteContainer column justify="space-between">
     <FlexContainer justify="space-between">
       {points}
-      <Image src={Crown} alt="crown" width="30px" />
+      <Image src={Crown} alt="crown" width="2rem" />
     </FlexContainer>
     <div>
-      <ResourceList resourceList={cost} hideEmpty mini />
+      <ResourceList resourceList={cost} hideEmpty mini column />
     </div>
   </EliteContainer>
 );

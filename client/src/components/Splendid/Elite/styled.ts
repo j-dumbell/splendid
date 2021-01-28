@@ -6,8 +6,8 @@ const EliteContainer = styled(FlexContainer)`
   background-color: #bc8eed;
   margin: 5px;
   padding: 5px;
-  width: 113px;
-  height: 113px;
+  width: 8.5rem;
+  height: 8.5rem;
   border-radius: 5px;
 `;
 

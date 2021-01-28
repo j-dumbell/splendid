@@ -27,7 +27,7 @@ const Resource = ({ resourceType, mini }: Props) => (
   <Image
     src={assetMap[resourceType]}
     alt={`${resourceType} resource`}
-    width={mini ? "20px" : "50px"}
+    width={mini ? "1.25rem" : "2.5rem"}
   />
 );
 

@@ -6,16 +6,17 @@ import Resource from "../Resource";
 import ResourceList from "../ResourceList";
 import CardContainer from "./styled";
 
-type Props = SplendidCard;
+type Props = SplendidCard & {
+  mini?: boolean;
+};
 
-const Card = ({ tier, points, income, cost }: Props) => (
-  <CardContainer column justify="space-between" tier={tier}>
+const Card = ({ tier, points, income, cost, mini }: Props) => (
+  <CardContainer column justify="space-between" tier={tier} mini={mini}>
     <FlexContainer justify="space-between">
-      <div>{Boolean(points) && points}</div> {income && <Resource resourceType={income} mini />}
+      <div>{Boolean(points) && points}</div>{" "}
+      {income && <Resource resourceType={income} mini />}
     </FlexContainer>
-    <div>
-      {cost && <ResourceList resourceList={cost} hideEmpty mini />}
-    </div>
+    <div>{cost && <ResourceList resourceList={cost} hideEmpty mini column />}</div>
   </CardContainer>
 );
 
