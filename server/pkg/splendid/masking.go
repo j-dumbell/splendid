@@ -36,7 +36,7 @@ func maskPlayerHands(id int, players []Player) []Player {
 func maskGame(g Game) map[int]messages.GameResponse {
 	maskedDecks := maskDecks(g.Board.Decks)
 
-	var idToResponse map[int]messages.GameResponse
+	idToResponse := map[int]messages.GameResponse{}
 	for _, player := range g.Players {
 		maskedGame := g
 		maskedGame.Board.Decks = maskedDecks

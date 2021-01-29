@@ -15,10 +15,10 @@ var decks, elites = CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
 
 // Game represents the state of a current game
 type Game struct {
-	Players           []Player
-	ActivePlayerIndex int
-	Board             Board
-	Turn              int
+	Players           []Player `json:"players"`
+	ActivePlayerIndex int      `json:"activePlayerIndex"`
+	Board             Board    `json:"board"`
+	Turn              int      `json:"turn"`
 }
 
 // StartGame starts the game
@@ -128,7 +128,11 @@ func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.Gam
 	switch payload.GameAction {
 	case "startGame":
 		fmt.Println("starting game")
-		g.StartGame(decks, elites)
+		err := g.StartGame(decks, elites)
+		if err != nil {
+			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
+			return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+		}
 		return maskGame(*g)
 	default:
 		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized action"})

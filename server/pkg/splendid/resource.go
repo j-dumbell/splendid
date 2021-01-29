@@ -8,25 +8,25 @@ import (
 // Resource represents currency within a game
 type Resource string
 
-var Black Resource = "Black"
-var White Resource = "White"
-var Red Resource = "Red"
-var Blue Resource = "Blue"
-var Green Resource = "Green"
-var Yellow Resource = "Yellow"
+var Black Resource = "black"
+var White Resource = "white"
+var Red Resource = "red"
+var Blue Resource = "blue"
+var Green Resource = "green"
+var Yellow Resource = "yellow"
 
 // MapResource maps a string to a Resource
 func MapResource(s string) Resource {
 	switch s {
-	case "Black":
+	case "black":
 		return Black
-	case "White":
+	case "white":
 		return White
-	case "Red":
+	case "red":
 		return Red
-	case "Blue":
+	case "blue":
 		return Blue
-	case "Green":
+	case "green":
 		return Green
 	default:
 		panic("Unknown resource")

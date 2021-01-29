@@ -4,9 +4,9 @@ import "github.com/j-dumbell/splendid/server/pkg/util"
 
 // Elite represents a special Noble card
 type Elite struct {
-	ID     int
-	Points int
-	Cost   map[Resource]int
+	ID     int              `json:"id"`
+	Points int              `json:"points"`
+	Cost   map[Resource]int `json:"cost"`
 }
 
 // CreateElites creates a list of Elite structs from CSV data
