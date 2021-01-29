@@ -24,14 +24,13 @@ func maskDecks(decks map[int][]Card) map[int][]Card {
 	return maskedDecks
 }
 
-func maskPlayers(id int, players []Player) []Player {
-	maskedPlayers := players
+func maskPlayerHands(id int, players []Player) []Player {
 	for i, player := range players {
 		if player.ID != id {
-			maskedPlayers[i].ReservedHidden = maskCards(players[i].ReservedHidden)
+			players[i].ReservedHidden = maskCards(players[i].ReservedHidden)
 		}
 	}
-	return maskedPlayers
+	return players
 }
 
 func maskGame(g Game) map[int]messages.GameResponse {
@@ -41,7 +40,7 @@ func maskGame(g Game) map[int]messages.GameResponse {
 	for _, player := range g.Players {
 		maskedGame := g
 		maskedGame.Board.Decks = maskedDecks
-		maskedGame.Players = maskPlayers(player.ID, g.Players)
+		maskedGame.Players = maskPlayerHands(player.ID, g.Players)
 
 		jsonGame, _ := json.Marshal(maskedGame)
 		idToResponse[player.ID] = messages.GameResponse{
