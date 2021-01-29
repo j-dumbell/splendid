@@ -10,9 +10,9 @@ import (
 
 // Board represents the game board
 type Board struct {
-	Decks  map[int][]Card
-	Elites []Elite
-	Bank   map[Resource]int
+	Decks  map[int][]Card   `json:"decks"`
+	Elites []Elite          `json:"elites"`
+	Bank   map[Resource]int `json:"bank"`
 }
 
 // FilterFn returns a card tier filter function
@@ -42,13 +42,12 @@ func CreateDecks(cardsPath string, elitesPath string) (map[int][]Card, []Elite) 
 func NewBoard(decks map[int][]Card, elites []Elite) Board {
 	seed := time.Now().Unix()
 
-	var shuffledDecks map[int][]Card
 	for i := 1; i <= 3; i++ {
 		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]Card)
 	}
 
 	return Board{
-		Decks:  shuffledDecks,
+		Decks:  decks,
 		Elites: util.Shuffle(elites, seed).([]Elite),
 		Bank: map[Resource]int{
 			Black:  config.ResourceDefault,

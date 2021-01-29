@@ -2,18 +2,18 @@ package splendid
 
 import (
 	"errors"
-	"github.com/j-dumbell/splendid/server/pkg/util"
 	"reflect"
+
+	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
 // Card represents a development card
 type Card struct {
-	ID       int
-	Tier     int
-	Points   int
-	Cost     map[Resource]int
-	Income   Resource
-	IsPublic bool
+	ID     int              `json:"id"`
+	Tier   int              `json:"tier"`
+	Points int              `json:"points"`
+	Cost   map[Resource]int `json:"cost"`
+	Income Resource         `json:"income"`
 }
 
 // CreateCards creates a list of Card structs from CSV data
@@ -31,8 +31,7 @@ func CreateCards(rows [][]string) []Card {
 				Blue:  util.StringToInt(row[6]),
 				Green: util.StringToInt(row[7]),
 			},
-			Income:   MapResource(row[1]),
-			IsPublic: false,
+			Income: MapResource(row[1]),
 		})
 	}
 	return cards

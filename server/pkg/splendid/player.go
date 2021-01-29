@@ -2,11 +2,11 @@ package splendid
 
 // Player represents a player in a game
 type Player struct {
-	ID              int
-	Purchased       []Card
-	ReservedVisible []Card
-	ReservedHidden  []Card
-	Bank            map[Resource]int
+	ID              int              `json:"id"`
+	Purchased       []Card           `json:"purchased"`
+	ReservedVisible []Card           `json:"reservedVisible"`
+	ReservedHidden  []Card           `json:"reservedHidden"`
+	Bank            map[Resource]int `json:"bank"`
 }
 
 var emptyBank = map[Resource]int{Black: 0, White: 0, Red: 0, Blue: 0, Green: 0, Yellow: 0}
