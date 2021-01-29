@@ -5,20 +5,27 @@ import FlexContainer from "../common/FlexContainer";
 import Board from "./Board";
 import Players from "./Players";
 
-// Temporary
-import fixtures from "./gameFixtures.json";
+import { WsResponse } from "../../hooks/useWebsocket";
 
-const { board, players, activePlayerIndex } = (fixtures as unknown) as {
+type Game = {
   activePlayerIndex: number;
   board: SplendidBoard;
   players: SplendidPlayer[];
 };
 
-const Splendid = () => (
-  <FlexContainer style={{ marginLeft: "50px" }}>
-    <Board {...board} />
-    <Players activePlayerIndex={activePlayerIndex} players={players} />
-  </FlexContainer>
-);
+type Props = {
+  latestAction?: WsResponse<Game>;
+};
+
+const Splendid = ({ latestAction }: Props) =>
+  latestAction?.details?.game ? (
+    <FlexContainer style={{ marginLeft: "50px" }}>
+      <Board {...latestAction.details.game.board} />
+      <Players
+        activePlayerIndex={latestAction.details.game.activePlayerIndex}
+        players={latestAction.details.game.players}
+      />
+    </FlexContainer>
+  ) : null;
 
 export default Splendid;

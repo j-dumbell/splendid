@@ -31,7 +31,7 @@ export type SplendidBoard = {
 };
 
 export type SplendidPlayer = {
-  name: string;
+  name?: string;
   bank: SplendidResourceList;
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];

@@ -11,7 +11,7 @@ import ExitLobbyButton from "./ExitLobbyButton";
 import LatestResponse from "./LatestResponse";
 
 type ActionProps = {
-  actions: WsResponse[];
+  actions: WsResponse<any>[];
   status: WsStatus;
 };
 

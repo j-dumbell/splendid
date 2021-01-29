@@ -4,7 +4,7 @@ import { WsResponse } from "../../hooks/useWebsocket";
 import Text from "../common/Text";
 
 type ChatHistoryProps = {
-  actions: WsResponse[];
+  actions: WsResponse<any>[];
 };
 
 const ChatHistory = ({ actions }: ChatHistoryProps) => {
