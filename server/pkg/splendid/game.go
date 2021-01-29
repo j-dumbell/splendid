@@ -129,7 +129,7 @@ func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.Gam
 	case "startGame":
 		fmt.Println("starting game")
 		g.StartGame(decks, elites)
-		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: true}}
+		return maskGame(*g)
 	default:
 		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized action"})
 		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
