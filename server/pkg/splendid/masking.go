@@ -33,6 +33,10 @@ func maskPlayerHands(id int, players []Player) []Player {
 	return players
 }
 
+type GameDetails struct {
+	Game Game `json:"game"`
+}
+
 func maskGame(g Game) map[int]messages.GameResponse {
 	maskedDecks := maskDecks(g.Board.Decks)
 
@@ -42,7 +46,8 @@ func maskGame(g Game) map[int]messages.GameResponse {
 		maskedGame.Board.Decks = maskedDecks
 		maskedGame.Players = maskPlayerHands(player.ID, g.Players)
 
-		jsonGame, _ := json.Marshal(maskedGame)
+		jsonGame, _ := json.Marshal(GameDetails{Game: maskedGame})
+
 		idToResponse[player.ID] = messages.GameResponse{
 			Ok:      true,
 			Details: jsonGame,

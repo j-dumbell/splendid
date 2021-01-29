@@ -2,7 +2,6 @@ package splendid
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
@@ -46,7 +45,6 @@ func NewBoard(decks map[int][]Card, elites []Elite) Board {
 	for i := 1; i <= 3; i++ {
 		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]Card)
 	}
-	fmt.Println(decks)
 
 	return Board{
 		Decks:  decks,

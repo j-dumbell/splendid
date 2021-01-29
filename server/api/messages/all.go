@@ -35,12 +35,12 @@ type MessageParams struct {
 
 // GameParams represents the params sent with a "game" action
 type GameParams struct {
-	ClientID int
-	Params   json.RawMessage
+	ClientID int             `json:"clientId"`
+	Params   json.RawMessage `json:"params"`
 }
 
 // GameResponse is the client level response from a game
 type GameResponse struct {
-	Ok      bool
-	Details json.RawMessage
+	Ok      bool            `json:"ok"`
+	Details json.RawMessage `json:"details"`
 }

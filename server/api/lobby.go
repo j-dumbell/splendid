@@ -44,7 +44,6 @@ func (l *Lobby) Run() {
 
 		select {
 		case client := <-l.join:
-			fmt.Println(client.id)
 			res := l.joinLobby(client)
 			client.send <- res
 		case client := <-l.exit:
