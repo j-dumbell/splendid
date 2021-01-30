@@ -46,6 +46,7 @@ export const useWebSocket = (path: string) => {
       switch (response.action) {
         case "chat": 
           dispatch(addChatMessage(response?.details?.message));
+          break;
         case "join":
           setLobbyId(response?.details?.lobbyId);
           break;

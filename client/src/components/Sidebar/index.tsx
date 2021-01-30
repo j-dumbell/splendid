@@ -15,7 +15,7 @@ const Sidebar = ({ actions, status, error }: ActionProps) => (
   <FlexContainer column>
     <h2>Server {error ? `errored: ${error}` : status}</h2>
     <ActionsForm actions={actions} status={status} />
-    <ChatHistory actions={actions} />
+    <ChatHistory />
   </FlexContainer>
 );
 
