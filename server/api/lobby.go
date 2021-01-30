@@ -45,10 +45,15 @@ func (l *Lobby) Run() {
 		select {
 		case client := <-l.join:
 			res := l.joinLobby(client)
-			client.send <- res
+			for _, client := range l.clients {
+				client.send <- res
+			}
 		case client := <-l.exit:
 			res := l.exitLobby(client)
 			client.send <- res
+			for _, otherClient := range l.clients {
+				otherClient.send <- res
+			}
 		case message := <-l.broadcast:
 			for _, c := range l.clients {
 				c.send <- message
@@ -77,11 +82,11 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	l.clients[client.id] = client
 	client.lobby = l
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
-	rj, _ := json.Marshal(messages.JoinParams{LobbyID: l.id, Name: client.name})
+
 	return messages.Response{
 		Action:  "join",
 		Ok:      true,
-		Details: rj,
+		Details: mkLobbyDetails(l.id, l.clients),
 	}
 }
 
@@ -90,8 +95,10 @@ func (l *Lobby) exitLobby(client *Client) messages.Response {
 	delete(l.clients, client.id)
 	l.game.RemovePlayer(client.id)
 	client.lobby = nil
+
 	return messages.Response{
-		Action: "exit",
-		Ok:     true,
+		Action:  "exit",
+		Ok:      true,
+		Details: mkLobbyDetails(l.id, l.clients),
 	}
 }

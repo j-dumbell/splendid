@@ -44,3 +44,9 @@ type GameResponse struct {
 	Ok      bool            `json:"ok"`
 	Details json.RawMessage `json:"details"`
 }
+
+// LobbyResponse is the response returned on joining or exiting a lobby
+type LobbyResponse struct {
+	ID          string         `json:"id"`
+	PlayerNames map[int]string `json:"playerNames"`
+}
