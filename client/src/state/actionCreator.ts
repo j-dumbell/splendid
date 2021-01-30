@@ -1,5 +1,10 @@
 import { SplendidGame } from "../components/Splendid/domain";
-import { MessageAction, SplendidAction } from "./domain";
+import {
+  HistoryAction,
+  HistoryActionType,
+  MessageAction,
+  SplendidAction,
+} from "./domain";
 
 export const addChatMessage = (message: string): MessageAction => ({
   type: "ADD_CHAT_MESSAGE",
@@ -9,7 +14,19 @@ export const addChatMessage = (message: string): MessageAction => ({
   },
 });
 
-export const updateSplendidGame = (game: SplendidGame): SplendidAction => ({
+export const updateSplendidGame = (payload: SplendidGame): SplendidAction => ({
   type: "UPDATE_GAME",
-  payload: game,
+  payload,
+});
+
+export const addHistoryAction = (
+  actionType: HistoryActionType,
+  details: any
+): HistoryAction => ({
+  type: "ADD_HISTORY_ACTION",
+  payload: {
+    details,
+    action: actionType,
+    timestamp: new Date(),
+  },
 });

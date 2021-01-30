@@ -2,12 +2,14 @@ import {
   State,
   MessageAction,
   SplendidAction,
+  HistoryAction,
   BaseAction,
   ActionType,
 } from "./domain";
 
 const defaultState: State = {
   chat: [],
+  history: [],
 };
 
 function reducer(
@@ -26,6 +28,12 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
+      };
+    case "ADD_HISTORY_ACTION":
+      const historyAction = action as HistoryAction;
+      return {
+        ...state,
+        history: state.history.concat(historyAction.payload),
       };
     default:
       return state;

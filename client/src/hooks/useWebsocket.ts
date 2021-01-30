@@ -2,14 +2,19 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import config from "../config";
-import { addChatMessage, updateSplendidGame } from "../state/actionCreator";
+import {
+  addChatMessage,
+  addHistoryAction,
+  updateSplendidGame,
+} from "../state/actionCreator";
+import { HistoryActionType } from "../state/domain";
 import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
-export type WsResponse<T> = {
-  action: "create" | "join" | "exit" | "chat" | "game";
+export type WsResponse = {
+  action: HistoryActionType;
   ok: boolean;
-  details: Record<string, T>;
+  details: Record<string, any>;
 };
 
 export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));
@@ -19,7 +24,6 @@ let socket: WebSocket;
 export const useWebSocket = (path: string) => {
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
-  const [actions, setActions] = useState<WsResponse<any>[]>([]);
   const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
   const dispatch = useDispatch();
 
@@ -40,25 +44,25 @@ export const useWebSocket = (path: string) => {
     socket.onopen = () => setStatus("open");
     socket.onclose = () => setStatus("closed");
     socket.onmessage = ({ data }) => {
-      const response = JSON.parse(data) as WsResponse<any>;
-      setActions((actions) => actions.concat(response));
-
+      const response = JSON.parse(data) as WsResponse;
       if (response?.details?.game) {
         dispatch(updateSplendidGame(response.details.game));
       }
-
+      if (response.action !== "chat") {
+        dispatch(addHistoryAction(response.action, response.details));
+      } else {
+        dispatch(addChatMessage(response?.details?.message));
+      }
       switch (response.action) {
-        case "chat":
-          dispatch(addChatMessage(response?.details?.message));
-          break;
         case "join":
           setLobbyId(response?.details?.lobbyId);
           break;
         case "exit":
           removeLobbyId();
+          break;
       }
     };
-  }, [path, actions, setLobbyId, removeLobbyId, dispatch]);
+  }, [path, setLobbyId, removeLobbyId, dispatch]);
 
-  return [status, error, actions];
+  return [status, error];
 };
