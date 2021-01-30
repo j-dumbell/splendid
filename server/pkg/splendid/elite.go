@@ -9,7 +9,7 @@ type Elite struct {
 	Cost   map[Resource]int `json:"cost"`
 }
 
-// CreateElites creates a list of Elite structs from CSV data
+// CreateElites creates a list of elites from CSV data
 func CreateElites(rows [][]string) []Elite {
 	var elites []Elite
 	for i, v := range rows {

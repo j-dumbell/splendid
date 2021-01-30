@@ -39,22 +39,22 @@ func CreateDecks(cardsPath string, elitesPath string) (map[int][]Card, []Elite) 
 }
 
 // NewBoard instantiates a new game board
-func NewBoard(decks map[int][]Card, elites []Elite) Board {
+func NewBoard(decks map[int][]Card, elites []Elite, gameConfig config.GameConfig) Board {
 	seed := time.Now().Unix()
 
 	for i := 1; i <= 3; i++ {
 		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]Card)
 	}
-
+	shuffledElites := util.Shuffle(elites, seed).([]Elite)
 	return Board{
 		Decks:  decks,
-		Elites: util.Shuffle(elites, seed).([]Elite),
+		Elites: shuffledElites[:gameConfig.ElitesCount],
 		Bank: map[Resource]int{
-			Black:  config.ResourceDefault,
-			White:  config.ResourceDefault,
-			Red:    config.ResourceDefault,
-			Blue:   config.ResourceDefault,
-			Green:  config.ResourceDefault,
+			Black:  gameConfig.ResourceCount,
+			White:  gameConfig.ResourceCount,
+			Red:    gameConfig.ResourceCount,
+			Blue:   gameConfig.ResourceCount,
+			Green:  gameConfig.ResourceCount,
 			Yellow: config.YellowDefault,
 		},
 	}

@@ -23,12 +23,16 @@ type Game struct {
 
 // StartGame starts the game
 func (g *Game) StartGame(decks map[int][]Card, elites []Elite) error {
-	if numPlayers := len(g.Players); numPlayers <= 1 {
+	numPlayers := len(g.Players)
+	if g.Turn >= 1 {
+		return errors.New("game already started")
+	}
+	if numPlayers <= 1 {
 		return fmt.Errorf("not enough players to start. %v in game, 2 or more required", len(g.Players))
 	}
 	g.Turn = 1
 	g.Players = util.Shuffle(g.Players, time.Now().Unix()).([]Player)
-	g.Board = NewBoard(decks, elites)
+	g.Board = NewBoard(decks, elites, config.GameConfigs[numPlayers])
 	return nil
 }
 
