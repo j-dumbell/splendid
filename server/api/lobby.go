@@ -77,7 +77,16 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	l.clients[client.id] = client
 	client.lobby = l
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
-	rj, _ := json.Marshal(messages.JoinParams{LobbyID: l.id, Name: client.name})
+
+	playerNames := make(map[int]string)
+	for id, client := range l.clients {
+		playerNames[id] = client.name
+	}
+	rj, _ := json.Marshal(messages.LobbyResponse{
+		ID:          l.id,
+		PlayerNames: playerNames,
+	})
+
 	return messages.Response{
 		Action:  "join",
 		Ok:      true,
