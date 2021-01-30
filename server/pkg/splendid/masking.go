@@ -37,10 +37,10 @@ type GameDetails struct {
 	Game Game `json:"game"`
 }
 
-func maskGame(g Game) map[int]messages.GameResponse {
+func maskGame(g Game) map[int]messages.DetailsGame {
 	maskedDecks := maskDecks(g.Board.Decks)
 
-	idToResponse := map[int]messages.GameResponse{}
+	idToResponse := map[int]messages.DetailsGame{}
 	for _, player := range g.Players {
 		maskedGame := g
 		maskedGame.Board.Decks = maskedDecks
@@ -48,7 +48,7 @@ func maskGame(g Game) map[int]messages.GameResponse {
 
 		jsonGame, _ := json.Marshal(GameDetails{Game: maskedGame})
 
-		idToResponse[player.ID] = messages.GameResponse{
+		idToResponse[player.ID] = messages.DetailsGame{
 			Ok:      true,
 			Details: jsonGame,
 		}

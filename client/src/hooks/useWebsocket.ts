@@ -10,6 +10,7 @@ import {
   updateSplendidGame,
 } from "../state/actionCreator";
 import { HistoryActionType } from "../state/domain";
+import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse = {
@@ -23,6 +24,7 @@ export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));
 let socket: WebSocket;
 
 export const useWebSocket = (path: string) => {
+  const [username] = useCookie('username');
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
   const dispatch = useDispatch();
@@ -52,17 +54,17 @@ export const useWebSocket = (path: string) => {
         dispatch(addHistoryAction(response.action, response.details));
         switch (response.action) {
           case "join":
-            dispatch(joinLobby(response.details.id));
+            dispatch(joinLobby(username, response.details.id, response.details.playerNames));
             break;
           case "exit":
-            dispatch(exitLobby());
+            dispatch(exitLobby(username, response.details.playerNames));
             break;
         }
       } else {
         dispatch(addChatMessage(response?.details?.message));
       }
     };
-  }, [path, dispatch]);
+  }, [path, username, dispatch]);
 
   return [status, error];
 };

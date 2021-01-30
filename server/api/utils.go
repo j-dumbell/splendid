@@ -16,13 +16,14 @@ func mkErrorResponse(action string, err error) messages.Response {
 	}
 }
 
-func mkLobbyDetails(lobbyID string, clients map[int]*Client) json.RawMessage {
+func mkLobbyDetails(lobbyID string, clients map[int]*Client, currentClient *Client) json.RawMessage {
 	playerNames := make(map[int]string)
 	for id, client := range clients {
 		playerNames[id] = client.name
 	}
-	rj, _ := json.Marshal(messages.LobbyResponse{
-		ID:          lobbyID,
+	rj, _ := json.Marshal(messages.DetailsLobby{
+		LobbyID:     lobbyID,
+		ClientID:    currentClient.id,
 		PlayerNames: playerNames,
 	})
 	return rj

@@ -121,12 +121,12 @@ type Payload struct {
 	GameParams json.RawMessage `json:"gameParams"`
 }
 
-func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.GameResponse {
+func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.DetailsGame {
 	var payload Payload
 	err := json.Unmarshal(params, &payload)
 	if err != nil {
 		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized message"})
-		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+		return map[int]messages.DetailsGame{id: messages.DetailsGame{Ok: false, Details: details}}
 	}
 
 	switch payload.GameAction {
@@ -135,11 +135,11 @@ func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.Gam
 		err := g.StartGame(decks, elites)
 		if err != nil {
 			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
-			return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+			return map[int]messages.DetailsGame{id: messages.DetailsGame{Ok: false, Details: details}}
 		}
 		return maskGame(*g)
 	default:
 		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized action"})
-		return map[int]messages.GameResponse{id: messages.GameResponse{Ok: false, Details: details}}
+		return map[int]messages.DetailsGame{id: messages.DetailsGame{Ok: false, Details: details}}
 	}
 }

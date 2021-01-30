@@ -6,11 +6,13 @@ import {
   HistoryAction,
   BaseAction,
   ActionType,
+  ExitLobbyAction,
 } from "./domain";
 
 const defaultState: State = {
   chat: [],
   history: [],
+  playerNames: {},
 };
 
 function reducer(
@@ -19,14 +21,32 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      const joinLobbyAction = action as JoinLobbyAction;
+      const {
+        payload: {
+          lobbyId: joinLobbyId,
+          clientId: joinClientId,
+          playerNames: joinPlayerNames,
+        },
+      } = action as JoinLobbyAction;
       return {
         ...state,
-        lobbyId: joinLobbyAction.payload.id,
+        lobbyId: joinLobbyId,
+        clientId: joinClientId,
+        playerNames: joinPlayerNames,
       };
     case "EXIT_LOBBY":
+      const {
+        payload: { playerNames: exitPlayerNames },
+      } = action as ExitLobbyAction;
+      if (state.clientId && exitPlayerNames[state.clientId]) {
+        return {
+          ...state,
+          playerNames: exitPlayerNames,
+        };
+      }
       return {
         ...state,
+        playerNames: {},
         lobbyId: undefined,
       };
     case "ADD_CHAT_MESSAGE":

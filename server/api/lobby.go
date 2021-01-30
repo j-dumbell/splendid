@@ -21,7 +21,7 @@ type Lobby struct {
 }
 
 type Game interface {
-	HandleAction(int, json.RawMessage) map[int]messages.GameResponse
+	HandleAction(int, json.RawMessage) map[int]messages.DetailsGame
 	AddPlayer(int) error
 	RemovePlayer(int) error
 }
@@ -86,7 +86,7 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	return messages.Response{
 		Action:  "join",
 		Ok:      true,
-		Details: mkLobbyDetails(l.id, l.clients),
+		Details: mkLobbyDetails(l.id, l.clients, client),
 	}
 }
 
@@ -99,6 +99,6 @@ func (l *Lobby) exitLobby(client *Client) messages.Response {
 	return messages.Response{
 		Action:  "exit",
 		Ok:      true,
-		Details: mkLobbyDetails(l.id, l.clients),
+		Details: mkLobbyDetails(l.id, l.clients, client),
 	}
 }

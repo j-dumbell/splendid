@@ -14,14 +14,18 @@ export type History = {
 };
 
 export type Lobby = {
-  id: string;
+  lobbyId?: string;
+  clientId: number;
+  playerNames: Record<number, string>;
 };
 
 export type State = {
   lobbyId?: string;
+  clientId?: number;
   chat: Message[];
   history: History[];
   game?: SplendidGame;
+  playerNames: Record<number, string>;
 };
 
 export const actionTypes = [
@@ -39,7 +43,7 @@ export type BaseAction<T, P> = {
 };
 
 export type JoinLobbyAction = BaseAction<typeof actionTypes[0], Lobby>;
-export type ExitLobbyAction = BaseAction<typeof actionTypes[1], undefined>;
+export type ExitLobbyAction = BaseAction<typeof actionTypes[1], Lobby>;
 export type MessageAction = BaseAction<typeof actionTypes[2], Message>;
 export type HistoryAction = BaseAction<typeof actionTypes[3], History>;
 export type SplendidAction = BaseAction<typeof actionTypes[4], SplendidGame>;
