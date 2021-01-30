@@ -1,5 +1,4 @@
 export type Message = {
-  clientId: number;
   message: string;
   timestamp: Date;
 };
@@ -15,4 +14,6 @@ type BaseAction<T> = {
   payload: T;
 };
 
-export type Action = BaseAction<Message>;
+export type MessageAction = BaseAction<Message>;
+
+export type Action = MessageAction;

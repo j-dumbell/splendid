@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import config from "../config";
+import { addChatMessage } from "../reducers/actionCreator";
 import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
@@ -19,6 +21,7 @@ export const useWebSocket = (path: string) => {
   const [status, setStatus] = useState<WsStatus>();
   const [actions, setActions] = useState<WsResponse<any>[]>([]);
   const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!config.apiUrl) {
@@ -41,6 +44,8 @@ export const useWebSocket = (path: string) => {
       setActions((actions) => actions.concat(response));
 
       switch (response.action) {
+        case "chat": 
+          dispatch(addChatMessage(response?.details?.message));
         case "join":
           setLobbyId(response?.details?.lobbyId);
           break;
@@ -48,7 +53,7 @@ export const useWebSocket = (path: string) => {
           removeLobbyId();
       }
     };
-  }, [path, actions, setLobbyId, removeLobbyId]);
+  }, [path, actions, setLobbyId, removeLobbyId, dispatch]);
 
   return [status, error, actions];
 };
