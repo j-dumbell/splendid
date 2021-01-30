@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import config from "../config";
-import { addChatMessage } from "../reducers/actionCreator";
+import { addChatMessage } from "../state/actionCreator";
 import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";

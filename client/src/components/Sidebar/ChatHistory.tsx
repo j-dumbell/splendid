@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { State } from "../../reducers/domain";
+import { State } from "../../state/domain";
 import Text from "../common/Text";
 
 const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
