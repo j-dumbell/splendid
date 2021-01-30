@@ -6,7 +6,7 @@ import ActionsForm from "./ActionsForm";
 import ChatHistory from "./ChatHistory";
 
 type ActionProps = {
-  actions: WsResponse[];
+  actions: WsResponse<any>[];
   status: WsStatus;
   error?: string;
 };

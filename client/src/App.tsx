@@ -7,16 +7,17 @@ import FlexContainer from "./components/common/FlexContainer";
 
 function App() {
   const [status, error, actions] = useWebSocket("/");
+  const allActions = actions as WsResponse<any>[];
   return (
     <>
       <h1>Splendid</h1>
       <FlexContainer>
         <Sidebar
-          actions={actions as WsResponse[]}
+          actions={allActions}
           status={status as WsStatus}
           error={error as string}
         />
-        <Splendid />
+        <Splendid actions={allActions} />
       </FlexContainer>
     </>
   );

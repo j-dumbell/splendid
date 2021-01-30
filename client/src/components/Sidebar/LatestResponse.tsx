@@ -4,7 +4,7 @@ import JSONPretty from "react-json-pretty";
 import { WsResponse } from "../../hooks/useWebsocket";
 
 type LatestResponseProps = {
-  actions: WsResponse[];
+  actions: WsResponse<any>[];
 };
 
 const jsonTheme = {

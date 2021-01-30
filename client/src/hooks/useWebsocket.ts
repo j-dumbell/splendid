@@ -4,10 +4,10 @@ import config from "../config";
 import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
-export type WsResponse = {
-  action: "create" | "join" | "exit" | "chat";
+export type WsResponse<T> = {
+  action: "create" | "join" | "exit" | "chat" | "game";
   ok: boolean;
-  details: Record<string, unknown>;
+  details: Record<string, T>;
 };
 
 export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));
@@ -17,7 +17,7 @@ let socket: WebSocket;
 export const useWebSocket = (path: string) => {
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
-  const [actions, setActions] = useState<WsResponse[]>([]);
+  const [actions, setActions] = useState<WsResponse<any>[]>([]);
   const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const useWebSocket = (path: string) => {
     socket.onopen = () => setStatus("open");
     socket.onclose = () => setStatus("closed");
     socket.onmessage = ({ data }) => {
-      const response = JSON.parse(data) as WsResponse;
+      const response = JSON.parse(data) as WsResponse<any>;
       setActions((actions) => actions.concat(response));
 
       switch (response.action) {
