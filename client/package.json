@@ -19,6 +19,7 @@
     "react-json-pretty": "^2.2.0",
     "react-redux": "^7.2.2",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
     "styled-components": "^5.2.1",
     "typescript": "~3.7.2"
   },
@@ -47,6 +48,7 @@
     "@types/node-fetch": "^2.5.7",
     "@types/react-beforeunload": "^2.1.0",
     "@types/react-json-pretty": "^2.2.0",
+    "@types/react-redux": "^7.1.16",
     "@types/styled-components": "^5.1.7",
     "redux-devtools": "^3.7.0"
   }
