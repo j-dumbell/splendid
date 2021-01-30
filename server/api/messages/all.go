@@ -39,14 +39,15 @@ type GameParams struct {
 	Params   json.RawMessage `json:"params"`
 }
 
-// GameResponse is the client level response from a game
-type GameResponse struct {
+// DetailsGame is the client level response from a game
+type DetailsGame struct {
 	Ok      bool            `json:"ok"`
 	Details json.RawMessage `json:"details"`
 }
 
-// LobbyResponse is the response returned on joining or exiting a lobby
-type LobbyResponse struct {
-	ID          string         `json:"id"`
+// DetailsLobby is the response returned on joining or exiting a lobby
+type DetailsLobby struct {
+	LobbyID     string         `json:"lobbyId"`
+	ClientID    int            `json:"clientId"`
 	PlayerNames map[int]string `json:"playerNames"`
 }
