@@ -24,6 +24,7 @@ export type State = {
   chat: Message[];
   history: History[];
   game?: SplendidGame;
+  playerNames: Record<number, string>;
 };
 
 export const actionTypes = [

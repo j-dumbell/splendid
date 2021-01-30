@@ -12,6 +12,7 @@ import {
 const defaultState: State = {
   chat: [],
   history: [],
+  playerNames: {},
 };
 
 function reducer(
@@ -20,18 +21,23 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      const joinLobbyAction = action as JoinLobbyAction;
+      const { payload: joinLobbyPayload } = action as JoinLobbyAction;
       return {
         ...state,
-        lobbyId: joinLobbyAction.payload.id,
+        lobbyId: joinLobbyPayload.id,
+        playerNames: joinLobbyPayload.playerNames,
       };
     case "EXIT_LOBBY":
-      const { payload: {
-        username,
-        playerNames,
-      }} = action as ExitLobbyAction;
-      if (Object.values(playerNames).includes(username)) {
-        return state;
+      const { payload: exitLobbyPayload } = action as ExitLobbyAction;
+      if (
+        Object.values(exitLobbyPayload.playerNames).includes(
+          exitLobbyPayload.username
+        )
+      ) {
+        return {
+          ...state,
+          playerNames: exitLobbyPayload.playerNames,
+        };
       }
       return {
         ...state,
