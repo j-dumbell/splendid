@@ -65,6 +65,7 @@ func (g *Game) RemovePlayer(id int) error {
 	if len(newPlayers) == len(g.Players) {
 		return fmt.Errorf("player \"%v\" doesn't exist", id)
 	}
+	g.Players = newPlayers
 	return nil
 }
 
