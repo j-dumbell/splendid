@@ -44,4 +44,4 @@ export type SplendidGame = {
   turn: number;
   board: SplendidBoard;
   players: SplendidPlayer[];
-}
+};
