@@ -6,11 +6,10 @@ import { sendJSON } from "../../hooks/useWebsocket";
 import { State } from "../../state/domain";
 
 const SendChatForm = () => {
-  const lobbyId = useSelector((state: State) => state.lobbyId);
+  const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
   if (!lobbyId) {
     return null;
   }
-
   return (
     <Formik
       initialValues={{ message: "" }}

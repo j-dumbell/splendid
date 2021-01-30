@@ -6,9 +6,8 @@ import { useCookie } from "../../hooks/useCookie";
 import { State } from "../../state/domain";
 
 export const NameForm = () => {
-  const lobbyId = useSelector((state: State) => state.lobbyId);
+  const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
   const [username, setUsername, removeUsername] = useCookie("username");
-
   return username ? (
     <>
       <h3>Welcome back {username}</h3>

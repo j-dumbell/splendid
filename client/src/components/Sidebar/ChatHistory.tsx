@@ -12,7 +12,7 @@ const Timestamp = styled.span`
 `;
 
 const ChatHistory = () => {
-  const chat = useSelector((state: State) => state.chat);
+  const chat = useSelector(({ chat }: State) => chat);
   if (!chat.length) {
     return null;
   }

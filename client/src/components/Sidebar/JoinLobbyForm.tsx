@@ -7,13 +7,11 @@ import { useCookie } from "../../hooks/useCookie";
 import { State } from "../../state/domain";
 
 export const JoinLobbyForm = () => {
-  const lobbyId = useSelector((state: State) => state.lobbyId);
+  const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
   const [username] = useCookie("username");
-
   if (lobbyId) {
     return null;
   }
-
   return (
     <Formik
       initialValues={{ id: "" }}

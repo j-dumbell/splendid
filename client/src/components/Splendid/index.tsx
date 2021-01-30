@@ -8,7 +8,7 @@ import Players from "./Players";
 import { State } from "../../state/domain";
 
 const Splendid = () => {
-  const game = useSelector((state: State) => state.game);
+  const game = useSelector(({ game }: State) => game);
   if (!game) {
     return null;
   }

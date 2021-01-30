@@ -13,7 +13,7 @@ const jsonTheme = {
 };
 
 const LatestResponse = () => {
-  const history = useSelector((state: State) => state.history);
+  const history = useSelector(({ history }: State) => history);
   if (!history.length) {
     return null;
   }
