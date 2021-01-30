@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import config from "../config";
-import { useCookie } from "./useCookie";
+import {
+  joinLobby,
+  exitLobby,
+  addChatMessage,
+  addHistoryAction,
+  updateSplendidGame,
+} from "../state/actionCreator";
+import { HistoryActionType } from "../state/domain";
 
 export type WsStatus = "open" | "closed" | "loading";
-export type WsResponse<T> = {
-  action: "create" | "join" | "exit" | "chat" | "game";
+export type WsResponse = {
+  action: HistoryActionType;
   ok: boolean;
-  details: Record<string, T>;
+  details: Record<string, any>;
 };
 
 export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));
@@ -17,8 +25,7 @@ let socket: WebSocket;
 export const useWebSocket = (path: string) => {
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
-  const [actions, setActions] = useState<WsResponse<any>[]>([]);
-  const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!config.apiUrl) {
@@ -37,18 +44,25 @@ export const useWebSocket = (path: string) => {
     socket.onopen = () => setStatus("open");
     socket.onclose = () => setStatus("closed");
     socket.onmessage = ({ data }) => {
-      const response = JSON.parse(data) as WsResponse<any>;
-      setActions((actions) => actions.concat(response));
-
-      switch (response.action) {
-        case "join":
-          setLobbyId(response?.details?.lobbyId);
-          break;
-        case "exit":
-          removeLobbyId();
+      const response = JSON.parse(data) as WsResponse;
+      if (response?.details?.game) {
+        dispatch(updateSplendidGame(response.details.game));
+      }
+      if (response.action !== "chat") {
+        dispatch(addHistoryAction(response.action, response.details));
+        switch (response.action) {
+          case "join":
+            dispatch(joinLobby(response.details.id));
+            break;
+          case "exit":
+            dispatch(exitLobby());
+            break;
+        }
+      } else {
+        dispatch(addChatMessage(response?.details?.message));
       }
     };
-  }, [path, actions, setLobbyId, removeLobbyId]);
+  }, [path, dispatch]);
 
-  return [status, error, actions];
+  return [status, error];
 };

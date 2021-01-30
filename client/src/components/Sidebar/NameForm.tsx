@@ -1,11 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useCookie } from "../../hooks/useCookie";
+import { State } from "../../state/domain";
 
 export const NameForm = () => {
-  const [lobbyId] = useCookie("lobbyId");
+  const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
   const [username, setUsername, removeUsername] = useCookie("username");
-
   return username ? (
     <>
       <h3>Welcome back {username}</h3>

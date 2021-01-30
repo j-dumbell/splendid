@@ -1,29 +1,33 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
 
-import { WsResponse } from "../../hooks/useWebsocket";
+import { State } from "../../state/domain";
 import Text from "../common/Text";
 
-type ChatHistoryProps = {
-  actions: WsResponse<any>[];
-};
+const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
 
-const ChatHistory = ({ actions }: ChatHistoryProps) => {
-  const messages = actions
-    .filter((m) => m.action === "chat")
-    .map((m) => m.details?.message) as string[];
+const Timestamp = styled.span`
+  color: #ac81fe;
+`;
 
-  return messages.length ? (
+const ChatHistory = () => {
+  const chat = useSelector(({ chat }: State) => chat);
+  if (!chat.length) {
+    return null;
+  }
+  return (
     <>
       <h2>Chat History</h2>
       <div>
-        {messages.map((m, i) => (
+        {chat.map((m, i) => (
           <Text key={`message-${i}`} color="white">
-            {m}
+            <Timestamp>{formatTimestamp(m.timestamp)}</Timestamp> {m.message}
           </Text>
         ))}
       </div>
     </>
-  ) : null;
+  );
 };
 
 export default ChatHistory;

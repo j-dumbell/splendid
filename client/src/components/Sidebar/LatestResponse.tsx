@@ -1,11 +1,8 @@
 import React from "react";
 import JSONPretty from "react-json-pretty";
+import { useSelector } from "react-redux";
 
-import { WsResponse } from "../../hooks/useWebsocket";
-
-type LatestResponseProps = {
-  actions: WsResponse<any>[];
-};
+import { State } from "../../state/domain";
 
 const jsonTheme = {
   main: "color:#66d9ef;",
@@ -15,12 +12,17 @@ const jsonTheme = {
   boolean: "color:#ac81fe;",
 };
 
-const LatestResponse = ({ actions }: LatestResponseProps) =>
-  actions.length ? (
+const LatestResponse = () => {
+  const history = useSelector(({ history }: State) => history);
+  if (!history.length) {
+    return null;
+  }
+  return (
     <>
       <h2>Latest Response</h2>
-      <JSONPretty data={actions.slice(-1)} theme={jsonTheme} />
+      <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
     </>
-  ) : null;
+  );
+};
 
 export default LatestResponse;
