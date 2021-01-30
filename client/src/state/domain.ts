@@ -14,13 +14,14 @@ export type History = {
 };
 
 export type Lobby = {
-  username: string;
-  id?: string;
+  lobbyId?: string;
+  clientId: number;
   playerNames: Record<number, string>;
 };
 
 export type State = {
   lobbyId?: string;
+  clientId: number;
   chat: Message[];
   history: History[];
   game?: SplendidGame;

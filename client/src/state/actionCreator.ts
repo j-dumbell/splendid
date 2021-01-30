@@ -9,20 +9,20 @@ import {
 } from "./domain";
 
 export const joinLobby = (
-  username: string,
-  id: string,
+  lobbyId: string,
+  clientId: number,
   playerNames: Record<number, string>
 ): JoinLobbyAction => ({
   type: "JOIN_LOBBY",
-  payload: { username, id, playerNames },
+  payload: { lobbyId, clientId, playerNames },
 });
 
 export const exitLobby = (
-  username: string,
+  clientId: number,
   playerNames: Record<number, string>
 ): ExitLobbyAction => ({
   type: "EXIT_LOBBY",
-  payload: { username, playerNames },
+  payload: { clientId, playerNames },
 });
 
 export const addChatMessage = (message: string): MessageAction => ({

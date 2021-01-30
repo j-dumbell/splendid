@@ -21,26 +21,32 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      const { payload: joinLobbyPayload } = action as JoinLobbyAction;
+      const {
+        payload: {
+          lobbyId: joinLobbyId,
+          clientId: joinClientId,
+          playerNames: joinPlayerNames,
+        },
+      } = action as JoinLobbyAction;
       return {
         ...state,
-        lobbyId: joinLobbyPayload.id,
-        playerNames: joinLobbyPayload.playerNames,
+        lobbyId: joinLobbyId,
+        clientId: joinClientId,
+        playerNames: joinPlayerNames,
       };
     case "EXIT_LOBBY":
-      const { payload: exitLobbyPayload } = action as ExitLobbyAction;
-      if (
-        Object.values(exitLobbyPayload.playerNames).includes(
-          exitLobbyPayload.username
-        )
-      ) {
+      const {
+        payload: { playerNames: exitPlayerNames },
+      } = action as ExitLobbyAction;
+      if (exitPlayerNames[state.clientId]) {
         return {
           ...state,
-          playerNames: exitLobbyPayload.playerNames,
+          playerNames: exitPlayerNames,
         };
       }
       return {
         ...state,
+        playerNames: {},
         lobbyId: undefined,
       };
     case "ADD_CHAT_MESSAGE":
