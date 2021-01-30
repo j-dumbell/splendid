@@ -3,6 +3,8 @@ package splendid
 import (
 	"reflect"
 	"testing"
+
+	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
 func TestFilterFn(t *testing.T) {
@@ -19,38 +21,16 @@ func TestFilterFn(t *testing.T) {
 	}
 }
 
-func isBoard(t interface{}) bool {
-	switch t.(type) {
-	case Board:
-		return true
-	default:
-		return false
-	}
-}
-
 func TestNewBoard(t *testing.T) {
-	deck := []Card{
-		{
-			ID:     1,
-			Tier:   1,
-			Points: 1,
-			Cost:   map[Resource]int{Black: 1},
-		},
+	deck1 := []Card{{ID: 1}}
+	elites := []Elite{{ID: 1}, {ID: 2}}
+	gc := config.GameConfig{ElitesCount: 1, ResourceCount: 2}
+	result := NewBoard(map[int][]Card{1: deck1}, elites, gc)
+	if len(result.Elites) != gc.ElitesCount {
+		t.Fatalf("unexpected number of elites \nExpected: %v \nActual %v", gc.ElitesCount, result.Elites)
 	}
-
-	result := NewBoard(
-		map[int][]Card{1: deck},
-		[]Elite{
-			{
-				ID:     1,
-				Points: 3,
-				Cost:   map[Resource]int{Black: 0, White: 0, Red: 4, Blue: 0, Green: 4},
-			},
-		},
-	)
-
-	if !isBoard(result) {
-		t.Fail()
+	if result.Bank[Black] != gc.ResourceCount {
+		t.Fatalf("unexpected resource count \nExpected: %v \nActual %v", gc.ResourceCount, result.Bank[Black])
 	}
 }
 
