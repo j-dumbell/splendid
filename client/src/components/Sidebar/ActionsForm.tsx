@@ -1,6 +1,5 @@
 import React from "react";
 
-import { WsStatus } from "../../hooks/useWebsocket";
 import { useCookie } from "../../hooks/useCookie";
 
 import NameForm from "./NameForm";
@@ -10,14 +9,9 @@ import CreateLobbyForm from "./CreateLobbyForm";
 import ExitLobbyButton from "./ExitLobbyButton";
 import LatestResponse from "./LatestResponse";
 
-type ActionProps = {
-  status: WsStatus;
-};
-
-const ActionsForm = ({ status }: ActionProps) => {
+const ActionsForm = () => {
   const [username] = useCookie("username");
-
-  return status === "open" ? (
+  return (
     <>
       <NameForm />
       {username && (
@@ -30,7 +24,7 @@ const ActionsForm = ({ status }: ActionProps) => {
       <SendChatForm />
       <LatestResponse />
     </>
-  ) : null;
+  );
 };
 
 export default ActionsForm;

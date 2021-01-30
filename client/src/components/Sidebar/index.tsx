@@ -13,7 +13,7 @@ type ActionProps = {
 const Sidebar = ({ status, error }: ActionProps) => (
   <FlexContainer column>
     <h2>Server {error ? `errored: ${error}` : status}</h2>
-    <ActionsForm status={status} />
+    {status === "open" && <ActionsForm />}
     <ChatHistory />
   </FlexContainer>
 );

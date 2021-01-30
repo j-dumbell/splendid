@@ -1,10 +1,22 @@
 import { SplendidGame } from "../components/Splendid/domain";
 import {
+  JoinLobbyAction,
+  ExitLobbyAction,
   HistoryAction,
   HistoryActionType,
   MessageAction,
   SplendidAction,
 } from "./domain";
+
+export const joinLobby = (id: string): JoinLobbyAction => ({
+  type: "JOIN_LOBBY",
+  payload: { id },
+});
+
+export const exitLobby = (): ExitLobbyAction => ({
+  type: "EXIT_LOBBY",
+  payload: undefined,
+});
 
 export const addChatMessage = (message: string): MessageAction => ({
   type: "ADD_CHAT_MESSAGE",

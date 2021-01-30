@@ -13,16 +13,23 @@ export type History = {
   timestamp: Date;
 };
 
+export type Lobby = {
+  id: string;
+};
+
 export type State = {
+  lobbyId?: string;
   chat: Message[];
   history: History[];
   game?: SplendidGame;
 };
 
 export const actionTypes = [
+  "JOIN_LOBBY",
+  "EXIT_LOBBY",
   "ADD_CHAT_MESSAGE",
-  "UPDATE_GAME",
   "ADD_HISTORY_ACTION",
+  "UPDATE_GAME",
 ] as const;
 export type ActionType = typeof actionTypes[number];
 
@@ -31,6 +38,8 @@ export type BaseAction<T, P> = {
   payload: P;
 };
 
-export type MessageAction = BaseAction<typeof actionTypes[0], Message>;
-export type SplendidAction = BaseAction<typeof actionTypes[1], SplendidGame>;
-export type HistoryAction = BaseAction<typeof actionTypes[2], History>;
+export type JoinLobbyAction = BaseAction<typeof actionTypes[0], Lobby>;
+export type ExitLobbyAction = BaseAction<typeof actionTypes[1], undefined>;
+export type MessageAction = BaseAction<typeof actionTypes[2], Message>;
+export type HistoryAction = BaseAction<typeof actionTypes[3], History>;
+export type SplendidAction = BaseAction<typeof actionTypes[4], SplendidGame>;

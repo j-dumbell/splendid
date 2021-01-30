@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 
 import config from "../config";
 import {
+  joinLobby,
+  exitLobby,
   addChatMessage,
   addHistoryAction,
   updateSplendidGame,
 } from "../state/actionCreator";
 import { HistoryActionType } from "../state/domain";
-import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse = {
@@ -24,7 +25,6 @@ let socket: WebSocket;
 export const useWebSocket = (path: string) => {
   const [error, setError] = useState<string>();
   const [status, setStatus] = useState<WsStatus>();
-  const [, setLobbyId, removeLobbyId] = useCookie("lobbyId");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,19 +50,19 @@ export const useWebSocket = (path: string) => {
       }
       if (response.action !== "chat") {
         dispatch(addHistoryAction(response.action, response.details));
+        switch (response.action) {
+          case "join":
+            dispatch(joinLobby(response.details.id));
+            break;
+          case "exit":
+            dispatch(exitLobby());
+            break;
+        }
       } else {
         dispatch(addChatMessage(response?.details?.message));
       }
-      switch (response.action) {
-        case "join":
-          setLobbyId(response?.details?.lobbyId);
-          break;
-        case "exit":
-          removeLobbyId();
-          break;
-      }
     };
-  }, [path, setLobbyId, removeLobbyId, dispatch]);
+  }, [path, dispatch]);
 
   return [status, error];
 };
