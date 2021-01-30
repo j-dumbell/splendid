@@ -77,6 +77,7 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 		return mkErrorResponse("join", errors.New("already in lobby"))
 	}
 	if err := l.game.AddPlayer(client.id); err != nil {
+		fmt.Printf("Error joining: %v", err.Error())
 		return mkErrorResponse("join", err)
 	}
 	l.clients[client.id] = client
