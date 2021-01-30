@@ -21,7 +21,7 @@ export type Lobby = {
 
 export type State = {
   lobbyId?: string;
-  clientId: number;
+  clientId?: number;
   chat: Message[];
   history: History[];
   game?: SplendidGame;

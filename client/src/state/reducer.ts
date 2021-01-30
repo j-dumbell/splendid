@@ -38,7 +38,7 @@ function reducer(
       const {
         payload: { playerNames: exitPlayerNames },
       } = action as ExitLobbyAction;
-      if (exitPlayerNames[state.clientId]) {
+      if (state.clientId && exitPlayerNames[state.clientId]) {
         return {
           ...state,
           playerNames: exitPlayerNames,
