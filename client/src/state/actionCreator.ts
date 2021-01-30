@@ -8,14 +8,19 @@ import {
   SplendidAction,
 } from "./domain";
 
-export const joinLobby = (id: string): JoinLobbyAction => ({
+export const joinLobby = (
+  id: string,
+  playerNames: Record<number, string>
+): JoinLobbyAction => ({
   type: "JOIN_LOBBY",
-  payload: { id },
+  payload: { id, playerNames },
 });
 
-export const exitLobby = (): ExitLobbyAction => ({
+export const exitLobby = (
+  playerNames: Record<number, string>
+): ExitLobbyAction => ({
   type: "EXIT_LOBBY",
-  payload: undefined,
+  payload: { playerNames },
 });
 
 export const addChatMessage = (message: string): MessageAction => ({

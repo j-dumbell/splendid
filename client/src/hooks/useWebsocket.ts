@@ -52,10 +52,10 @@ export const useWebSocket = (path: string) => {
         dispatch(addHistoryAction(response.action, response.details));
         switch (response.action) {
           case "join":
-            dispatch(joinLobby(response.details.id));
+            dispatch(joinLobby(response.details.id, response.details.playerNames));
             break;
           case "exit":
-            dispatch(exitLobby());
+            dispatch(exitLobby(response.details.playerNames));
             break;
         }
       } else {
