@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import config from "../config";
-import { addChatMessage } from "../state/actionCreator";
+import { addChatMessage, updateSplendidGame } from "../state/actionCreator";
 import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
@@ -43,8 +43,12 @@ export const useWebSocket = (path: string) => {
       const response = JSON.parse(data) as WsResponse<any>;
       setActions((actions) => actions.concat(response));
 
+      if (response?.details?.game) {
+        dispatch(updateSplendidGame(response.details.game));
+      }
+
       switch (response.action) {
-        case "chat": 
+        case "chat":
           dispatch(addChatMessage(response?.details?.message));
           break;
         case "join":

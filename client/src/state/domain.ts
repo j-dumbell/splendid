@@ -1,3 +1,5 @@
+import { SplendidGame } from "../components/Splendid/domain";
+
 export type Message = {
   message: string;
   timestamp: Date;
@@ -5,15 +7,16 @@ export type Message = {
 
 export type State = {
   chat: Message[];
+  game?: SplendidGame;
 };
 
-export const actionTypes = ["ADD_CHAT_MESSAGE"] as const;
+export const actionTypes = ["ADD_CHAT_MESSAGE", "UPDATE_GAME"] as const;
+export type ActionType = typeof actionTypes[number];
 
-type BaseAction<T> = {
-  type: typeof actionTypes[number];
-  payload: T;
+export type BaseAction<T, P> = {
+  type: T;
+  payload: P;
 };
 
-export type MessageAction = BaseAction<Message>;
-
-export type Action = MessageAction;
+export type MessageAction = BaseAction<typeof actionTypes[0], Message>;
+export type SplendidAction = BaseAction<typeof actionTypes[1], SplendidGame>;

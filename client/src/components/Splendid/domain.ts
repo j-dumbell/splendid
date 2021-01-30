@@ -38,3 +38,10 @@ export type SplendidPlayer = {
   reservedVisible: SplendidCard[];
   reservedHidden: SplendidCard[];
 };
+
+export type SplendidGame = {
+  activePlayerIndex: number;
+  turn: number;
+  board: SplendidBoard;
+  players: SplendidPlayer[];
+}
