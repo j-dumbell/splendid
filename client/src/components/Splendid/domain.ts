@@ -32,6 +32,7 @@ export type SplendidBoard = {
 
 export type SplendidPlayer = {
   name?: string;
+  id: number;
   bank: SplendidResourceList;
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];

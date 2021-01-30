@@ -21,9 +21,13 @@ const Players = ({ players, activePlayerIndex }: Props) => (
           border: `${i === activePlayerIndex && "solid 2px white"}`,
         }}
       >
-        <h2>{player.name}</h2>
+        <h2>{player.name || `client#${player.id}`}</h2>
         <FlexContainer color="white">
-          <ResourceList resourceList={player.bank} purchased={player.purchased} />
+          <ResourceList
+            resourceList={player.bank}
+            purchased={player.purchased}
+            hideEmpty
+          />
         </FlexContainer>
         <FlexContainer>
           {player.purchased.map((card, j) => (
