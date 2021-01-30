@@ -14,6 +14,7 @@ export type History = {
 };
 
 export type Lobby = {
+  username: string;
   id?: string;
   playerNames: Record<number, string>;
 };

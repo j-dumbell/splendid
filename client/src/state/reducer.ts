@@ -6,6 +6,7 @@ import {
   HistoryAction,
   BaseAction,
   ActionType,
+  ExitLobbyAction,
 } from "./domain";
 
 const defaultState: State = {
@@ -25,6 +26,13 @@ function reducer(
         lobbyId: joinLobbyAction.payload.id,
       };
     case "EXIT_LOBBY":
+      const { payload: {
+        username,
+        playerNames,
+      }} = action as ExitLobbyAction;
+      if (Object.values(playerNames).includes(username)) {
+        return state;
+      }
       return {
         ...state,
         lobbyId: undefined,
