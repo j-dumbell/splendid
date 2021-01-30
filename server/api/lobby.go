@@ -45,13 +45,14 @@ func (l *Lobby) Run() {
 		select {
 		case client := <-l.join:
 			res := l.joinLobby(client)
-			for _, client := range l.clients {
-				client.send <- res
+			for _, otherClient := range l.clients {
+				otherClient.send <- res
 			}
 		case client := <-l.exit:
 			res := l.exitLobby(client)
-			for _, client := range l.clients {
-				client.send <- res
+			client.send <- res
+			for _, otherClient := range l.clients {
+				otherClient.send <- res
 			}
 		case message := <-l.broadcast:
 			for _, c := range l.clients {
