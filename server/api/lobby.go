@@ -45,10 +45,14 @@ func (l *Lobby) Run() {
 		select {
 		case client := <-l.join:
 			res := l.joinLobby(client)
-			client.send <- res
+			for _, client := range l.clients {
+				client.send <- res
+			}
 		case client := <-l.exit:
 			res := l.exitLobby(client)
-			client.send <- res
+			for _, client := range l.clients {
+				client.send <- res
+			}
 		case message := <-l.broadcast:
 			for _, c := range l.clients {
 				c.send <- message
@@ -99,8 +103,19 @@ func (l *Lobby) exitLobby(client *Client) messages.Response {
 	delete(l.clients, client.id)
 	l.game.RemovePlayer(client.id)
 	client.lobby = nil
+
+	playerNames := make(map[int]string)
+	for id, client := range l.clients {
+		playerNames[id] = client.name
+	}
+	rj, _ := json.Marshal(messages.LobbyResponse{
+		ID:          l.id,
+		PlayerNames: playerNames,
+	})
+
 	return messages.Response{
-		Action: "exit",
-		Ok:     true,
+		Action:  "exit",
+		Ok:      true,
+		Details: rj,
 	}
 }
