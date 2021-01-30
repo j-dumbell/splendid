@@ -17,9 +17,7 @@ function App() {
           status={status as WsStatus}
           error={error as string}
         />
-        <Splendid
-          latestAction={allActions.length ? allActions.slice(-1)[0] : undefined}
-        />
+        <Splendid actions={allActions} />
       </FlexContainer>
     </>
   );

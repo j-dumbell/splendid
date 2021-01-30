@@ -14,18 +14,30 @@ type Game = {
 };
 
 type Props = {
-  latestAction?: WsResponse<Game>;
+  actions: WsResponse<any>[];
 };
 
-const Splendid = ({ latestAction }: Props) =>
-  latestAction?.details?.game ? (
+const Splendid = ({ actions }: Props) => {
+  const gameAction: WsResponse<Game> = actions
+    ?.filter(({ action }) => action === "game")
+    ?.slice(-1)[0];
+
+  if (!gameAction) {
+    return null;
+  }
+
+  const {
+    details: { game },
+  } = gameAction;
+  return (
     <FlexContainer style={{ marginLeft: "50px" }}>
-      <Board {...latestAction.details.game.board} />
+      <Board {...game.board} />
       <Players
-        activePlayerIndex={latestAction.details.game.activePlayerIndex}
-        players={latestAction.details.game.players}
+        activePlayerIndex={game.activePlayerIndex}
+        players={game.players}
       />
     </FlexContainer>
-  ) : null;
+  );
+};
 
 export default Splendid;

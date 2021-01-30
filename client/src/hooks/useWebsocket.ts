@@ -5,7 +5,7 @@ import { useCookie } from "./useCookie";
 
 export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse<T> = {
-  action: "create" | "join" | "exit" | "chat";
+  action: "create" | "join" | "exit" | "chat" | "game";
   ok: boolean;
   details: Record<string, T>;
 };
