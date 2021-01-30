@@ -83,19 +83,10 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	client.lobby = l
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 
-	playerNames := make(map[int]string)
-	for id, client := range l.clients {
-		playerNames[id] = client.name
-	}
-	rj, _ := json.Marshal(messages.LobbyResponse{
-		ID:          l.id,
-		PlayerNames: playerNames,
-	})
-
 	return messages.Response{
 		Action:  "join",
 		Ok:      true,
-		Details: rj,
+		Details: mkLobbyDetails(l.id, l.clients),
 	}
 }
 
@@ -105,18 +96,9 @@ func (l *Lobby) exitLobby(client *Client) messages.Response {
 	l.game.RemovePlayer(client.id)
 	client.lobby = nil
 
-	playerNames := make(map[int]string)
-	for id, client := range l.clients {
-		playerNames[id] = client.name
-	}
-	rj, _ := json.Marshal(messages.LobbyResponse{
-		ID:          l.id,
-		PlayerNames: playerNames,
-	})
-
 	return messages.Response{
 		Action:  "exit",
 		Ok:      true,
-		Details: rj,
+		Details: mkLobbyDetails(l.id, l.clients),
 	}
 }
