@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
+// Lobby represents a group of connected clients
 type Lobby struct {
 	id          string
 	clients     map[int]*client
@@ -18,12 +18,6 @@ type Lobby struct {
 	join        chan (*client)
 	gameActions chan (messages.GameParams)
 	game        Game
-}
-
-type Game interface {
-	HandleAction(int, json.RawMessage) map[int]messages.DetailsGame
-	AddPlayer(int) error
-	RemovePlayer(int) error
 }
 
 func newLobby(newGame func() Game) Lobby {
