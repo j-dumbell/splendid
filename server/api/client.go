@@ -16,7 +16,7 @@ type Client struct {
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) ReadPump(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) {
+func (c *Client) readPump(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) {
 	defer func() {
 		if c.lobby != nil {
 			c.lobby.exit <- c
@@ -57,7 +57,7 @@ func (c *Client) ReadPump(newGame func() Game, allLobbies map[string]*Lobby, max
 	}
 }
 
-func (c *Client) WritePump() {
+func (c *Client) writePump() {
 	for {
 		r := <-c.send
 		websocket.JSON.Send(c.conn, r)

@@ -26,7 +26,7 @@ type Game interface {
 	RemovePlayer(int) error
 }
 
-func NewLobby(newGame func() Game) Lobby {
+func newLobby(newGame func() Game) Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
 		id:          lobbyID,
@@ -39,9 +39,8 @@ func NewLobby(newGame func() Game) Lobby {
 	}
 }
 
-func (l *Lobby) Run() {
+func (l *Lobby) run() {
 	for {
-
 		select {
 		case client := <-l.join:
 			res := l.joinLobby(client)

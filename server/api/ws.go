@@ -5,14 +5,14 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-var startingId = 1
+var startingID = 1
 
 // MkWsHandler returns a websocket handler
 func MkWsHandler(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) func(ws *websocket.Conn) {
 	return func(ws *websocket.Conn) {
-		c := &Client{conn: ws, send: make(chan messages.Response), id: startingId}
-		startingId++
-		go c.ReadPump(newGame, allLobbies, maxPlayers)
-		c.WritePump()
+		c := &Client{conn: ws, send: make(chan messages.Response), id: startingID}
+		startingID++
+		go c.readPump(newGame, allLobbies, maxPlayers)
+		c.writePump()
 	}
 }

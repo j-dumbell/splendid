@@ -8,10 +8,10 @@ import (
 )
 
 func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[string]*Lobby) {
-	l := NewLobby(newGame)
+	l := newLobby(newGame)
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
-	go l.Run()
+	go l.run()
 	var createParams messages.CreateParams
 	json.Unmarshal(p, &createParams)
 	c.name = createParams.Name
