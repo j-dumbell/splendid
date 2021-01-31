@@ -3,7 +3,7 @@ package splendid
 import (
 	"encoding/json"
 
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
@@ -41,10 +41,10 @@ type gameDetails struct {
 	Game Game `json:"game"`
 }
 
-func maskGame(game Game) map[int]messages.DetailsGame {
+func maskGame(game Game) map[int]m.DetailsGame {
 	maskedDecks := maskDecks(game.Board.Decks)
 
-	idToResponse := map[int]messages.DetailsGame{}
+	idToResponse := map[int]m.DetailsGame{}
 	for _, player := range game.Players {
 		maskedGame := game
 		maskedGame.Board.Decks = maskedDecks
@@ -52,7 +52,7 @@ func maskGame(game Game) map[int]messages.DetailsGame {
 
 		jsonGame, _ := json.Marshal(gameDetails{Game: maskedGame})
 
-		idToResponse[player.ID] = messages.DetailsGame{
+		idToResponse[player.ID] = m.DetailsGame{
 			Ok:      true,
 			Details: jsonGame,
 		}

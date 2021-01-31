@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
@@ -114,12 +114,12 @@ type buyCardParams struct {
 }
 
 // HandleAction maps action params into game actions
-func (game *Game) HandleAction(id int, params json.RawMessage) map[int]messages.DetailsGame {
+func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.DetailsGame {
 	var payload payload
 	err := json.Unmarshal(params, &payload)
 	if err != nil {
-		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized message"})
-		return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
+		details, _ := json.Marshal(m.MessageParams{Message: "unrecognized message"})
+		return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 	}
 
 	switch payload.GameAction {
@@ -127,25 +127,25 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]messages.
 		fmt.Println("starting game")
 		err := game.StartGame(decks, elites)
 		if err != nil {
-			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
-			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
+			details, _ := json.Marshal(m.MessageParams{Message: err.Error()})
+			return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 		}
 		return maskGame(*game)
 	case "buyCard":
 		fmt.Println("buying card")
 		var p buyCardParams
 		if err := json.Unmarshal(params, &p); err != nil {
-			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
-			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
+			details, _ := json.Marshal(m.MessageParams{Message: err.Error()})
+			return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 		}
 		buyErr := game.buyCard(id, p.CardID)
 		if buyErr != nil {
-			details, _ := json.Marshal(messages.MessageParams{Message: buyErr.Error()})
-			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
+			details, _ := json.Marshal(m.MessageParams{Message: buyErr.Error()})
+			return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 		}
 		return maskGame(*game)
 	default:
-		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized action"})
-		return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
+		details, _ := json.Marshal(m.MessageParams{Message: "unrecognized action"})
+		return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 	}
 }
