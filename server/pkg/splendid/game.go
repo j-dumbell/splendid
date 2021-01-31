@@ -70,10 +70,9 @@ func (g *Game) RemovePlayer(id int) error {
 }
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
-func (g *Game) BuyCard(playerId int, cardID int) error {
-	//To do - refactor once lobbies implemented
+func (g *Game) BuyCard(playerID int, cardID int) error {
 	activePlayer := &g.Players[g.ActivePlayerIndex]
-	if playerId != activePlayer.ID {
+	if playerID != activePlayer.ID {
 		return errors.New("not active player")
 	}
 	card, cardErr := GetCard(g.Board.Decks, cardID)
