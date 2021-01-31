@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/j-dumbell/splendid/server/api/messages"
+	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
 func maskCards(cards []Card) []Card {
@@ -17,8 +18,11 @@ func maskCards(cards []Card) []Card {
 func maskDecks(decks map[int][]Card) map[int][]Card {
 	maskedDecks := decks
 	for tier, cards := range decks {
-		if len(cards) > 4 {
-			maskedDecks[tier] = append(cards[:4], maskCards(cards[4:])...)
+		if len(cards) > config.DeckCapacity {
+			maskedDecks[tier] = append(
+				cards[:config.DeckCapacity],
+				maskCards(cards[config.DeckCapacity:])...,
+			)
 		}
 	}
 	return maskedDecks
