@@ -74,8 +74,8 @@ func VisibleDeckCards(decks map[int][]Card, capacity int) (map[int][]Card, error
 }
 
 // GetCard checks whether <id> is visible and returns the corresponding card
-func GetCard(decks map[int][]Card, ID int, capacity int) (Card, error) {
-	visDecks, err := VisibleDeckCards(decks, capacity)
+func GetCard(decks map[int][]Card, ID int) (Card, error) {
+	visDecks, err := VisibleDeckCards(decks, config.DeckCapacity)
 	if err != nil {
 		return Card{}, err
 	}

@@ -82,13 +82,13 @@ func lastCards(cards []Card, index int) ([]Card, error) {
 }
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
-func (g *Game) BuyCard(playerId int, cardID int, capacity int) error {
+func (g *Game) BuyCard(playerId int, cardID int) error {
 	//To do - refactor once lobbies implemented
 	activePlayer := &g.Players[g.ActivePlayerIndex]
 	if playerId != activePlayer.ID {
 		return errors.New("not active player")
 	}
-	card, cardErr := GetCard(g.Board.Decks, cardID, capacity)
+	card, cardErr := GetCard(g.Board.Decks, cardID)
 	tier := card.Tier
 	if cardErr != nil {
 		return cardErr

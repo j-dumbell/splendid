@@ -58,12 +58,12 @@ func TestGetCard(t *testing.T) {
 	deck3 := []Card{{ID: 7}}
 	decks := map[int][]Card{1: deck1, 2: deck2, 3: deck3}
 
-	rec, _ := GetCard(decks, 6, 2)
+	rec, _ := GetCard(decks, 6)
 	if !reflect.DeepEqual(Card{ID: 6}, rec) {
 		t.Fail()
 	}
 
-	_, err := GetCard(decks, 10, 2)
+	_, err := GetCard(decks, 10)
 	if err == nil {
 		t.Fail()
 	}
