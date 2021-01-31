@@ -2,7 +2,7 @@ import React from "react";
 
 import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
-import Card from "../Card";
+import { PurchasableCard } from "../Card";
 import Elite from "../Elite";
 import ResourceList from "../ResourceList";
 
@@ -28,7 +28,7 @@ const Board = ({ elites, decks, bank }: Props) => (
             {decks[tier]
               .filter((card) => card.id)
               .map((card, j) => (
-                <Card key={`board-card-${j}`} {...card} />
+                <PurchasableCard key={`board-card-${j}`} {...card} />
               ))}
           </FlexContainer>
         ))}
