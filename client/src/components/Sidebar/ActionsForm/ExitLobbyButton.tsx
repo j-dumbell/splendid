@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { sendJSON } from "../../hooks/useWebsocket";
-import { State } from "../../state/domain";
+import { sendJSON } from "../../../hooks/useWebsocket";
+import { State } from "../../../state/domain";
 
 const ExitLobbyButton = () => {
   const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);

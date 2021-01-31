@@ -2,8 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useCookie } from "../../hooks/useCookie";
-import { State } from "../../state/domain";
+import { useCookie } from "../../../hooks/useCookie";
+import { State } from "../../../state/domain";
 
 export const NameForm = () => {
   const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
