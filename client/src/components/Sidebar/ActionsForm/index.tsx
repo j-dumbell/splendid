@@ -1,13 +1,13 @@
 import React from "react";
 
-import { useCookie } from "../../hooks/useCookie";
+import { useCookie } from "../../../hooks/useCookie";
 
 import NameForm from "./NameForm";
 import SendChatForm from "./SendChatForm";
 import JoinLobbyForm from "./JoinLobbyForm";
 import CreateLobbyForm from "./CreateLobbyForm";
 import ExitLobbyButton from "./ExitLobbyButton";
-import LatestResponse from "./LatestResponse";
+import StartGameButton from "./StartGameButton";
 
 const ActionsForm = () => {
   const [username] = useCookie("username");
@@ -21,8 +21,8 @@ const ActionsForm = () => {
         </>
       )}
       <ExitLobbyButton />
+      <StartGameButton />
       <SendChatForm />
-      <LatestResponse />
     </>
   );
 };
