@@ -118,8 +118,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 	var payload payload
 	err := json.Unmarshal(params, &payload)
 	if err != nil {
-		details, _ := json.Marshal(m.MessageParams{Message: "unrecognized message"})
-		return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
+		return mkGameDetails(id, false, "unrecognized message")
 	}
 
 	switch payload.GameAction {
@@ -127,25 +126,21 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		fmt.Println("starting game")
 		err := game.StartGame(decks, elites)
 		if err != nil {
-			details, _ := json.Marshal(m.MessageParams{Message: err.Error()})
-			return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
+			return mkGameDetails(id, false, err.Error())
 		}
 		return maskGame(*game)
 	case "buyCard":
 		fmt.Println("buying card")
 		var p buyCardParams
 		if err := json.Unmarshal(params, &p); err != nil {
-			details, _ := json.Marshal(m.MessageParams{Message: err.Error()})
-			return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
+			return mkGameDetails(id, false, err.Error())
 		}
 		buyErr := game.buyCard(id, p.CardID)
 		if buyErr != nil {
-			details, _ := json.Marshal(m.MessageParams{Message: buyErr.Error()})
-			return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
+			return mkGameDetails(id, false, buyErr.Error())
 		}
 		return maskGame(*game)
 	default:
-		details, _ := json.Marshal(m.MessageParams{Message: "unrecognized action"})
-		return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
+		return mkGameDetails(id, false, "unrecognized action")
 	}
 }
