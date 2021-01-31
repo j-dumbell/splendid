@@ -69,18 +69,6 @@ func (g *Game) RemovePlayer(id int) error {
 	return nil
 }
 
-// lastCards returns the last <index> cards
-func lastCards(cards []Card, index int) ([]Card, error) {
-	if index < 0 {
-		return nil, errors.New("negative index provided")
-	}
-	lowerBound := len(cards) - index
-	if lowerBound < 0 {
-		return cards, nil
-	}
-	return cards[lowerBound:], nil
-}
-
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
 func (g *Game) BuyCard(playerId int, cardID int) error {
 	//To do - refactor once lobbies implemented
@@ -122,6 +110,10 @@ type Payload struct {
 	GameParams json.RawMessage `json:"gameParams"`
 }
 
+type BuyCardParams struct {
+	CardID int `json:"cardId"`
+}
+
 // HandleAction maps action params into game actions
 func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.DetailsGame {
 	var payload Payload
@@ -135,6 +127,16 @@ func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.Det
 	case "startGame":
 		fmt.Println("starting game")
 		err := g.StartGame(decks, elites)
+		if err != nil {
+			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
+			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
+		}
+		return maskGame(*g)
+	case "buyCard":
+		fmt.Println("buying card")
+		var p BuyCardParams
+		err := json.Unmarshal(params, &p)
+		err = g.BuyCard(id, p.CardID)
 		if err != nil {
 			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
 			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}

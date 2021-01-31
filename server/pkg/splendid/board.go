@@ -60,26 +60,10 @@ func NewBoard(decks map[int][]Card, elites []Elite, gameConfig config.GameConfig
 	}
 }
 
-// VisibleDeckCards returns the visible cards from each deck
-func VisibleDeckCards(decks map[int][]Card, capacity int) (map[int][]Card, error) {
-	visDecks := make(map[int][]Card)
-	for tier, deck := range decks {
-		visDeck, err := lastCards(deck, capacity)
-		if err != nil {
-			return nil, err
-		}
-		visDecks[tier] = visDeck
-	}
-	return visDecks, nil
-}
-
 // GetCard checks whether <id> is visible and returns the corresponding card
 func GetCard(decks map[int][]Card, ID int) (Card, error) {
-	visDecks, err := VisibleDeckCards(decks, config.DeckCapacity)
-	if err != nil {
-		return Card{}, err
-	}
-	for _, deck := range visDecks {
+	maskedDecks := maskDecks(decks)
+	for _, deck := range maskedDecks {
 		for _, card := range deck {
 			if card.ID == ID {
 				return card, nil
