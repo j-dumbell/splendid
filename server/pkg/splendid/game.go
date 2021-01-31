@@ -135,7 +135,9 @@ func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.Det
 		fmt.Println("buying card")
 		var p BuyCardParams
 		err := json.Unmarshal(params, &p)
+		fmt.Printf("Before 1: %v, 2: %v\n", g.Players[0].Bank, g.Players[1].Bank)
 		err = g.BuyCard(id, p.CardID)
+		fmt.Printf("After 1: %v, 2: %v\n", g.Players[0].Bank, g.Players[1].Bank)
 		if err != nil {
 			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
 			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
