@@ -18,7 +18,7 @@ func createEmptyBank() map[resource]int {
 	return map[resource]int{Black: 0, White: 0, Red: 0, Blue: 0, Green: 0, Yellow: 0}
 }
 
-func mkGameDetails(id int, ok bool, message string) map[int]m.DetailsGame {
+func mkErrorDetails(id int, message string) map[int]m.DetailsGame {
 	details, _ := json.Marshal(m.MessageParams{Message: message})
-	return map[int]m.DetailsGame{id: {Ok: ok, Details: details}}
+	return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 }

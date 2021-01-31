@@ -41,7 +41,7 @@ type gameDetails struct {
 	Game Game `json:"game"`
 }
 
-func maskGame(game Game) map[int]m.DetailsGame {
+func mkMaskedDetails(game Game) map[int]m.DetailsGame {
 	maskedDecks := maskDecks(game.Board.Decks)
 
 	idToResponse := map[int]m.DetailsGame{}
