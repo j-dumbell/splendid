@@ -3,14 +3,14 @@ package api
 import (
 	"fmt"
 
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 	"golang.org/x/net/websocket"
 )
 
 type client struct {
 	conn  *websocket.Conn
 	lobby *Lobby
-	send  chan messages.Response
+	send  chan m.Response
 	name  string
 	id    int
 }
@@ -25,7 +25,7 @@ func (c *client) readPump(newGame func() Game, allLobbies map[string]*Lobby, max
 	}()
 
 	for {
-		var p messages.Payload
+		var p m.Payload
 		var err error
 
 		err = websocket.JSON.Receive(c.conn, &p)
@@ -42,7 +42,7 @@ func (c *client) readPump(newGame func() Game, allLobbies map[string]*Lobby, max
 		case "chat":
 			err = chat(c, p.Params)
 		case "game":
-			pg := messages.GameParams{
+			pg := m.GameParams{
 				ClientID: c.id,
 				Params:   p.Params,
 			}

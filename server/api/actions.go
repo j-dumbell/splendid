@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 )
 
 func create(newGame func() Game, c *client, p json.RawMessage, allLobbies map[string]*Lobby) {
@@ -12,7 +12,7 @@ func create(newGame func() Game, c *client, p json.RawMessage, allLobbies map[st
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
 	go l.run()
-	var createParams messages.CreateParams
+	var createParams m.CreateParams
 	json.Unmarshal(p, &createParams)
 	c.name = createParams.Name
 	l.join <- c
@@ -22,7 +22,7 @@ func join(c *client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 	if c.lobby != nil {
 		return fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
 	}
-	var joinParams messages.JoinParams
+	var joinParams m.JoinParams
 	json.Unmarshal(p, &joinParams)
 	c.name = joinParams.Name
 	l, exists := allLobbies[joinParams.LobbyID]
@@ -39,7 +39,7 @@ func join(c *client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 // TODO - json.RawMessage type could be garbled.  Use proper type instead?
 func chat(c *client, p json.RawMessage) error {
 	if c.lobby != nil {
-		c.lobby.broadcast <- messages.Response{Action: "chat", Ok: true, Details: p}
+		c.lobby.broadcast <- m.Response{Action: "chat", Ok: true, Details: p}
 		return nil
 	}
 	return fmt.Errorf("client \"%v\" not in any lobby", c.name)
