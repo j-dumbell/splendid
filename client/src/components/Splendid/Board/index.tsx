@@ -28,7 +28,7 @@ const Board = ({ elites, decks, bank }: Props) => (
             {decks[tier]
               .filter((card) => card.id)
               .map((card, j) => (
-                <Card key={`board-card-${j}`} {...card} />
+                <Card key={`board-card-${j}`} {...card} purchasable />
               ))}
           </FlexContainer>
         ))}

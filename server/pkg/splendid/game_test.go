@@ -6,13 +6,13 @@ import (
 )
 
 func TestGame_AddPlayer(t *testing.T) {
-	g := Game{Players: []Player{{ID: 1, Bank: emptyBank}}}
+	g := Game{Players: []Player{{ID: 1, Bank: createEmptyBank()}}}
 
 	g1 := g
 	g1.AddPlayer(2)
 	expected := []Player{
-		{ID: 1, Bank: emptyBank},
-		{ID: 2, Bank: emptyBank, ReservedVisible: []Card{}, ReservedHidden: []Card{}, Purchased: []Card{}},
+		{ID: 1, Bank: createEmptyBank()},
+		{ID: 2, Bank: createEmptyBank(), ReservedVisible: []Card{}, ReservedHidden: []Card{}, Purchased: []Card{}},
 	}
 	if !reflect.DeepEqual(g1.Players, expected) {
 		t.Fatalf("unexpected players: \nExpected: %v \nReceived: %v", expected, g1.Players)
@@ -38,7 +38,7 @@ func TestGame_BuyCard(t *testing.T) {
 	g1 := g
 	g2 := g
 
-	err1 := g1.BuyCard(3, 2, 2)
+	err1 := g1.BuyCard(3, 2)
 	expErr := "not active player"
 	if err1.Error() != expErr {
 		t.Fatalf("incorrect error returned: \nActual: %v \nExpected: %v", err1.Error(), expErr)
@@ -47,7 +47,7 @@ func TestGame_BuyCard(t *testing.T) {
 		t.Fatalf("incorrect game: \nActual: %v \nExpected: %v", g1, g)
 	}
 
-	g2.BuyCard(1, 6, 2)
+	g2.BuyCard(1, 6)
 	expGBank := map[Resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5}
 	expPBank := map[Resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3}
 	if !(reflect.DeepEqual(g2.Board.Bank, expGBank)) {

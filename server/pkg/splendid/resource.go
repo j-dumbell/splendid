@@ -1,7 +1,6 @@
 package splendid
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -33,14 +32,16 @@ func MapResource(s string) Resource {
 	}
 }
 
-// MoveResources moves <cost>  from <fromBank> to <toBank>, returning error if <fromBank> can't afford.
+// MoveResources moves <cost>  from <fromBank> to <toBank>, returning error if <fromBank> can"t afford.
 func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, map[Resource]int, error) {
+	newFromBank := copyBank(fromBank)
+	newToBank := copyBank(toBank)
 	for res, amount := range cost {
-		fromBank[res] -= amount
-		if fromBank[res] < 0 {
-			return nil, nil, errors.New(fmt.Sprintf("can't afford %v: %v\n", res, amount))
+		newFromBank[res] -= amount
+		if newFromBank[res] < 0 {
+			return nil, nil, fmt.Errorf("can't afford %v: %v", res, amount)
 		}
-		toBank[res] += amount
+		newToBank[res] += amount
 	}
-	return fromBank, toBank, nil
+	return newFromBank, newToBank, nil
 }

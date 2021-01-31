@@ -25,5 +25,4 @@ func TestMoveResources(t *testing.T) {
 	if err == nil {
 		t.Errorf("expect error, nil returned")
 	}
-
 }
