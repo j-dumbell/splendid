@@ -34,8 +34,8 @@ func MapResource(s string) Resource {
 
 // MoveResources moves <cost>  from <fromBank> to <toBank>, returning error if <fromBank> can"t afford.
 func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, map[Resource]int, error) {
-	newFromBank := CopyBank(fromBank)
-	newToBank := CopyBank(toBank)
+	newFromBank := copyBank(fromBank)
+	newToBank := copyBank(toBank)
 	for res, amount := range cost {
 		newFromBank[res] -= amount
 		if newFromBank[res] < 0 {

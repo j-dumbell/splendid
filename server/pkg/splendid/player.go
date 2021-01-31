@@ -9,10 +9,6 @@ type Player struct {
 	Bank            map[Resource]int `json:"bank"`
 }
 
-func emptyBank() map[Resource]int {
-	return map[Resource]int{Black: 10, White: 10, Red: 10, Blue: 10, Green: 10, Yellow: 10}
-}
-
 // NewPlayer creates a new Player
 func NewPlayer(id int) Player {
 	return Player{
@@ -20,6 +16,6 @@ func NewPlayer(id int) Player {
 		Purchased:       []Card{},
 		ReservedVisible: []Card{},
 		ReservedHidden:  []Card{},
-		Bank:            emptyBank(),
+		Bank:            createEmptyBank(),
 	}
 }
