@@ -38,7 +38,7 @@ func TestGame_BuyCard(t *testing.T) {
 	g1 := g
 	g2 := g
 
-	err1 := g1.BuyCard(3, 2)
+	err1 := g1.buyCard(3, 2)
 	expErr := "not active player"
 	if err1.Error() != expErr {
 		t.Fatalf("incorrect error returned: \nActual: %v \nExpected: %v", err1.Error(), expErr)
@@ -47,7 +47,7 @@ func TestGame_BuyCard(t *testing.T) {
 		t.Fatalf("incorrect game: \nActual: %v \nExpected: %v", g1, g)
 	}
 
-	g2.BuyCard(1, 6)
+	g2.buyCard(1, 6)
 	expGBank := map[resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5}
 	expPBank := map[resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3}
 	if !(reflect.DeepEqual(g2.Board.Bank, expGBank)) {

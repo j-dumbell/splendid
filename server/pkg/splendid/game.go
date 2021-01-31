@@ -70,7 +70,7 @@ func (game *Game) RemovePlayer(id int) error {
 }
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
-func (game *Game) BuyCard(playerID int, cardID int) error {
+func (game *Game) buyCard(playerID int, cardID int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
 	if playerID != activePlayer.ID {
 		return errors.New("not active player")
@@ -138,7 +138,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]messages.
 			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
 			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
 		}
-		buyErr := game.BuyCard(id, p.CardID)
+		buyErr := game.buyCard(id, p.CardID)
 		if buyErr != nil {
 			details, _ := json.Marshal(messages.MessageParams{Message: buyErr.Error()})
 			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
