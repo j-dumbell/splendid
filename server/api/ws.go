@@ -10,9 +10,9 @@ var startingID = 1
 // MkWsHandler returns a websocket handler
 func MkWsHandler(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) func(ws *websocket.Conn) {
 	return func(ws *websocket.Conn) {
-		c := &client{conn: ws, send: make(chan m.Response), id: startingID}
+		client := &client{conn: ws, send: make(chan m.Response), id: startingID}
 		startingID++
-		go c.readPump(newGame, allLobbies, maxPlayers)
-		c.writePump()
+		go client.readPump(newGame, allLobbies, maxPlayers)
+		client.writePump()
 	}
 }

@@ -33,33 +33,33 @@ func newLobby(newGame func() Game) Lobby {
 	}
 }
 
-func (l *Lobby) run() {
+func (lobby *Lobby) run() {
 	for {
 		select {
-		case client := <-l.join:
-			res := l.joinLobby(client)
-			for _, client := range l.clients {
+		case client := <-lobby.join:
+			res := lobby.joinLobby(client)
+			for _, client := range lobby.clients {
 				client.send <- res
 			}
-		case client := <-l.exit:
-			res := l.exitLobby(client)
+		case client := <-lobby.exit:
+			res := lobby.exitLobby(client)
 			client.send <- res
-			for _, otherClient := range l.clients {
+			for _, otherClient := range lobby.clients {
 				otherClient.send <- res
 			}
-		case message := <-l.broadcast:
-			for _, c := range l.clients {
+		case message := <-lobby.broadcast:
+			for _, c := range lobby.clients {
 				c.send <- message
 			}
-		case ga := <-l.gameActions:
-			idToResponse := l.game.HandleAction(ga.ClientID, ga.Params)
+		case ga := <-lobby.gameActions:
+			idToResponse := lobby.game.HandleAction(ga.ClientID, ga.Params)
 			for id, gameResponse := range idToResponse {
 				response := m.Response{
 					Action:  "game",
 					Ok:      gameResponse.Ok,
 					Details: gameResponse.Details,
 				}
-				l.clients[id].send <- response
+				lobby.clients[id].send <- response
 			}
 		}
 	}

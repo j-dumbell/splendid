@@ -7,24 +7,24 @@ import (
 	m "github.com/j-dumbell/splendid/server/api/messages"
 )
 
-func create(newGame func() Game, c *client, p json.RawMessage, allLobbies map[string]*Lobby) {
-	l := newLobby(newGame)
-	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
-	allLobbies[l.id] = &l
-	go l.run()
+func create(newGame func() Game, client *client, params json.RawMessage, allLobbies map[string]*Lobby) {
+	lobby := newLobby(newGame)
+	fmt.Printf("Created lobby %v with lobbyId %v\n", lobby, lobby.id)
+	allLobbies[lobby.id] = &lobby
+	go lobby.run()
 	var createParams m.CreateParams
-	json.Unmarshal(p, &createParams)
-	c.name = createParams.Name
-	l.join <- c
+	json.Unmarshal(params, &createParams)
+	client.name = createParams.Name
+	lobby.join <- client
 }
 
-func join(c *client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers int) error {
-	if c.lobby != nil {
-		return fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
+func join(client *client, params json.RawMessage, allLobbies map[string]*Lobby, maxPlayers int) error {
+	if client.lobby != nil {
+		return fmt.Errorf("already in lobby \"%v\"", client.lobby.id)
 	}
 	var joinParams m.JoinParams
-	json.Unmarshal(p, &joinParams)
-	c.name = joinParams.Name
+	json.Unmarshal(params, &joinParams)
+	client.name = joinParams.Name
 	l, exists := allLobbies[joinParams.LobbyID]
 	if !exists {
 		return fmt.Errorf("lobby \"%v\" does not exist", joinParams.LobbyID)
@@ -32,15 +32,15 @@ func join(c *client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 	if len(l.clients) >= maxPlayers {
 		return fmt.Errorf("lobby \"%v\" is full", l.id)
 	}
-	l.join <- c
+	l.join <- client
 	return nil
 }
 
 // TODO - json.RawMessage type could be garbled.  Use proper type instead?
-func chat(c *client, p json.RawMessage) error {
-	if c.lobby != nil {
-		c.lobby.broadcast <- m.Response{Action: "chat", Ok: true, Details: p}
+func chat(client *client, p json.RawMessage) error {
+	if client.lobby != nil {
+		client.lobby.broadcast <- m.Response{Action: "chat", Ok: true, Details: p}
 		return nil
 	}
-	return fmt.Errorf("client \"%v\" not in any lobby", c.name)
+	return fmt.Errorf("client \"%v\" not in any lobby", client.name)
 }

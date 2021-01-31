@@ -14,12 +14,12 @@ type Game interface {
 }
 
 func mkErrorResponse(action string, err error) m.Response {
-	details := m.MessageParams{Message: err.Error()}
-	d, _ := json.Marshal(details)
+	messageParams := m.MessageParams{Message: err.Error()}
+	details, _ := json.Marshal(messageParams)
 	return m.Response{
 		Action:  action,
 		Ok:      false,
-		Details: d,
+		Details: details,
 	}
 }
 
@@ -28,10 +28,10 @@ func mkLobbyDetails(lobbyID string, clients map[int]*client, currentClient *clie
 	for id, client := range clients {
 		playerNames[id] = client.name
 	}
-	rj, _ := json.Marshal(m.DetailsLobby{
+	lobbyDetails, _ := json.Marshal(m.DetailsLobby{
 		LobbyID:     lobbyID,
 		ClientID:    currentClient.id,
 		PlayerNames: playerNames,
 	})
-	return rj
+	return lobbyDetails
 }
