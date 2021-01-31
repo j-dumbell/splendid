@@ -15,8 +15,7 @@ type card struct {
 	Income resource         `json:"income"`
 }
 
-func createCards(rows [][]string) []card {
-	var cards []card
+func createCards(rows [][]string) (cards []card) {
 	for i, row := range rows {
 		cards = append(cards, card{
 			ID:     i + 1,
@@ -37,8 +36,7 @@ func createCards(rows [][]string) []card {
 
 // FilterCards returns a slice of Card structs that pass the
 // test implemented by the provided function
-func filterCards(cards []card, f func(card) bool) []card {
-	var filtered []card
+func filterCards(cards []card, f func(card) bool) (filtered []card) {
 	for _, v := range cards {
 		if f(v) {
 			filtered = append(filtered, v)

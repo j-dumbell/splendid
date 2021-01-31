@@ -8,8 +8,7 @@ type elite struct {
 	Cost   map[resource]int `json:"cost"`
 }
 
-func createElites(rows [][]string) []elite {
-	var elites []elite
+func createElites(rows [][]string) (elites []elite) {
 	for i, v := range rows {
 		elite := elite{
 			ID:     i + 1,
