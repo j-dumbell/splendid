@@ -6,10 +6,18 @@ import Resource from "../Resource";
 import ResourceList from "../ResourceList";
 import CardContainer from "./styled";
 import { sendJSON } from "../../../hooks/useWebsocket";
+import styled from "styled-components";
 
 type Props = SplendidCard & {
   mini?: boolean;
 };
+
+const CardButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  text-align: left;
+`;
 
 const Card = ({ tier, points, income, cost, mini }: Props) => (
   <CardContainer column justify="space-between" tier={tier} mini={mini}>
@@ -24,7 +32,7 @@ const Card = ({ tier, points, income, cost, mini }: Props) => (
 );
 
 export const PurchasableCard = (props: Props) => (
-  <button
+  <CardButton
     onClick={() =>
       sendJSON({
         action: "game",
@@ -33,7 +41,7 @@ export const PurchasableCard = (props: Props) => (
     }
   >
     <Card {...props} />
-  </button>
+  </CardButton>
 );
 
 export default Card;
