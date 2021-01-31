@@ -2,21 +2,19 @@ package splendid
 
 import "github.com/j-dumbell/splendid/server/pkg/util"
 
-// Elite represents a special Noble card
-type Elite struct {
+type elite struct {
 	ID     int              `json:"id"`
 	Points int              `json:"points"`
-	Cost   map[Resource]int `json:"cost"`
+	Cost   map[resource]int `json:"cost"`
 }
 
-// CreateElites creates a list of elites from CSV data
-func CreateElites(rows [][]string) []Elite {
-	var elites []Elite
+func createElites(rows [][]string) []elite {
+	var elites []elite
 	for i, v := range rows {
-		elite := Elite{
+		elite := elite{
 			ID:     i + 1,
 			Points: util.StringToInt(v[0]),
-			Cost: map[Resource]int{
+			Cost: map[resource]int{
 				Black: util.StringToInt(v[1]),
 				White: util.StringToInt(v[2]),
 				Red:   util.StringToInt(v[3]),

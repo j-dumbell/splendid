@@ -8,48 +8,44 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
-// Board represents the game board
-type Board struct {
-	Decks  map[int][]Card   `json:"decks"`
-	Elites []Elite          `json:"elites"`
-	Bank   map[Resource]int `json:"bank"`
+type board struct {
+	Decks  map[int][]card   `json:"decks"`
+	Elites []elite          `json:"elites"`
+	Bank   map[resource]int `json:"bank"`
 }
 
-// FilterFn returns a card tier filter function
-func FilterFn(tier int) func(c Card) bool {
-	return func(c Card) bool {
+func filterFn(tier int) func(c card) bool {
+	return func(c card) bool {
 		return c.Tier == tier
 	}
 }
 
-// CreateDecks Read card/elite records from csv and instantiate decks
-func CreateDecks(cardsPath string, elitesPath string) (map[int][]Card, []Elite) {
+func createDecks(cardsPath string, elitesPath string) (map[int][]card, []elite) {
 	cardRows, _ := util.ReadCSV(cardsPath)
-	cards := CreateCards(cardRows)
+	cards := createCards(cardRows)
 
-	decks := make(map[int][]Card)
+	decks := make(map[int][]card)
 	for i := 1; i <= 3; i++ {
-		decks[i] = FilterCards(cards, FilterFn(i))
+		decks[i] = filterCards(cards, filterFn(i))
 	}
 
 	eliteRows, _ := util.ReadCSV(elitesPath)
-	elites := CreateElites(eliteRows)
+	elites := createElites(eliteRows)
 
 	return decks, elites
 }
 
-// NewBoard instantiates a new game board
-func NewBoard(decks map[int][]Card, elites []Elite, gameConfig config.GameConfig) Board {
+func newBoard(decks map[int][]card, elites []elite, gameConfig config.GameConfig) board {
 	seed := time.Now().Unix()
 
 	for i := 1; i <= 3; i++ {
-		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]Card)
+		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]card)
 	}
-	shuffledElites := util.Shuffle(elites, seed).([]Elite)
-	return Board{
+	shuffledElites := util.Shuffle(elites, seed).([]elite)
+	return board{
 		Decks:  decks,
 		Elites: shuffledElites[:gameConfig.ElitesCount],
-		Bank: map[Resource]int{
+		Bank: map[resource]int{
 			Black:  gameConfig.ResourceCount,
 			White:  gameConfig.ResourceCount,
 			Red:    gameConfig.ResourceCount,
@@ -60,8 +56,7 @@ func NewBoard(decks map[int][]Card, elites []Elite, gameConfig config.GameConfig
 	}
 }
 
-// GetCard checks whether <id> is visible and returns the corresponding card
-func GetCard(decks map[int][]Card, ID int) (Card, error) {
+func getCard(decks map[int][]card, ID int) (card, error) {
 	maskedDecks := maskDecks(decks)
 	for _, deck := range maskedDecks {
 		for _, card := range deck {
@@ -70,5 +65,5 @@ func GetCard(decks map[int][]Card, ID int) (Card, error) {
 			}
 		}
 	}
-	return Card{}, errors.New("invalid card selected")
+	return card{}, errors.New("invalid card selected")
 }

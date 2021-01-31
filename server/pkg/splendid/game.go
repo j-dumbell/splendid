@@ -11,18 +11,18 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
-var decks, elites = CreateDecks(config.CardsCSVPath, config.ElitesCSVPath)
+var decks, elites = createDecks(config.CardsCSVPath, config.ElitesCSVPath)
 
 // Game represents the state of a current game
 type Game struct {
 	Players           []Player `json:"players"`
 	ActivePlayerIndex int      `json:"activePlayerIndex"`
-	Board             Board    `json:"board"`
+	Board             board    `json:"board"`
 	Turn              int      `json:"turn"`
 }
 
 // StartGame starts the game
-func (g *Game) StartGame(decks map[int][]Card, elites []Elite) error {
+func (g *Game) StartGame(decks map[int][]card, elites []elite) error {
 	numPlayers := len(g.Players)
 	if g.Turn >= 1 {
 		return errors.New("game already started")
@@ -32,7 +32,7 @@ func (g *Game) StartGame(decks map[int][]Card, elites []Elite) error {
 	}
 	g.Turn = 1
 	g.Players = util.Shuffle(g.Players, time.Now().Unix()).([]Player)
-	g.Board = NewBoard(decks, elites, config.GameConfigs[numPlayers])
+	g.Board = newBoard(decks, elites, config.GameConfigs[numPlayers])
 	return nil
 }
 
@@ -75,28 +75,28 @@ func (g *Game) BuyCard(playerID int, cardID int) error {
 	if playerID != activePlayer.ID {
 		return errors.New("not active player")
 	}
-	card, cardErr := GetCard(g.Board.Decks, cardID)
+	card, cardErr := getCard(g.Board.Decks, cardID)
 	tier := card.Tier
 	if cardErr != nil {
 		return cardErr
 	}
 
-	newPBank, newGBank, resErr := MoveResources(activePlayer.Bank, g.Board.Bank, card.Cost)
+	newPBank, newGBank, resErr := moveResources(activePlayer.Bank, g.Board.Bank, card.Cost)
 	if resErr != nil {
 		return resErr
 	}
 	activePlayer.Bank = newPBank
 	g.Board.Bank = newGBank
 
-	newDeck, newHand, _ := MoveCard(card, g.Board.Decks[tier], activePlayer.Purchased)
+	newDeck, newHand, _ := moveCard(card, g.Board.Decks[tier], activePlayer.Purchased)
 	g.Board.Decks[tier] = newDeck
 	activePlayer.Purchased = newHand
-	g.NextPlayer()
+	g.nextPlayer()
 	return nil
 }
 
 // NextPlayer sets the next activeplayer and updates turn if necessary
-func (g *Game) NextPlayer() {
+func (g *Game) nextPlayer() {
 	newIndex := (g.ActivePlayerIndex + 1) % len(g.Players)
 	g.ActivePlayerIndex = newIndex
 	if newIndex == 0 {
@@ -104,18 +104,18 @@ func (g *Game) NextPlayer() {
 	}
 }
 
-type Payload struct {
+type payload struct {
 	GameAction string          `json:"gameAction"`
 	GameParams json.RawMessage `json:"gameParams"`
 }
 
-type BuyCardParams struct {
+type buyCardParams struct {
 	CardID int `json:"cardId"`
 }
 
 // HandleAction maps action params into game actions
 func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.DetailsGame {
-	var payload Payload
+	var payload payload
 	err := json.Unmarshal(params, &payload)
 	if err != nil {
 		details, _ := json.Marshal(messages.MessageParams{Message: "unrecognized message"})
@@ -133,7 +133,7 @@ func (g *Game) HandleAction(id int, params json.RawMessage) map[int]messages.Det
 		return maskGame(*g)
 	case "buyCard":
 		fmt.Println("buying card")
-		var p BuyCardParams
+		var p buyCardParams
 		if err := json.Unmarshal(params, &p); err != nil {
 			details, _ := json.Marshal(messages.MessageParams{Message: err.Error()})
 			return map[int]messages.DetailsGame{id: {Ok: false, Details: details}}
