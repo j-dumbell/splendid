@@ -48,7 +48,7 @@ func filterCards(cards []card, f func(card) bool) []card {
 }
 
 // MoveCard removes <card> from <fromDeck> and appends to <toDeck>
-func moveCard(c card, fromDeck []card, toDeck []card) ([]card, []card, error) {
+func moveCard(c card, fromDeck, toDeck []card) ([]card, []card, error) {
 	var newFromDeck []card
 	for _, deckCard := range fromDeck {
 		if !reflect.DeepEqual(c, deckCard) {
