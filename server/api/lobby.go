@@ -1,78 +1,71 @@
 package api
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
 
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
+// Lobby represents a group of connected clients
 type Lobby struct {
 	id          string
-	clients     map[int]*Client
-	broadcast   chan (messages.Response)
-	exit        chan (*Client)
-	join        chan (*Client)
-	gameActions chan (messages.GameParams)
+	clients     map[int]*client
+	broadcast   chan (m.Response)
+	exit        chan (*client)
+	join        chan (*client)
+	gameActions chan (m.GameParams)
 	game        Game
 }
 
-type Game interface {
-	HandleAction(int, json.RawMessage) map[int]messages.DetailsGame
-	AddPlayer(int) error
-	RemovePlayer(int) error
-}
-
-func NewLobby(newGame func() Game) Lobby {
+func newLobby(newGame func() Game) Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
 		id:          lobbyID,
-		clients:     make(map[int]*Client),
-		broadcast:   make(chan messages.Response),
-		exit:        make(chan *Client),
-		join:        make(chan *Client),
-		gameActions: make(chan messages.GameParams),
+		clients:     make(map[int]*client),
+		broadcast:   make(chan m.Response),
+		exit:        make(chan *client),
+		join:        make(chan *client),
+		gameActions: make(chan m.GameParams),
 		game:        newGame(),
 	}
 }
 
-func (l *Lobby) Run() {
+func (lobby *Lobby) run() {
 	for {
-
 		select {
-		case client := <-l.join:
-			res := l.joinLobby(client)
-			for _, client := range l.clients {
+		case client := <-lobby.join:
+			res := lobby.joinLobby(client)
+			for _, client := range lobby.clients {
 				client.send <- res
 			}
-		case client := <-l.exit:
-			res := l.exitLobby(client)
+		case client := <-lobby.exit:
+			res := lobby.exitLobby(client)
 			client.send <- res
-			for _, otherClient := range l.clients {
+			for _, otherClient := range lobby.clients {
 				otherClient.send <- res
 			}
-		case message := <-l.broadcast:
-			for _, c := range l.clients {
+		case message := <-lobby.broadcast:
+			for _, c := range lobby.clients {
 				c.send <- message
 			}
-		case ga := <-l.gameActions:
-			idToResponse := l.game.HandleAction(ga.ClientID, ga.Params)
+		case ga := <-lobby.gameActions:
+			idToResponse := lobby.game.HandleAction(ga.ClientID, ga.Params)
 			for id, gameResponse := range idToResponse {
-				response := messages.Response{
+				response := m.Response{
 					Action:  "game",
 					Ok:      gameResponse.Ok,
 					Details: gameResponse.Details,
 				}
-				l.clients[id].send <- response
+				lobby.clients[id].send <- response
 			}
 		}
 	}
 }
 
-func (l *Lobby) joinLobby(client *Client) messages.Response {
+func (l *Lobby) joinLobby(client *client) m.Response {
 	if _, exists := l.clients[client.id]; exists {
 		return mkErrorResponse("join", errors.New("already in lobby"))
 	}
@@ -83,20 +76,20 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	client.lobby = l
 	fmt.Printf("Client \"%v\" joined lobby \"%v\"\n", client.name, l.id)
 
-	return messages.Response{
+	return m.Response{
 		Action:  "join",
 		Ok:      true,
 		Details: mkLobbyDetails(l.id, l.clients, client),
 	}
 }
 
-func (l *Lobby) exitLobby(client *Client) messages.Response {
+func (l *Lobby) exitLobby(client *client) m.Response {
 	fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
 	delete(l.clients, client.id)
 	l.game.RemovePlayer(client.id)
 	client.lobby = nil
 
-	return messages.Response{
+	return m.Response{
 		Action:  "exit",
 		Ok:      true,
 		Details: mkLobbyDetails(l.id, l.clients, client),

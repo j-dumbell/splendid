@@ -6,15 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 	"golang.org/x/net/websocket"
 )
 
 type mockGame struct{}
 
-func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]messages.DetailsGame { return nil }
-func (mG *mockGame) AddPlayer(i int) error                                              { return nil }
-func (mG *mockGame) RemovePlayer(i int) error                                           { return nil }
+func (mG *mockGame) HandleAction(i int, j json.RawMessage) map[int]m.DetailsGame { return nil }
+func (mG *mockGame) AddPlayer(i int) error                                       { return nil }
+func (mG *mockGame) RemovePlayer(i int) error                                    { return nil }
 
 func emptyGame() Game { return &mockGame{} }
 
@@ -37,7 +37,7 @@ func TestCreateLobby(t *testing.T) {
 	if errRead != nil {
 		t.Fatalf("%v", errRead)
 	}
-	var r messages.Response
+	var r m.Response
 	if errDecode := json.Unmarshal(msg[:n], &r); errDecode != nil {
 		t.Fatalf("%v", errDecode)
 	}

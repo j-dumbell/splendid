@@ -1,18 +1,18 @@
 package api
 
 import (
-	"github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/api/messages"
 	"golang.org/x/net/websocket"
 )
 
-var startingId = 1
+var startingID = 1
 
 // MkWsHandler returns a websocket handler
 func MkWsHandler(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) func(ws *websocket.Conn) {
 	return func(ws *websocket.Conn) {
-		c := &Client{conn: ws, send: make(chan messages.Response), id: startingId}
-		startingId++
-		go c.ReadPump(newGame, allLobbies, maxPlayers)
-		c.WritePump()
+		client := &client{conn: ws, send: make(chan m.Response), id: startingID}
+		startingID++
+		go client.readPump(newGame, allLobbies, maxPlayers)
+		client.writePump()
 	}
 }

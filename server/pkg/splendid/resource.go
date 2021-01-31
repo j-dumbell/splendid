@@ -5,17 +5,17 @@ import (
 )
 
 // Resource represents currency within a game
-type Resource string
+type resource string
 
-var Black Resource = "black"
-var White Resource = "white"
-var Red Resource = "red"
-var Blue Resource = "blue"
-var Green Resource = "green"
-var Yellow Resource = "yellow"
+var Black resource = "black"
+var White resource = "white"
+var Red resource = "red"
+var Blue resource = "blue"
+var Green resource = "green"
+var Yellow resource = "yellow"
 
 // MapResource maps a string to a Resource
-func MapResource(s string) Resource {
+func mapResource(s string) resource {
 	switch s {
 	case "black":
 		return Black
@@ -33,7 +33,7 @@ func MapResource(s string) Resource {
 }
 
 // MoveResources moves <cost>  from <fromBank> to <toBank>, returning error if <fromBank> can"t afford.
-func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, map[Resource]int, error) {
+func moveResources(fromBank, toBank, cost map[resource]int) (map[resource]int, map[resource]int, error) {
 	newFromBank := copyBank(fromBank)
 	newToBank := copyBank(toBank)
 	for res, amount := range cost {

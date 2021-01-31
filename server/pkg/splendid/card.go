@@ -7,31 +7,29 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
-// Card represents a development card
-type Card struct {
+type card struct {
 	ID     int              `json:"id"`
 	Tier   int              `json:"tier"`
 	Points int              `json:"points"`
-	Cost   map[Resource]int `json:"cost"`
-	Income Resource         `json:"income"`
+	Cost   map[resource]int `json:"cost"`
+	Income resource         `json:"income"`
 }
 
-// CreateCards creates a list of Card structs from CSV data
-func CreateCards(rows [][]string) []Card {
-	var cards []Card
+func createCards(rows [][]string) []card {
+	var cards []card
 	for i, row := range rows {
-		cards = append(cards, Card{
+		cards = append(cards, card{
 			ID:     i + 1,
 			Tier:   util.StringToInt(row[0]),
 			Points: util.StringToInt(row[2]),
-			Cost: map[Resource]int{
+			Cost: map[resource]int{
 				Black: util.StringToInt(row[3]),
 				White: util.StringToInt(row[4]),
 				Red:   util.StringToInt(row[5]),
 				Blue:  util.StringToInt(row[6]),
 				Green: util.StringToInt(row[7]),
 			},
-			Income: MapResource(row[1]),
+			Income: mapResource(row[1]),
 		})
 	}
 	return cards
@@ -39,8 +37,8 @@ func CreateCards(rows [][]string) []Card {
 
 // FilterCards returns a slice of Card structs that pass the
 // test implemented by the provided function
-func FilterCards(cards []Card, f func(Card) bool) []Card {
-	var filtered []Card
+func filterCards(cards []card, f func(card) bool) []card {
+	var filtered []card
 	for _, v := range cards {
 		if f(v) {
 			filtered = append(filtered, v)
@@ -50,16 +48,16 @@ func FilterCards(cards []Card, f func(Card) bool) []Card {
 }
 
 // MoveCard removes <card> from <fromDeck> and appends to <toDeck>
-func MoveCard(card Card, fromDeck []Card, toDeck []Card) ([]Card, []Card, error) {
-	var newFromDeck []Card
+func moveCard(c card, fromDeck, toDeck []card) ([]card, []card, error) {
+	var newFromDeck []card
 	for _, deckCard := range fromDeck {
-		if !reflect.DeepEqual(card, deckCard) {
+		if !reflect.DeepEqual(c, deckCard) {
 			newFromDeck = append(newFromDeck, deckCard)
 		}
 	}
 	if len(newFromDeck) == len(fromDeck) {
-		return []Card{}, []Card{}, errors.New("Card does not exist in fromDeck")
+		return []card{}, []card{}, errors.New("card does not exist in fromDeck")
 	}
-	newToDeck := append(toDeck, card)
+	newToDeck := append(toDeck, c)
 	return newFromDeck, newToDeck, nil
 }

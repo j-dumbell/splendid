@@ -7,15 +7,15 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
-func maskCards(cards []Card) []Card {
+func maskCards(cards []card) []card {
 	maskedCards := cards
-	for i, card := range maskedCards {
-		maskedCards[i] = Card{Tier: card.Tier}
+	for i, c := range maskedCards {
+		maskedCards[i] = card{Tier: c.Tier}
 	}
 	return maskedCards
 }
 
-func maskDecks(decks map[int][]Card) map[int][]Card {
+func maskDecks(decks map[int][]card) map[int][]card {
 	maskedDecks := decks
 	for tier, cards := range decks {
 		if len(cards) > config.DeckCapacity {
@@ -37,20 +37,20 @@ func maskPlayerHands(id int, players []Player) []Player {
 	return players
 }
 
-type GameDetails struct {
+type gameDetails struct {
 	Game Game `json:"game"`
 }
 
-func maskGame(g Game) map[int]messages.DetailsGame {
-	maskedDecks := maskDecks(g.Board.Decks)
+func maskGame(game Game) map[int]messages.DetailsGame {
+	maskedDecks := maskDecks(game.Board.Decks)
 
 	idToResponse := map[int]messages.DetailsGame{}
-	for _, player := range g.Players {
-		maskedGame := g
+	for _, player := range game.Players {
+		maskedGame := game
 		maskedGame.Board.Decks = maskedDecks
-		maskedGame.Players = maskPlayerHands(player.ID, g.Players)
+		maskedGame.Players = maskPlayerHands(player.ID, game.Players)
 
-		jsonGame, _ := json.Marshal(GameDetails{Game: maskedGame})
+		jsonGame, _ := json.Marshal(gameDetails{Game: maskedGame})
 
 		idToResponse[player.ID] = messages.DetailsGame{
 			Ok:      true,
