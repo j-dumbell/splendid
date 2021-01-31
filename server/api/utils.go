@@ -16,7 +16,7 @@ func mkErrorResponse(action string, err error) messages.Response {
 	}
 }
 
-func mkLobbyDetails(lobbyID string, clients map[int]*Client, currentClient *Client) json.RawMessage {
+func mkLobbyDetails(lobbyID string, clients map[int]*client, currentClient *client) json.RawMessage {
 	playerNames := make(map[int]string)
 	for id, client := range clients {
 		playerNames[id] = client.name

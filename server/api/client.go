@@ -7,7 +7,7 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type Client struct {
+type client struct {
 	conn  *websocket.Conn
 	lobby *Lobby
 	send  chan messages.Response
@@ -16,7 +16,7 @@ type Client struct {
 }
 
 // ReadPump handles a Client's incoming messages
-func (c *Client) readPump(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) {
+func (c *client) readPump(newGame func() Game, allLobbies map[string]*Lobby, maxPlayers int) {
 	defer func() {
 		if c.lobby != nil {
 			c.lobby.exit <- c
@@ -57,7 +57,7 @@ func (c *Client) readPump(newGame func() Game, allLobbies map[string]*Lobby, max
 	}
 }
 
-func (c *Client) writePump() {
+func (c *client) writePump() {
 	for {
 		r := <-c.send
 		websocket.JSON.Send(c.conn, r)

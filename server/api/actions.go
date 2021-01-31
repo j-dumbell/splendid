@@ -7,7 +7,7 @@ import (
 	"github.com/j-dumbell/splendid/server/api/messages"
 )
 
-func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[string]*Lobby) {
+func create(newGame func() Game, c *client, p json.RawMessage, allLobbies map[string]*Lobby) {
 	l := newLobby(newGame)
 	fmt.Printf("Created lobby %v with lobbyId %v\n", l, l.id)
 	allLobbies[l.id] = &l
@@ -18,7 +18,7 @@ func create(newGame func() Game, c *Client, p json.RawMessage, allLobbies map[st
 	l.join <- c
 }
 
-func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers int) error {
+func join(c *client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers int) error {
 	if c.lobby != nil {
 		return fmt.Errorf("already in lobby \"%v\"", c.lobby.id)
 	}
@@ -37,7 +37,7 @@ func join(c *Client, p json.RawMessage, allLobbies map[string]*Lobby, maxPlayers
 }
 
 // TODO - json.RawMessage type could be garbled.  Use proper type instead?
-func chat(c *Client, p json.RawMessage) error {
+func chat(c *client, p json.RawMessage) error {
 	if c.lobby != nil {
 		c.lobby.broadcast <- messages.Response{Action: "chat", Ok: true, Details: p}
 		return nil

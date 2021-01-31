@@ -12,10 +12,10 @@ import (
 
 type Lobby struct {
 	id          string
-	clients     map[int]*Client
+	clients     map[int]*client
 	broadcast   chan (messages.Response)
-	exit        chan (*Client)
-	join        chan (*Client)
+	exit        chan (*client)
+	join        chan (*client)
 	gameActions chan (messages.GameParams)
 	game        Game
 }
@@ -30,10 +30,10 @@ func newLobby(newGame func() Game) Lobby {
 	lobbyID := util.RandID(6, time.Now().UnixNano())
 	return Lobby{
 		id:          lobbyID,
-		clients:     make(map[int]*Client),
+		clients:     make(map[int]*client),
 		broadcast:   make(chan messages.Response),
-		exit:        make(chan *Client),
-		join:        make(chan *Client),
+		exit:        make(chan *client),
+		join:        make(chan *client),
 		gameActions: make(chan messages.GameParams),
 		game:        newGame(),
 	}
@@ -71,7 +71,7 @@ func (l *Lobby) run() {
 	}
 }
 
-func (l *Lobby) joinLobby(client *Client) messages.Response {
+func (l *Lobby) joinLobby(client *client) messages.Response {
 	if _, exists := l.clients[client.id]; exists {
 		return mkErrorResponse("join", errors.New("already in lobby"))
 	}
@@ -89,7 +89,7 @@ func (l *Lobby) joinLobby(client *Client) messages.Response {
 	}
 }
 
-func (l *Lobby) exitLobby(client *Client) messages.Response {
+func (l *Lobby) exitLobby(client *client) messages.Response {
 	fmt.Printf("Removing client \"%v\" from lobby \"%v\"\n", client.name, l.id)
 	delete(l.clients, client.id)
 	l.game.RemovePlayer(client.id)
