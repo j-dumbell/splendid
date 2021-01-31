@@ -43,5 +43,5 @@ func MoveResources(fromBank, toBank, cost map[Resource]int) (map[Resource]int, m
 		}
 		newToBank[res] += amount
 	}
-	return newFromBank, toBank, nil
+	return newFromBank, newToBank, nil
 }
