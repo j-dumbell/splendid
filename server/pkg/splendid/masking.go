@@ -8,21 +8,26 @@ import (
 )
 
 func maskCards(cards []card) []card {
-	maskedCards := cards
-	for i, c := range maskedCards {
+	maskedCards := make([]card, len(cards))
+	copy(maskedCards, cards)
+	for i, c := range cards {
 		maskedCards[i] = card{Tier: c.Tier}
 	}
 	return maskedCards
 }
 
 func maskDecks(decks map[int][]card) map[int][]card {
-	maskedDecks := decks
+	maskedDecks := map[int][]card{}
 	for tier, cards := range decks {
+		copyCards := make([]card, len(cards))
+		copy(copyCards, cards)
 		if len(cards) > config.DeckCapacity {
 			maskedDecks[tier] = append(
-				cards[:config.DeckCapacity],
-				maskCards(cards[config.DeckCapacity:])...,
+				copyCards[:config.DeckCapacity],
+				maskCards(copyCards[config.DeckCapacity:])...,
 			)
+		} else {
+			maskedDecks[tier] = decks[tier]
 		}
 	}
 	return maskedDecks
