@@ -4,8 +4,9 @@ import { SplendidCard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Resource from "../Resource";
 import ResourceList from "../ResourceList";
-import { CardContainer, CardButton } from "./styled";
+import { CardContainer } from "./styled";
 import { sendJSON } from "../../../hooks/useWebsocket";
+import { UnstyledButton } from "../../common/Button";
 
 type Props = SplendidCard & {
   mini?: boolean;
@@ -24,17 +25,20 @@ const CardInner = ({ tier, points, income, cost, mini }: Props) => (
   </CardContainer>
 );
 
-const Card = ({ purchasable, ...props }: Props) => (
-  purchasable ? <CardButton
-    onClick={() =>
-      sendJSON({
-        action: "game",
-        params: { gameAction: "buyCard", cardId: props.id },
-      })
-    }
-  >
+const Card = ({ purchasable, ...props }: Props) =>
+  purchasable ? (
+    <UnstyledButton
+      onClick={() =>
+        sendJSON({
+          action: "game",
+          params: { gameAction: "buyCard", cardId: props.id },
+        })
+      }
+    >
+      <CardInner {...props} />
+    </UnstyledButton>
+  ) : (
     <CardInner {...props} />
-  </CardButton> : <CardInner {...props} />
-);
+  );
 
 export default Card;

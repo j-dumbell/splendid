@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { SplendidPlayer } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Card from "../Card";
-import ResourceList from "../ResourceList";
+import { PlayerResourceList as ResourceList } from "../ResourceList";
 import { State } from "../../../state/domain";
 
 type Props = {

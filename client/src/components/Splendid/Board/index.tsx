@@ -4,7 +4,7 @@ import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Card from "../Card";
 import Elite from "../Elite";
-import ResourceList from "../ResourceList";
+import { BoardResourceList as ResourceList } from "../ResourceList";
 
 type Props = SplendidBoard;
 
