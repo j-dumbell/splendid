@@ -1,10 +1,10 @@
 import React from "react";
-import { Formik, Form, Field, FormikProps } from "formik";
+import { Formik, Form, FormikProps, Field, ErrorMessage } from "formik";
 
 import { splendidResource, SplendidCard } from "../domain";
-import { UnstyledButton } from "../../common/Button";
 import ResourceCount from "./ResourceCount";
 import { sendJSON } from "../../../hooks/useWebsocket";
+import FlexContainer from "../../common/FlexContainer";
 
 type Props = {
   resourceList: Record<string, number>;
@@ -58,41 +58,92 @@ export const PlayerResourceList = ({
   </>
 );
 
+export const validateMax = (form: Record<string, number>) => {
+  const keys = Object.keys(form);
+  const values = Object.values(form);
+  const maxTotal = keys.reduce(
+    (prev, next) => prev + form[next],
+    0
+  );
+  if (maxTotal > 3) {
+    return keys.reduce(
+      (prev, next) => ({ ...prev, [next]: "max" }),
+      {}
+    );
+  }
+  const maxSingle = values.some((value) => value > 2);
+  if (maxSingle) {
+    return keys.reduce(
+      (prev, next) => ({ ...prev, [next]: "max" }),
+      {}
+    );
+  }
+  const maxMixture = values.some((value) => value == 2) && maxTotal > 2;
+  if (maxMixture) {
+    return keys.reduce(
+      (prev, next) => ({ ...prev, [next]: "max" }),
+      {}
+    );
+  }
+  return {};
+};
+
 export const BoardResourceList = ({ resourceList }: Props) => (
   <Formik
+    validate={validateMax}
     initialValues={Object.keys(resourceList).reduce(
       (prev, next) => ({ ...prev, [next]: 0 }),
       {}
     )}
-    onSubmit={(values, { resetForm, setSubmitting }) => {
+    onSubmit={(values) =>
       sendJSON({
         action: "game",
         params: { ...values, gameAction: "takeResources" },
-      });
-      resetForm();
-      setSubmitting(false);
-    }}
+      })
+    }
   >
-    {({ values, setFieldValue }: FormikProps<any>) => (
+    {({ values, errors, setFieldValue }: FormikProps<any>) => (
       <Form>
         {splendidResource.map((resource, i) => (
-          <UnstyledButton
-            key={`resource-${i}`}
-            type="button"
-            id={resource}
-            onClick={({ currentTarget: { id } }) =>
-              setFieldValue(id, values[id] + 1)
-            }
-          >
-            <Field
-              type="hidden"
-              name={resource}
-              placeholder={resource}
-              required
-            />
+          <FlexContainer key={i}>
+            <div>
+              <ErrorMessage name={resource} />
+              <Field
+                type="text"
+                name={resource}
+                disabled
+                value={values[resource]}
+                id={resource}
+              />
+              <button
+                disabled={Boolean(errors[resource])}
+                style={{ marginRight: "5px" }}
+                type="button"
+                value={resource}
+                onClick={async ({ currentTarget: { value } }) => {
+                  setFieldValue(value, values[value] + 1);
+                }}
+              >
+                +
+              </button>
+              <button
+                disabled={values[resource] <= 0}
+                style={{ marginRight: "5px" }}
+                type="button"
+                value={resource}
+                onClick={async ({ currentTarget: { value } }) => {
+                  setFieldValue(value, values[value] - 1);
+                }}
+              >
+                -
+              </button>
+            </div>
             <ResourceCount resource={resource} count={resourceList[resource]} />
-          </UnstyledButton>
+          </FlexContainer>
         ))}
+        <button type="submit" disabled={Object.values(errors).some(Boolean)}>
+          Buy resources
+        </button>
       </Form>
     )}
   </Formik>
