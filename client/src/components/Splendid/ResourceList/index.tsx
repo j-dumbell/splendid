@@ -1,10 +1,10 @@
 import React from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikProps } from "formik";
 
 import { splendidResource, SplendidCard } from "../domain";
 import { UnstyledButton } from "../../common/Button";
 import ResourceCount from "./ResourceCount";
-// import { sendJSON } from "../../../hooks/useWebsocket";
+import { sendJSON } from "../../../hooks/useWebsocket";
 
 type Props = {
   resourceList: Record<string, number>;
@@ -60,25 +60,29 @@ export const PlayerResourceList = ({
 
 export const BoardResourceList = ({ resourceList }: Props) => (
   <Formik
-    initialValues={{ id: "" }}
-    onSubmit={() => {}}
-    // onSubmit={(values, { resetForm, setSubmitting }) => {
-    //   sendJSON({
-    //     action: "game",
-    //     params: { ...values, gameAction: "takeResources" },
-    //   });
-    //   resetForm();
-    //   setSubmitting(false);
-    // }}
+    initialValues={Object.keys(resourceList).reduce(
+      (prev, next) => ({ ...prev, [next]: 0 }),
+      {}
+    )}
+    onSubmit={(values, { resetForm, setSubmitting }) => {
+      sendJSON({
+        action: "game",
+        params: { ...values, gameAction: "takeResources" },
+      });
+      resetForm();
+      setSubmitting(false);
+    }}
   >
-    <Form>
-      {splendidResource.map((resource, i) => {
-        return (
+    {({ values, setFieldValue }: FormikProps<any>) => (
+      <Form>
+        {splendidResource.map((resource, i) => (
           <UnstyledButton
-            type="button"
             key={`resource-${i}`}
-            onClick={(e) => console.log(e.currentTarget.id)}
+            type="button"
             id={resource}
+            onClick={({ currentTarget: { id } }) =>
+              setFieldValue(id, values[id] + 1)
+            }
           >
             <Field
               type="hidden"
@@ -88,9 +92,9 @@ export const BoardResourceList = ({ resourceList }: Props) => (
             />
             <ResourceCount resource={resource} count={resourceList[resource]} />
           </UnstyledButton>
-        );
-      })}
-    </Form>
+        ))}
+      </Form>
+    )}
   </Formik>
 );
 
