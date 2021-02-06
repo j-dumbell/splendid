@@ -102,7 +102,7 @@ func (game *Game) nextPlayer() {
 	}
 }
 
-func (game *Game) reserveHidden(playerID, tier int) error {
+func (game *Game) reserveHidden(tier int) error {
 	if _, exists := game.Board.Decks[tier]; !exists {
 		return errors.New("tier does not exist")
 	}
@@ -139,6 +139,10 @@ type buyCardParams struct {
 
 type reserveHiddenParams struct {
 	Tier int `json:"tier"`
+}
+
+type reserveVisibleParams struct {
+	CardID int `json:"cardId"`
 }
 
 type takeResourcesParams struct {
@@ -187,6 +191,27 @@ func (game *Game) takeResources(toTake map[resource]int) error {
 	return nil
 }
 
+func (game *Game) reserveVisible(cardID int) error {
+	c, err := getCard(game.Board.Decks, cardID)
+	if err != nil {
+		return err
+	}
+	if game.Board.Bank[Yellow] <= 0 {
+		return errors.New("no tokens in bank to reserve with")
+	}
+	if len(game.Players[game.ActivePlayerIndex].ReservedHidden)+len(game.Players[game.ActivePlayerIndex].ReservedVisible) >= 3 {
+		return errors.New("maximum cards already reserved")
+	}
+	deck, hand, _ := moveCard(c, game.Board.Decks[c.Tier], game.Players[game.ActivePlayerIndex].ReservedVisible)
+	gameBank, playerBank, _ := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, map[resource]int{Yellow: 1})
+	game.Board.Decks[c.Tier] = deck
+	game.Players[game.ActivePlayerIndex].ReservedVisible = hand
+	game.Board.Bank = gameBank
+	game.Players[game.ActivePlayerIndex].Bank = playerBank
+	game.nextPlayer()
+	return nil
+}
+
 // HandleAction maps action params into game actions
 func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.DetailsGame {
 	var payload payload
@@ -230,13 +255,22 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		}
 		return mkMaskedDetails(*game)
 	case "reserveHidden":
-		fmt.Println("reserving card")
+		fmt.Println("reserving hidden card")
 		var p reserveHiddenParams
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		fmt.Printf("tier is %v", p.Tier)
-		if err := game.reserveHidden(id, p.Tier); err != nil {
+		if err := game.reserveHidden(p.Tier); err != nil {
+			return mkErrorDetails(id, err.Error())
+		}
+		return mkMaskedDetails(*game)
+	case "reserveVisible":
+		fmt.Println("reserving visible card")
+		var p reserveVisibleParams
+		if err := json.Unmarshal(params, &p); err != nil {
+			return mkErrorDetails(id, err.Error())
+		}
+		if err := game.reserveVisible(p.CardID); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
 		return mkMaskedDetails(*game)
