@@ -21,10 +21,3 @@ export const CardContainer = styled(FlexContainer)`
   border-radius: 5px;
   background-color: ${({ tier }: Props) => tierColours[tier]};
 `;
-
-export const CardButton = styled.button`
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  text-align: left;
-`;

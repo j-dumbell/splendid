@@ -7,7 +7,7 @@ import ResourceContainer from "./styled";
 type Props = {
   resource: SplendidResource;
   count: number;
-  purchasedCount: number;
+  purchasedCount?: number;
   mini?: boolean;
   column?: boolean;
 };
@@ -17,7 +17,7 @@ const ResourceCount = ({ resource, count, purchasedCount, mini, column }: Props)
     <Resource resourceType={resource} mini={mini} />
     <p>
       {count}
-      {purchasedCount > 0 && `(+${purchasedCount})`}
+      {(purchasedCount ?? 0) > 0 && `(+${purchasedCount})`}
     </p>
   </ResourceContainer>
 );
