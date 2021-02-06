@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form, FormikProps, Field, ErrorMessage } from "formik";
+import { Formik, Form, FormikProps, Field } from "formik";
 
 import { splendidResource, SplendidCard } from "../domain";
 import ResourceCount from "./ResourceCount";
@@ -61,29 +61,17 @@ export const PlayerResourceList = ({
 export const validateMax = (form: Record<string, number>) => {
   const keys = Object.keys(form);
   const values = Object.values(form);
-  const maxTotal = keys.reduce(
-    (prev, next) => prev + form[next],
-    0
-  );
+  const maxTotal = keys.reduce((prev, next) => prev + form[next], 0);
   if (maxTotal > 3) {
-    return keys.reduce(
-      (prev, next) => ({ ...prev, [next]: "max" }),
-      {}
-    );
+    return keys.reduce((prev, next) => ({ ...prev, [next]: "max" }), {});
   }
   const maxSingle = values.some((value) => value > 2);
   if (maxSingle) {
-    return keys.reduce(
-      (prev, next) => ({ ...prev, [next]: "max" }),
-      {}
-    );
+    return keys.reduce((prev, next) => ({ ...prev, [next]: "max" }), {});
   }
-  const maxMixture = values.some((value) => value == 2) && maxTotal > 2;
+  const maxMixture = values.some((value) => value === 2) && maxTotal > 2;
   if (maxMixture) {
-    return keys.reduce(
-      (prev, next) => ({ ...prev, [next]: "max" }),
-      {}
-    );
+    return keys.reduce((prev, next) => ({ ...prev, [next]: "max" }), {});
   }
   return {};
 };
@@ -106,8 +94,7 @@ export const BoardResourceList = ({ resourceList }: Props) => (
       <Form>
         {splendidResource.map((resource, i) => (
           <FlexContainer key={i}>
-            <div>
-              <ErrorMessage name={resource} />
+            <>
               <Field
                 type="text"
                 name={resource}
@@ -137,7 +124,7 @@ export const BoardResourceList = ({ resourceList }: Props) => (
               >
                 -
               </button>
-            </div>
+            </>
             <ResourceCount resource={resource} count={resourceList[resource]} />
           </FlexContainer>
         ))}
