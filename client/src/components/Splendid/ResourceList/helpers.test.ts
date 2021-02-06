@@ -1,6 +1,6 @@
-import { validateMax } from ".";
+import { validateMax } from "./helpers";
 
-describe("validateMaxs()", () => {
+describe("validateMax()", () => {
   it("should not error when only 1 colour selected", () => {
     const values = {
       red: 1,
