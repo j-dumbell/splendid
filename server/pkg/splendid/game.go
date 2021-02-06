@@ -149,7 +149,8 @@ type takeResourcesParams struct {
 	red   int `json:"red"`
 }
 
-func paramsToBank(params takeResourcesParams) (bank map[resource]int) {
+func paramsToBank(params takeResourcesParams) map[resource]int {
+	bank := map[resource]int{}
 	bank[Black] = params.black
 	bank[White] = params.white
 	bank[Blue] = params.blue
