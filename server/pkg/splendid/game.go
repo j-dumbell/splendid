@@ -70,11 +70,8 @@ func (game *Game) RemovePlayer(id int) error {
 }
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
-func (game *Game) buyCard(playerID int, cardID int) error {
+func (game *Game) buyCard(cardID int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
-	if playerID != activePlayer.ID {
-		return errors.New("not active player")
-	}
 	card, cardErr := getCard(game.Board.Decks, cardID)
 	tier := card.Tier
 	if cardErr != nil {
@@ -104,13 +101,43 @@ func (game *Game) nextPlayer() {
 	}
 }
 
+func (game *Game) reserveHidden(playerID, tier int) error {
+	if _, exists := game.Board.Decks[tier]; !exists {
+		return errors.New("tier does not exist")
+	}
+	if len(game.Board.Decks[tier]) <= config.DeckCapacity {
+		return errors.New("deck is empty")
+	}
+	if game.Board.Bank[Yellow] <= 0 {
+		return errors.New("no tokens in bank to reserve with")
+	}
+	if len(game.Players[game.ActivePlayerIndex].ReservedHidden)+len(game.Players[game.ActivePlayerIndex].ReservedVisible) >= 3 {
+		return errors.New("maximum cards already reserved")
+	}
+	newGameBank, newPlayerBank, _ := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, map[resource]int{Yellow: 1})
+	game.Players[game.ActivePlayerIndex].Bank = newPlayerBank
+	game.Board.Bank = newGameBank
+	newTier, newReserved, _ := moveCard(
+		game.Board.Decks[tier][4],
+		game.Board.Decks[tier],
+		game.Players[game.ActivePlayerIndex].ReservedHidden,
+	)
+	game.Players[game.ActivePlayerIndex].ReservedHidden = newReserved
+	game.Board.Decks[tier] = newTier
+	game.nextPlayer()
+	return nil
+}
+
 type payload struct {
-	GameAction string          `json:"gameAction"`
-	GameParams json.RawMessage `json:"gameParams"`
+	GameAction string `json:"gameAction"`
 }
 
 type buyCardParams struct {
 	CardID int `json:"cardId"`
+}
+
+type reserveHiddenParams struct {
+	Tier int `json:"tier"`
 }
 
 // HandleAction maps action params into game actions
@@ -120,12 +147,16 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 	if err != nil {
 		return mkErrorDetails(id, "unrecognized message")
 	}
-
+	if id != game.Players[game.ActivePlayerIndex].ID {
+		if game.Turn == 0 {
+			return mkErrorDetails(id, "game has not started")
+		}
+		return mkErrorDetails(id, "not active player")
+	}
 	switch payload.GameAction {
 	case "startGame":
 		fmt.Println("starting game")
-		err := game.StartGame(decks, elites)
-		if err != nil {
+		if err := game.StartGame(decks, elites); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
 		return mkMaskedDetails(*game)
@@ -135,9 +166,20 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		buyErr := game.buyCard(id, p.CardID)
+		buyErr := game.buyCard(p.CardID)
 		if buyErr != nil {
 			return mkErrorDetails(id, buyErr.Error())
+		}
+		return mkMaskedDetails(*game)
+	case "reserveHidden":
+		fmt.Println("reserving card")
+		var p reserveHiddenParams
+		if err := json.Unmarshal(params, &p); err != nil {
+			return mkErrorDetails(id, err.Error())
+		}
+		fmt.Printf("tier is %v", p.Tier)
+		if err := game.reserveHidden(id, p.Tier); err != nil {
+			return mkErrorDetails(id, err.Error())
 		}
 		return mkMaskedDetails(*game)
 	default:

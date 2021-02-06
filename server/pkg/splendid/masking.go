@@ -27,7 +27,7 @@ func maskDecks(decks map[int][]card) map[int][]card {
 				maskCards(copyCards[config.DeckCapacity:])...,
 			)
 		} else {
-			maskedDecks[tier] = decks[tier]
+			maskedDecks[tier] = copyCards
 		}
 	}
 	return maskedDecks
