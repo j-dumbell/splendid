@@ -148,6 +148,9 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		return mkErrorDetails(id, "unrecognized message")
 	}
 	if id != game.Players[game.ActivePlayerIndex].ID {
+		if game.Turn == 0 {
+			return mkErrorDetails(id, "game has not started")
+		}
 		return mkErrorDetails(id, "not active player")
 	}
 	switch payload.GameAction {
