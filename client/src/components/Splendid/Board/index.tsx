@@ -9,31 +9,35 @@ import { BoardResourceList as ResourceList } from "../ResourceList";
 type Props = SplendidBoard;
 
 const Board = ({ elites, decks, bank }: Props) => (
-  <div>
-    <FlexContainer color="white">
-      <ResourceList resourceList={bank} />
-    </FlexContainer>
-    <FlexContainer>
-      {elites
-        .filter((card) => card.id)
-        .map((elite, i) => (
-          <Elite key={`elite-${i}`} {...elite} />
-        ))}
-    </FlexContainer>
+  <FlexContainer>
     <div>
-      {Object.keys(decks)
-        .reverse()
-        .map((tier, i) => (
-          <FlexContainer key={`card-container-${i}`}>
-            {decks[tier]
-              .filter((card) => card.id)
-              .map((card, j) => (
-                <Card key={`board-card-${j}`} {...card} purchasable />
-              ))}
-          </FlexContainer>
-        ))}
+      <FlexContainer color="white">
+        <ResourceList resourceList={bank} />
+      </FlexContainer>
     </div>
-  </div>
+    <div>
+      <FlexContainer>
+        {elites
+          .filter((card) => card.id)
+          .map((elite, i) => (
+            <Elite key={`elite-${i}`} {...elite} />
+          ))}
+      </FlexContainer>
+      <div>
+        {Object.keys(decks)
+          .reverse()
+          .map((tier, i) => (
+            <FlexContainer key={`card-container-${i}`}>
+              {decks[tier]
+                .filter((card) => card.id)
+                .map((card, j) => (
+                  <Card key={`board-card-${j}`} {...card} purchasable />
+                ))}
+            </FlexContainer>
+          ))}
+      </div>
+    </div>
+  </FlexContainer>
 );
 
 export default Board;
