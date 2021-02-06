@@ -21,18 +21,3 @@ export const CardInnerContainer = styled(FlexContainer)`
   border-radius: 5px;
   background-color: ${({ tier }: Props) => tierColours[tier]};
 `;
-
-export const PurchaseContainer = styled.div`
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  visibility: ${({ selectedCard }: { selectedCard: boolean }) =>
-    selectedCard ? "visible" : "hidden"};
-
-  button {
-    margin-bottom: 5px;
-    width: 100%;
-  }
-`;

@@ -4,8 +4,7 @@ import { SplendidCard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Resource from "../Resource";
 import ResourceList from "../ResourceList";
-import { CardInnerContainer, PurchaseContainer } from "./styled";
-import { sendJSON } from "../../../hooks/useWebsocket";
+import { CardInnerContainer } from "./styled";
 
 type Props = SplendidCard & {
   mini?: boolean;

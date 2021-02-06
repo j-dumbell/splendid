@@ -1,54 +1,33 @@
 import React from "react";
-import { Formik, Field, Form } from "formik";
+import { Formik, Form } from "formik";
 
-import { SplendidBoard, SplendidCard } from "../domain";
+import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
-import PurchasableCard from "../Card/PurchasableCard";
+import DeckCard from "./DeckCard";
 
 type Props = {
   decks: SplendidBoard["decks"];
 };
 
-const DeckCard = ({
-  card,
-  selected,
-}: {
-  card: SplendidCard;
-  selected?: string;
-}) => {
-  const ref = card.id ? `visible-${card.id}` : `hidden-${card.tier}`;
-  return (
-    <label>
-      <Field
-        type="radio"
-        name="selected"
-        value={ref}
-        style={{ display: "none" }}
-      />
-      <PurchasableCard {...card} selectedCard={selected === ref} />
-    </label>
-  );
-};
+const constructDeck = (tier: string, decks: SplendidBoard["decks"]) =>
+  decks[tier].filter((card) => card.id).concat(decks[tier].slice(-1));
 
 const BoardDecks = ({ decks }: Props) => (
-  <Formik
-    onSubmit={() => {}}
-    initialValues={{
-      selected: undefined,
-    }}
-  >
-    {({ values: { selected } }) => (
+  <Formik onSubmit={() => {}} initialValues={{ selected: undefined }}>
+    {({ values }) => (
       <Form>
         {Object.keys(decks)
           .reverse()
           .map((tier, i) => {
-            const deckCards = decks[tier]
-              .filter((card) => card.id)
-              .concat(decks[tier].slice(-1));
+            const deckCards = constructDeck(tier, decks);
             return (
-              <FlexContainer key={`card-container-${i}`}>
+              <FlexContainer key={`deck-${i}`}>
                 {deckCards.map((card, j) => (
-                  <DeckCard key={j} card={card} selected={selected} />
+                  <DeckCard
+                    key={`cards-${j}`}
+                    card={card}
+                    selected={values.selected}
+                  />
                 ))}
               </FlexContainer>
             );
