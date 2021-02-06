@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form, FormikProps, Field } from "formik";
 
-import { splendidResource, SplendidCard } from "../domain";
+import { splendidResource } from "../domain";
 import ResourceCount from "./ResourceCount";
 import { sendJSON } from "../../../hooks/useWebsocket";
 import FlexContainer from "../../common/FlexContainer";
