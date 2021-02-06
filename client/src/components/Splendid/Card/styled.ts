@@ -13,7 +13,7 @@ const tierColours: Record<string, string> = {
   3: "#54BEFA",
 };
 
-export const CardInnerContainer = styled(FlexContainer)`
+export const CardContainer = styled(FlexContainer)`
   margin: 5px;
   padding: 5px;
   width: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};

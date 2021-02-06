@@ -4,7 +4,7 @@ import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Elite from "../Elite";
 import { BoardResourceList as ResourceList } from "../ResourceList";
-import BoardDecks from "./BoardDecks";
+import Decks from "../Decks";
 
 type Props = SplendidBoard;
 
@@ -23,7 +23,7 @@ const Board = ({ elites, decks, bank }: Props) => (
             <Elite key={`elite-${i}`} {...elite} />
           ))}
       </FlexContainer>
-      <BoardDecks decks={decks} />
+      <Decks decks={decks} />
     </div>
   </FlexContainer>
 );

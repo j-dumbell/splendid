@@ -1,11 +1,15 @@
 import styled from "styled-components";
 
-export const DeckCardOuter = styled.label`
+export const DeckCardContainer = styled.label`
   display: block;
   position: relative;
+
+  input[type=radio] {
+    display: none;
+  }
 `;
 
-export const DeckCardInner = styled.div`
+export const PurchaseContainer = styled.div`
   position: absolute;
   top: 30px;
   left: 50%;
