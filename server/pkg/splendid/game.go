@@ -70,11 +70,8 @@ func (game *Game) RemovePlayer(id int) error {
 }
 
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
-func (game *Game) buyCard(playerID int, cardID int) error {
+func (game *Game) buyCard(cardID int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
-	if playerID != activePlayer.ID {
-		return errors.New("not active player")
-	}
 	card, cardErr := getCard(game.Board.Decks, cardID)
 	tier := card.Tier
 	if cardErr != nil {
@@ -105,11 +102,6 @@ func (game *Game) nextPlayer() {
 }
 
 func (game *Game) reserveHidden(playerID, tier int) error {
-	if playerID != game.Players[game.ActivePlayerIndex].ID {
-		return errors.New("not active player")
-	}
-	fmt.Println(tier)
-	fmt.Println(game.Board.Decks)
 	if _, exists := game.Board.Decks[tier]; !exists {
 		return errors.New("tier does not exist")
 	}
@@ -155,12 +147,13 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 	if err != nil {
 		return mkErrorDetails(id, "unrecognized message")
 	}
-
+	if id != game.Players[game.ActivePlayerIndex].ID {
+		return mkErrorDetails(id, "not active player")
+	}
 	switch payload.GameAction {
 	case "startGame":
 		fmt.Println("starting game")
-		err := game.StartGame(decks, elites)
-		if err != nil {
+		if err := game.StartGame(decks, elites); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
 		return mkMaskedDetails(*game)
@@ -170,7 +163,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		buyErr := game.buyCard(id, p.CardID)
+		buyErr := game.buyCard(p.CardID)
 		if buyErr != nil {
 			return mkErrorDetails(id, buyErr.Error())
 		}
