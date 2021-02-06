@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
@@ -140,6 +141,52 @@ type reserveHiddenParams struct {
 	Tier int `json:"tier"`
 }
 
+type takeResourcesParams struct {
+	Black int `json:"black"`
+	White int `json:"white"`
+	Blue  int `json:"blue"`
+	Green int `json:"green"`
+	Red   int `json:"red"`
+}
+
+func paramsToBank(params takeResourcesParams) map[resource]int {
+	bank := map[resource]int{}
+	bank[Black] = params.Black
+	bank[White] = params.White
+	bank[Blue] = params.Blue
+	bank[Green] = params.Green
+	bank[Red] = params.Red
+	return bank
+}
+
+func validateTake(toTake map[resource]int) error {
+	if count, exists := toTake[Yellow]; exists && count >= 1 {
+		return errors.New("cannot take yellow resources")
+	}
+	countFreq := map[int]int{}
+	for _, num := range toTake {
+		countFreq[num]++
+	}
+	if !(reflect.DeepEqual(countFreq, map[int]int{0: 4, 2: 1}) || reflect.DeepEqual(countFreq, map[int]int{0: 2, 1: 3})) {
+		return errors.New("invalid resource combination")
+	}
+	return nil
+}
+
+func (game *Game) takeResources(toTake map[resource]int) error {
+	if err := validateTake(toTake); err != nil {
+		return err
+	}
+	gameBank, playerBank, err := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, toTake)
+	if err != nil {
+		return err
+	}
+	game.Players[game.ActivePlayerIndex].Bank = playerBank
+	game.Board.Bank = gameBank
+	game.nextPlayer()
+	return nil
+}
+
 // HandleAction maps action params into game actions
 func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.DetailsGame {
 	var payload payload
@@ -169,6 +216,17 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		buyErr := game.buyCard(p.CardID)
 		if buyErr != nil {
 			return mkErrorDetails(id, buyErr.Error())
+		}
+		return mkMaskedDetails(*game)
+	case "takeResources":
+		fmt.Println("taking resources")
+		var p takeResourcesParams
+		if err := json.Unmarshal(params, &p); err != nil {
+			return mkErrorDetails(id, err.Error())
+		}
+		toTake := paramsToBank(p)
+		if err := game.takeResources(toTake); err != nil {
+			return mkErrorDetails(id, err.Error())
 		}
 		return mkMaskedDetails(*game)
 	case "reserveHidden":

@@ -15,7 +15,7 @@ func copyBank(bank map[resource]int) map[resource]int {
 }
 
 func createEmptyBank() map[resource]int {
-	return map[resource]int{Black: 10, White: 10, Red: 10, Blue: 10, Green: 10, Yellow: 10}
+	return map[resource]int{Black: 0, White: 0, Red: 0, Blue: 0, Green: 0, Yellow: 0}
 }
 
 func mkErrorDetails(id int, message string) map[int]m.DetailsGame {
