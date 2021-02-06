@@ -87,7 +87,7 @@ func TestGame_ReserveHidden(t *testing.T) {
 		ActivePlayerIndex: 1,
 		Board:             expBoard,
 	}
-	err := g.reserveHidden(1, 1)
+	err := g.reserveHidden(1)
 	if err != nil {
 		t.Fatalf("unexpected error: \"%v\"", err.Error())
 	}
