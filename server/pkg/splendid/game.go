@@ -142,20 +142,20 @@ type reserveHiddenParams struct {
 }
 
 type takeResourcesParams struct {
-	black int `json:"black"`
-	white int `json:"white"`
-	blue  int `json:"blue"`
-	green int `json:"green"`
-	red   int `json:"red"`
+	Black int `json:"black"`
+	White int `json:"white"`
+	Blue  int `json:"blue"`
+	Green int `json:"green"`
+	Red   int `json:"red"`
 }
 
 func paramsToBank(params takeResourcesParams) map[resource]int {
 	bank := map[resource]int{}
-	bank[Black] = params.black
-	bank[White] = params.white
-	bank[Blue] = params.blue
-	bank[Green] = params.green
-	bank[Red] = params.red
+	bank[Black] = params.Black
+	bank[White] = params.White
+	bank[Blue] = params.Blue
+	bank[Green] = params.Green
+	bank[Red] = params.Red
 	return bank
 }
 
