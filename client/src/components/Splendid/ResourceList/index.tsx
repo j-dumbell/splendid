@@ -9,5 +9,4 @@ export type ResourceListProps = {
 };
 
 export { default } from './BaseResourceList';
-export { default as BoardResourceList } from './BoardResourceList';
 export { default as PlayerResourceList } from './PlayerResourceList';

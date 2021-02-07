@@ -8,7 +8,7 @@ import { PlayerResourceList as ResourceList } from "../ResourceList";
 import { State } from "../../../state/domain";
 import { PlayersContainer, PlayerContainer } from "./styled";
 import DeckCard from "../Decks/DeckCard";
-import { Formik, Form } from "formik";
+import { useFormikContext } from "formik";
 
 type Props = {
   players: SplendidPlayer[];
@@ -16,6 +16,7 @@ type Props = {
 };
 
 const Players = ({ players, activePlayerIndex }: Props) => {
+  const { values } = useFormikContext<any>();
   const playerNames = useSelector(({ playerNames }: State) => playerNames);
   return (
     <PlayersContainer>
@@ -33,37 +34,31 @@ const Players = ({ players, activePlayerIndex }: Props) => {
               hideEmpty
             />
           </FlexContainer>
-          <Formik onSubmit={() => {}} initialValues={{ selected: undefined }}>
-            {({ values }) => (
-              <Form>
-                <FlexContainer>
-                  {player.purchased.map((card, j) => (
-                    <Card key={`player-purchased-card-${j}`} mini {...card} />
-                  ))}
-                  <FlexContainer>
-                    {player.reservedVisible.map((card, j) => (
-                      <DeckCard
-                        reserved
-                        mini
-                        key={`player-reserved-vis-card-${j}`}
-                        card={card}
-                        selected={values.selected}
-                      />
-                    ))}
-                    {player.reservedHidden.map((card, j) => (
-                      <DeckCard
-                        reserved
-                        mini
-                        key={`player-reserved-hid-card-${j}`}
-                        card={card}
-                        selected={values.selected}
-                      />
-                    ))}
-                  </FlexContainer>
-                </FlexContainer>
-              </Form>
-            )}
-          </Formik>
+          <FlexContainer>
+            {player.purchased.map((card, j) => (
+              <Card key={`player-purchased-card-${j}`} mini {...card} />
+            ))}
+            <FlexContainer>
+              {player.reservedVisible.map((card, j) => (
+                <DeckCard
+                  reserved
+                  mini
+                  key={`player-reserved-vis-card-${j}`}
+                  card={card}
+                  selected={values.selected}
+                />
+              ))}
+              {player.reservedHidden.map((card, j) => (
+                <DeckCard
+                  reserved
+                  mini
+                  key={`player-reserved-hid-card-${j}`}
+                  card={card}
+                  selected={values.selected}
+                />
+              ))}
+            </FlexContainer>
+          </FlexContainer>
         </PlayerContainer>
       ))}
     </PlayersContainer>

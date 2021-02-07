@@ -32,8 +32,8 @@ const PurchaseButtons = (props: PurchaseButtonsProps) => (
   <PurchaseContainer selectedCard={props.selectedCard}>
     {props.reserved ? (
       <PurchaseButton
-        gameAction="reserveVisible"
-        text="Reserve"
+        gameAction="buyCard"
+        text="Buy"
         params={{ cardId: props.id }}
       />
     ) : props.id ? (
