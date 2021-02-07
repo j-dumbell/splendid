@@ -70,7 +70,10 @@ func (game *Game) RemovePlayer(id int) error {
 // BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
 func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
-	card, cardErr := getCard(game.Board.Decks, cardID)
+
+	flatDecks := flattenVisibleCards(game.Board.Decks)
+	allCards := append(flatDecks, activePlayer.ReservedVisible, activePlayer.ReservedHidden)
+	card, cardErr := getCard(allCards, cardID)
 	tier := card.Tier
 	if cardErr != nil {
 		return cardErr
@@ -141,7 +144,8 @@ func (game *Game) takeResources(toTake map[resource]int) error {
 }
 
 func (game *Game) reserveVisible(cardID int) error {
-	c, err := getCard(game.Board.Decks, cardID)
+	allCards := flattenVisibleCards(game.Board.Decks)
+	c, err := getCard(allCards, cardID)
 	if err != nil {
 		return err
 	}

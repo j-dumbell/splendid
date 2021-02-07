@@ -38,7 +38,7 @@ func TestGetCard(t *testing.T) {
 	deck1 := Cards{{ID: 0}, {ID: 1}, {ID: 2}, {ID: 3}}
 	deck2 := Cards{{ID: 4}, {ID: 5}, {ID: 6}}
 	deck3 := Cards{{ID: 7}}
-	decks := map[int]Cards{1: deck1, 2: deck2, 3: deck3}
+	decks := []Cards{deck1, deck2, deck3}
 
 	rec, _ := getCard(decks, 6)
 	if !reflect.DeepEqual(Card{ID: 6}, rec) {

@@ -45,7 +45,8 @@ func (cards *Cards) filter(f func(Card) bool) (filtered Cards) {
 	return filtered
 }
 
-func (cards *Cards) apply(f func(Card) Card) (mapped Cards) {
+func (cards *Cards) apply(f func(Card) Card) Cards {
+	mapped := Cards{}
 	for _, v := range *cards {
 		mapped = append(mapped, f(v))
 	}

@@ -8,12 +8,8 @@ import (
 )
 
 func maskCards(cards Cards) Cards {
-	maskedCards := make(Cards, len(cards))
-	copy(maskedCards, cards)
-	for i, c := range cards {
-		maskedCards[i] = Card{Tier: c.Tier}
-	}
-	return maskedCards
+	f := func(card Card) Card { return Card{Tier: card.Tier} }
+	return cards.apply(f)
 }
 
 func maskDecks(decks map[int]Cards) map[int]Cards {
@@ -50,15 +46,19 @@ type gameDetails struct {
 	Game Game `json:"game"`
 }
 
-func mkMaskedDetails(game Game) map[int]m.DetailsGame {
+func maskGame(playerID int, game Game) Game {
+	maskedGame := game
 	maskedDecks := maskDecks(game.Board.Decks)
+	maskedGame.Board.Decks = maskedDecks
+	maskedGame.Players = maskPlayerHands(playerID, game.Players)
 
+	return maskedGame
+}
+
+func mkMaskedDetails(game Game) map[int]m.DetailsGame {
 	idToResponse := map[int]m.DetailsGame{}
 	for _, player := range game.Players {
-		maskedGame := game
-		maskedGame.Board.Decks = maskedDecks
-		maskedGame.Players = maskPlayerHands(player.ID, game.Players)
-
+		maskedGame := maskGame(player.ID, game)
 		jsonGame, _ := json.Marshal(gameDetails{Game: maskedGame})
 
 		idToResponse[player.ID] = m.DetailsGame{
