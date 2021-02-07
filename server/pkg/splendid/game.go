@@ -3,7 +3,6 @@ package splendid
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
@@ -21,7 +20,7 @@ type Game struct {
 }
 
 // StartGame starts the game
-func (game *Game) StartGame(decks map[int][]card, elites []elite) error {
+func (game *Game) StartGame(decks map[int][]Card, elites []elite) error {
 	numPlayers := len(game.Players)
 	if game.Turn >= 1 {
 		return errors.New("game already started")

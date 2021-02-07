@@ -2,7 +2,9 @@ package splendid
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"reflect"
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
 )

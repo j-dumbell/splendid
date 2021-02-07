@@ -7,19 +7,19 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
-func maskCards(cards []card) []card {
-	maskedCards := make([]card, len(cards))
+func maskCards(cards []Card) []Card {
+	maskedCards := make([]Card, len(cards))
 	copy(maskedCards, cards)
 	for i, c := range cards {
-		maskedCards[i] = card{Tier: c.Tier}
+		maskedCards[i] = Card{Tier: c.Tier}
 	}
 	return maskedCards
 }
 
-func maskDecks(decks map[int][]card) map[int][]card {
-	maskedDecks := map[int][]card{}
+func maskDecks(decks map[int][]Card) map[int][]Card {
+	maskedDecks := map[int][]Card{}
 	for tier, cards := range decks {
-		copyCards := make([]card, len(cards))
+		copyCards := make([]Card, len(cards))
 		copy(copyCards, cards)
 		if len(cards) > config.DeckCapacity {
 			maskedDecks[tier] = append(
@@ -38,7 +38,7 @@ func maskPlayerHands(id int, players []Player) []Player {
 	copy(maskedPlayers, players)
 	for i, player := range players {
 		if player.ID != id {
-			reservedHiddenCopy := make([]card, len(players[i].ReservedHidden))
+			reservedHiddenCopy := make([]Card, len(players[i].ReservedHidden))
 			copy(reservedHiddenCopy, players[i].ReservedHidden)
 			maskedPlayers[i].ReservedHidden = maskCards(reservedHiddenCopy)
 		}
