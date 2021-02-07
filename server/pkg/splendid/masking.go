@@ -46,15 +46,19 @@ type gameDetails struct {
 	Game Game `json:"game"`
 }
 
-func mkMaskedDetails(game Game) map[int]m.DetailsGame {
+func maskGame(playerID int, game Game) Game {
+	maskedGame := game
 	maskedDecks := maskDecks(game.Board.Decks)
+	maskedGame.Board.Decks = maskedDecks
+	maskedGame.Players = maskPlayerHands(playerID, game.Players)
 
+	return maskedGame
+}
+
+func mkMaskedDetails(game Game) map[int]m.DetailsGame {
 	idToResponse := map[int]m.DetailsGame{}
 	for _, player := range game.Players {
-		maskedGame := game
-		maskedGame.Board.Decks = maskedDecks
-		maskedGame.Players = maskPlayerHands(player.ID, game.Players)
-
+		maskedGame := maskGame(player.ID, game)
 		jsonGame, _ := json.Marshal(gameDetails{Game: maskedGame})
 
 		idToResponse[player.ID] = m.DetailsGame{
