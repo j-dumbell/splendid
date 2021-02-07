@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
+	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
 func copyBank(bank map[resource]int) map[resource]int {
@@ -34,9 +35,13 @@ func paramsToBank(params resourceParams) map[resource]int {
 	return bank
 }
 
-func flattenDecks(decks map[int]Cards) (allCards []Cards) {
+func flattenVisibleCards(decks map[int]Cards) (allCards []Cards) {
 	for _, cards := range decks {
-		allCards = append(allCards, cards)
+		if len(cards) > config.DeckCapacity {
+			allCards = append(allCards, cards[:config.DeckCapacity])
+		} else {
+			allCards = append(allCards, cards)
+		}
 	}
 	return allCards
 }
