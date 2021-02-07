@@ -33,6 +33,20 @@ type resourceParams struct {
 	Yellow int `json:"yellow"`
 }
 
+func validateTake(toTake map[resource]int) error {
+	if count, exists := toTake[Yellow]; exists && count >= 1 {
+		return errors.New("cannot take yellow resources")
+	}
+	countFreq := map[int]int{}
+	for _, num := range toTake {
+		countFreq[num]++
+	}
+	if !(reflect.DeepEqual(countFreq, map[int]int{0: 4, 2: 1}) || reflect.DeepEqual(countFreq, map[int]int{0: 2, 1: 3})) {
+		return errors.New("invalid resource combination")
+	}
+	return nil
+}
+
 // HandleAction maps action params into game actions
 func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.DetailsGame {
 	var payload payload

@@ -127,20 +127,6 @@ func (game *Game) reserveHidden(tier int) error {
 	return nil
 }
 
-func validateTake(toTake map[resource]int) error {
-	if count, exists := toTake[Yellow]; exists && count >= 1 {
-		return errors.New("cannot take yellow resources")
-	}
-	countFreq := map[int]int{}
-	for _, num := range toTake {
-		countFreq[num]++
-	}
-	if !(reflect.DeepEqual(countFreq, map[int]int{0: 4, 2: 1}) || reflect.DeepEqual(countFreq, map[int]int{0: 2, 1: 3})) {
-		return errors.New("invalid resource combination")
-	}
-	return nil
-}
-
 func (game *Game) takeResources(toTake map[resource]int) error {
 	if err := validateTake(toTake); err != nil {
 		return err
