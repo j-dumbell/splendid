@@ -9,7 +9,7 @@ import (
 )
 
 type board struct {
-	Decks  map[int]Cards   `json:"decks"`
+	Decks  map[int]Cards    `json:"decks"`
 	Elites []elite          `json:"elites"`
 	Bank   map[resource]int `json:"bank"`
 }
@@ -26,7 +26,7 @@ func createDecks(cardsPath string, elitesPath string) (map[int]Cards, []elite) {
 
 	decks := make(map[int]Cards)
 	for i := 1; i <= 3; i++ {
-		decks[i] = filterCards(cards, filterFn(i))
+		decks[i] = cards.filter(filterFn(i))
 	}
 
 	eliteRows, _ := util.ReadCSV(elitesPath)

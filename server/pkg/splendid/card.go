@@ -38,8 +38,8 @@ func createCards(rows [][]string) (cards Cards) {
 
 // FilterCards returns a slice of Card structs that pass the
 // test implemented by the provided function
-func filterCards(cards Cards, f func(Card) bool) (filtered Cards) {
-	for _, v := range cards {
+func (cards *Cards) filter(f func(Card) bool) (filtered Cards) {
+	for _, v := range *cards {
 		if f(v) {
 			filtered = append(filtered, v)
 		}

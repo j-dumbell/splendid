@@ -27,11 +27,11 @@ func TestFilterCards(t *testing.T) {
 		return c.Tier == 1
 	}
 
-	if !reflect.DeepEqual(Cards{cards[0]}, filterCards(cards, f)) {
+	if !reflect.DeepEqual(Cards{cards[0]}, cards.filter(f)) {
 		t.Fail()
 	}
 
-	if reflect.DeepEqual(Cards{cards[1]}, filterCards(cards, f)) {
+	if reflect.DeepEqual(Cards{cards[1]}, cards.filter(f)) {
 		t.Fail()
 	}
 }
