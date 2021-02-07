@@ -8,12 +8,8 @@ import (
 )
 
 func maskCards(cards Cards) Cards {
-	maskedCards := make(Cards, len(cards))
-	copy(maskedCards, cards)
-	for i, c := range cards {
-		maskedCards[i] = Card{Tier: c.Tier}
-	}
-	return maskedCards
+	f := func(card Card) Card { return Card{Tier: card.Tier} }
+	return cards.apply(f)
 }
 
 func maskDecks(decks map[int]Cards) map[int]Cards {
