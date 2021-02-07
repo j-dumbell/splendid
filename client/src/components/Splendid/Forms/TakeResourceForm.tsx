@@ -42,6 +42,7 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                 <ResourceCount
                   resource={resource}
                   count={resourceList[resource]}
+                  offset={-values[resource]}
                 />
                 <div>
                   <button
@@ -56,7 +57,9 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                   </button>
                   <button
                     disabled={
-                      Boolean(errors[resource]) || !canBeTaken(resource)
+                      Boolean(errors[resource]) ||
+                      values[resource] >= resourceList[resource] ||
+                      !canBeTaken(resource)
                     }
                     type="button"
                     value={resource}
@@ -67,13 +70,10 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                     +
                   </button>
                   <Field
-                    style={{ marginLeft: "5px", marginRight: "5px" }}
-                    type="text"
+                    type="hidden"
                     name={resource}
-                    disabled
                     value={values[resource]}
                     id={resource}
-                    size={6}
                   />
                 </div>
               </FlexContainer>

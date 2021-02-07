@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useFormikContext } from "formik";
 
-import { SplendidPlayer } from "../domain";
+import { SplendidPlayer, splendidResource } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Card from "../Card";
 import ResourceList from "../ResourceList";
 import { State } from "../../../state/domain";
 import { PlayersContainer, PlayerContainer } from "./styled";
 import DeckCard from "../Decks/DeckCard";
-import { useFormikContext } from "formik";
 
 type Props = {
   players: SplendidPlayer[];
@@ -17,14 +17,13 @@ type Props = {
 
 const Players = ({ players, activePlayerIndex }: Props) => {
   const { values } = useFormikContext<any>();
-  const {
-    playerNames,
-    isActivePlayer,
-  } = useSelector(({ playerNames, isActivePlayer }: State) => ({
-    playerNames,
-    isActivePlayer,
-  }));
-  
+  const { playerNames, isActivePlayer } = useSelector(
+    ({ playerNames, isActivePlayer }: State) => ({
+      playerNames,
+      isActivePlayer,
+    })
+  );
+
   return (
     <PlayersContainer>
       {players.map((player, i) => (
@@ -37,7 +36,15 @@ const Players = ({ players, activePlayerIndex }: Props) => {
           <FlexContainer color="white">
             <ResourceList
               resourceList={player.bank}
-              purchased={player.purchased}
+              offsets={splendidResource.reduce(
+                (prev, next) => ({
+                  ...prev,
+                  [next]: player.purchased?.filter(
+                    (card) => card.income === next
+                  ).length,
+                }),
+                {}
+              )}
               hideEmpty
             />
           </FlexContainer>
