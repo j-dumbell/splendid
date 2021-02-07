@@ -1,10 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useFormikContext } from "formik";
 
 import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import DeckCard from "./DeckCard";
+import Card from "../Card";
 import { DeckStack, StackCount } from "./styled";
+import { State } from "../../../state/domain";
 
 type Props = {
   decks: SplendidBoard["decks"];
@@ -20,6 +23,9 @@ const constructDeck = (tier: string, decks: SplendidBoard["decks"]) =>
   decks[tier].filter((card) => !card.id);
 
 const Decks = ({ decks }: Props) => {
+  const isActivePlayer = useSelector(
+    ({ isActivePlayer }: State) => isActivePlayer
+  );
   const { values } = useFormikContext<any>();
   return (
     <>
@@ -34,10 +40,14 @@ const Decks = ({ decks }: Props) => {
           ))}
           <DeckStack>
             <StackCount>{constructDeck(tier, decks).length}</StackCount>
-            <DeckCard
-              card={{ tier: Number(tier) }}
-              selected={values.selected}
-            />
+            {isActivePlayer ? (
+              <DeckCard
+                card={{ tier: Number(tier) }}
+                selected={values.selected}
+              />
+            ) : (
+              <Card tier={Number(tier)} />
+            )}
           </DeckStack>
         </FlexContainer>
       ))}

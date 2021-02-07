@@ -1,5 +1,5 @@
-import fixtures from './gameFixtures.json';
-import { SplendidGame } from '../components/Splendid/domain';
+import fixtures from "./gameFixtures.json";
+import { SplendidGame } from "../components/Splendid/domain";
 
 import {
   State,
@@ -17,6 +17,7 @@ const defaultState: State = {
   history: [],
   playerNames: {},
   game: (fixtures as unknown) as SplendidGame,
+  isActivePlayer: true,
 };
 
 function reducer(
@@ -70,6 +71,10 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
+        isActivePlayer:
+          splendidAction.payload.players[
+            splendidAction.payload.activePlayerIndex
+          ].id === state.clientId,
       };
     default:
       return state;

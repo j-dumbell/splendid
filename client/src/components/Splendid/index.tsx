@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../state/domain";
 import TakeResourceForm from "./Forms/TakeResourceForm";
 import CardActionForm from "./Forms/CardActionForm";
+import FlexContainer from "../common/FlexContainer";
 
 const Splendid = () => {
   const game = useSelector(({ game }: State) => game);
@@ -11,10 +12,12 @@ const Splendid = () => {
     return null;
   }
   return (
-    <>
-      <TakeResourceForm resourceList={game.board.bank} />
+    <FlexContainer column>
+      <FlexContainer>
+        <TakeResourceForm resourceList={game.board.bank} />
+      </FlexContainer>
       <CardActionForm {...game} />
-    </>
+    </FlexContainer>
   );
 };
 

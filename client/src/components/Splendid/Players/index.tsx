@@ -17,7 +17,14 @@ type Props = {
 
 const Players = ({ players, activePlayerIndex }: Props) => {
   const { values } = useFormikContext<any>();
-  const playerNames = useSelector(({ playerNames }: State) => playerNames);
+  const {
+    playerNames,
+    isActivePlayer,
+  } = useSelector(({ playerNames, isActivePlayer }: State) => ({
+    playerNames,
+    isActivePlayer,
+  }));
+  
   return (
     <PlayersContainer>
       {players.map((player, i) => (
@@ -39,24 +46,42 @@ const Players = ({ players, activePlayerIndex }: Props) => {
               <Card key={`player-purchased-card-${j}`} mini {...card} />
             ))}
             <FlexContainer>
-              {player.reservedVisible.map((card, j) => (
-                <DeckCard
-                  reserved
-                  mini
-                  key={`player-reserved-vis-card-${j}`}
-                  card={card}
-                  selected={values.selected}
-                />
-              ))}
-              {player.reservedHidden.map((card, j) => (
-                <DeckCard
-                  reserved
-                  mini
-                  key={`player-reserved-hid-card-${j}`}
-                  card={card}
-                  selected={values.selected}
-                />
-              ))}
+              {player.reservedVisible.map((card, j) =>
+                isActivePlayer ? (
+                  <DeckCard
+                    reserved
+                    mini
+                    key={`player-reserved-vis-card-${j}`}
+                    card={card}
+                    selected={values.selected}
+                  />
+                ) : (
+                  <Card
+                    reserved
+                    mini
+                    key={`player-reserved-vis-card-${j}`}
+                    {...card}
+                  />
+                )
+              )}
+              {player.reservedHidden.map((card, j) =>
+                isActivePlayer ? (
+                  <DeckCard
+                    reserved
+                    mini
+                    key={`player-reserved-hid-card-${j}`}
+                    card={card}
+                    selected={values.selected}
+                  />
+                ) : (
+                  <Card
+                    reserved
+                    mini
+                    key={`player-reserved-vis-card-${j}`}
+                    {...card}
+                  />
+                )
+              )}
             </FlexContainer>
           </FlexContainer>
         </PlayerContainer>
