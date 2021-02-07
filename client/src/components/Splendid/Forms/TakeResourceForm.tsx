@@ -5,8 +5,8 @@ import { splendidResource } from "../domain";
 import ResourceCount from "../ResourceList/ResourceCount";
 import { sendJSON } from "../../../hooks/useWebsocket";
 import FlexContainer from "../../common/FlexContainer";
-import { validateMax } from "../ResourceList/helpers";
 import { ResourceListProps } from "../ResourceList";
+import { validateMax } from "./helpers";
 
 const canBeTaken = (resource: string): boolean => resource !== "yellow";
 const constructInitialValues = (resourceList: Record<string, number>) =>

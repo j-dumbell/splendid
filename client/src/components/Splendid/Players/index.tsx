@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { SplendidPlayer } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Card from "../Card";
-import { PlayerResourceList as ResourceList } from "../ResourceList";
+import ResourceList from "../ResourceList";
 import { State } from "../../../state/domain";
 import { PlayersContainer, PlayerContainer } from "./styled";
 import DeckCard from "../Decks/DeckCard";

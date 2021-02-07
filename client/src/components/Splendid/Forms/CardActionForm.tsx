@@ -8,7 +8,11 @@ import { SplendidGame } from "../domain";
 import Elite from "../Elite";
 import Players from "../Players";
 
-const CardActionForm = ({ board, players, activePlayerIndex }: SplendidGame) => (
+const CardActionForm = ({
+  board,
+  players,
+  activePlayerIndex,
+}: SplendidGame) => (
   <Formik
     initialValues={{ gameAction: "" }}
     onSubmit={(values, { resetForm, setSubmitting }) => {
@@ -18,22 +22,17 @@ const CardActionForm = ({ board, players, activePlayerIndex }: SplendidGame) => 
     }}
   >
     <Form style={{ display: "flex" }}>
-      <>
-        <FlexContainer column>
-          <FlexContainer>
-            {board.elites
-              .filter((card) => card.id)
-              .map((elite, i) => (
-                <Elite key={`elite-${i}`} {...elite} />
-              ))}
-          </FlexContainer>
-          <Decks decks={board.decks} />
+      <FlexContainer column>
+        <FlexContainer>
+          {board.elites
+            .filter((card) => card.id)
+            .map((elite, i) => (
+              <Elite key={`elite-${i}`} {...elite} />
+            ))}
         </FlexContainer>
-        <Players
-          activePlayerIndex={activePlayerIndex}
-          players={players}
-        />
-      </>
+        <Decks decks={board.decks} />
+      </FlexContainer>
+      <Players activePlayerIndex={activePlayerIndex} players={players} />
     </Form>
   </Formik>
 );
