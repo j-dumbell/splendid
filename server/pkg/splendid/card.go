@@ -7,7 +7,7 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
-type card struct {
+type Card struct {
 	ID     int              `json:"id"`
 	Tier   int              `json:"tier"`
 	Points int              `json:"points"`
@@ -15,9 +15,11 @@ type card struct {
 	Income resource         `json:"income"`
 }
 
-func createCards(rows [][]string) (cards []card) {
+type Cards []Card
+
+func createCards(rows [][]string) (cards Cards) {
 	for i, row := range rows {
-		cards = append(cards, card{
+		cards = append(cards, Card{
 			ID:     i + 1,
 			Tier:   util.StringToInt(row[0]),
 			Points: util.StringToInt(row[2]),
@@ -34,10 +36,8 @@ func createCards(rows [][]string) (cards []card) {
 	return cards
 }
 
-// FilterCards returns a slice of Card structs that pass the
-// test implemented by the provided function
-func filterCards(cards []card, f func(card) bool) (filtered []card) {
-	for _, v := range cards {
+func (cards *Cards) filter(f func(Card) bool) (filtered Cards) {
+	for _, v := range *cards {
 		if f(v) {
 			filtered = append(filtered, v)
 		}
@@ -45,16 +45,23 @@ func filterCards(cards []card, f func(card) bool) (filtered []card) {
 	return filtered
 }
 
+func (cards *Cards) apply(f func(Card) Card) (mapped Cards) {
+	for _, v := range *cards {
+		mapped = append(mapped, f(v))
+	}
+	return mapped
+}
+
 // MoveCard removes <card> from <fromDeck> and appends to <toDeck>
-func moveCard(c card, fromDeck, toDeck []card) ([]card, []card, error) {
-	var newFromDeck []card
+func moveCard(c Card, fromDeck, toDeck Cards) (Cards, Cards, error) {
+	var newFromDeck Cards
 	for _, deckCard := range fromDeck {
 		if !reflect.DeepEqual(c, deckCard) {
 			newFromDeck = append(newFromDeck, deckCard)
 		}
 	}
 	if len(newFromDeck) == len(fromDeck) {
-		return []card{}, []card{}, errors.New("card does not exist in fromDeck")
+		return Cards{}, Cards{}, errors.New("card does not exist in fromDeck")
 	}
 	newToDeck := append(toDeck, c)
 	return newFromDeck, newToDeck, nil
