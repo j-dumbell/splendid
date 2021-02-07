@@ -33,3 +33,10 @@ func paramsToBank(params resourceParams) map[resource]int {
 	bank[Yellow] = params.Yellow
 	return bank
 }
+
+func flattenDecks(decks map[int]Cards) (allCards []Cards) {
+	for _, cards := range decks {
+		allCards = append(allCards, cards)
+	}
+	return allCards
+}

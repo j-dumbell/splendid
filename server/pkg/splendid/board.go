@@ -56,10 +56,9 @@ func newBoard(decks map[int]Cards, elites []elite, gameConfig config.GameConfig)
 	}
 }
 
-func getCard(decks map[int]Cards, ID int) (Card, error) {
-	maskedDecks := maskDecks(decks)
+func getCard(allCards []Cards, ID int) (Card, error) {
 	f := func(card Card) bool { return card.ID == ID }
-	for _, cards := range maskedDecks {
+	for _, cards := range allCards {
 		if filtered := cards.filter(f); len(filtered) == 1 {
 			return filtered[0], nil
 		}
