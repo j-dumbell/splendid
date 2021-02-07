@@ -5,6 +5,7 @@ import FlexContainer from "../../common/FlexContainer";
 type Props = {
   tier: number;
   mini?: boolean;
+  reserved?: boolean;
 };
 
 const tierColours: Record<string, string> = {
@@ -20,4 +21,5 @@ export const CardContainer = styled(FlexContainer)`
   height: ${({ mini }: Props) => (mini ? "7.5rem" : "9rem")};
   border-radius: 5px;
   background-color: ${({ tier }: Props) => tierColours[tier]};
+  opacity: ${({ reserved }: Props) => (reserved ? "0.3" : "1")};
 `;

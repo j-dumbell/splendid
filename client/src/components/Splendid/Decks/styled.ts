@@ -11,6 +11,7 @@ export const DeckCardContainer = styled.label`
 
 export const PurchaseContainer = styled.div`
   position: absolute;
+  z-index: 1;
   top: 30px;
   left: 50%;
   transform: translate(-50%, -15px);
