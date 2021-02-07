@@ -1,103 +1,131 @@
 {
   "players": [
     {
-      "id": 4,
-      "purchased": [],
-      "reservedVisible": [],
-      "reservedHidden": [],
-      "bank": {
-        "black": 10,
-        "blue": 10,
-        "green": 10,
-        "red": 10,
-        "white": 10,
-        "yellow": 10
-      }
-    },
-    {
-      "id": 3,
-      "purchased": [],
-      "reservedVisible": [],
-      "reservedHidden": [],
-      "bank": {
-        "black": 10,
-        "blue": 10,
-        "green": 10,
-        "red": 10,
-        "white": 10,
-        "yellow": 10
-      }
-    }
-  ],
-  "activePlayerIndex": 0,
-  "board": {
-    "decks": {
-      "1": [
+      "id": 2,
+      "purchased": [
         {
-          "id": 30,
+          "id": 1,
+          "tier": 1,
+          "points": 0,
+          "cost": {
+            "black": 0,
+            "blue": 1,
+            "green": 1,
+            "red": 1,
+            "white": 1
+          },
+          "income": "black"
+        }
+      ],
+      "reservedVisible": [],
+      "reservedHidden": [
+        {
+          "id": 35,
           "tier": 1,
           "points": 0,
           "cost": {
             "black": 1,
             "blue": 1,
             "green": 1,
-            "red": 0,
-            "white": 1
+            "red": 1,
+            "white": 0
           },
-          "income": "red"
-        },
+          "income": "white"
+        }
+      ],
+      "bank": {
+        "black": 0,
+        "blue": 1,
+        "green": 0,
+        "red": 1,
+        "white": 0,
+        "yellow": 1
+      }
+    },
+    {
+      "id": 1,
+      "purchased": [],
+      "reservedVisible": [
         {
-          "id": 37,
+          "id": 56,
+          "tier": 2,
+          "points": 2,
+          "cost": {
+            "black": 0,
+            "blue": 0,
+            "green": 5,
+            "red": 0,
+            "white": 0
+          },
+          "income": "green"
+        }
+      ],
+      "reservedHidden": [],
+      "bank": {
+        "black": 0,
+        "blue": 2,
+        "green": 2,
+        "red": 1,
+        "white": 1,
+        "yellow": 1
+      }
+    }
+  ],
+  "activePlayerIndex": 1,
+  "board": {
+    "decks": {
+      "1": [
+        {
+          "id": 31,
           "tier": 1,
           "points": 0,
           "cost": {
             "black": 0,
-            "blue": 2,
-            "green": 2,
-            "red": 0,
-            "white": 0
-          },
-          "income": "white"
-        },
-        {
-          "id": 11,
-          "tier": 1,
-          "points": 0,
-          "cost": {
-            "black": 1,
             "blue": 0,
-            "green": 1,
-            "red": 1,
-            "white": 1
+            "green": 0,
+            "red": 2,
+            "white": 2
           },
-          "income": "blue"
+          "income": "red"
         },
         {
-          "id": 7,
+          "id": 18,
           "tier": 1,
           "points": 0,
           "cost": {
             "black": 0,
             "blue": 2,
             "green": 0,
-            "red": 1,
-            "white": 2
+            "red": 2,
+            "white": 0
+          },
+          "income": "green"
+        },
+        {
+          "id": 8,
+          "tier": 1,
+          "points": 1,
+          "cost": {
+            "black": 0,
+            "blue": 4,
+            "green": 0,
+            "red": 0,
+            "white": 0
           },
           "income": "black"
         },
         {
-          "id": 0,
+          "id": 26,
           "tier": 1,
           "points": 0,
-          "cost": null,
-          "income": ""
-        },
-        {
-          "id": 0,
-          "tier": 1,
-          "points": 0,
-          "cost": null,
-          "income": ""
+          "cost": {
+            "black": 3,
+            "blue": 0,
+            "green": 0,
+            "red": 1,
+            "white": 1
+          },
+          "income": "red"
         },
         {
           "id": 0,
@@ -340,6 +368,19 @@
       ],
       "2": [
         {
+          "id": 68,
+          "tier": 2,
+          "points": 2,
+          "cost": {
+            "black": 0,
+            "blue": 0,
+            "green": 0,
+            "red": 5,
+            "white": 0
+          },
+          "income": "white"
+        },
+        {
           "id": 59,
           "tier": 2,
           "points": 1,
@@ -353,50 +394,30 @@
           "income": "red"
         },
         {
-          "id": 67,
+          "id": 62,
           "tier": 2,
           "points": 2,
           "cost": {
-            "black": 2,
-            "blue": 0,
-            "green": 1,
-            "red": 4,
-            "white": 0
-          },
-          "income": "white"
-        },
-        {
-          "id": 44,
-          "tier": 2,
-          "points": 2,
-          "cost": {
-            "black": 0,
+            "black": 5,
             "blue": 0,
             "green": 0,
             "red": 0,
-            "white": 5
+            "white": 3
+          },
+          "income": "red"
+        },
+        {
+          "id": 42,
+          "tier": 2,
+          "points": 1,
+          "cost": {
+            "black": 2,
+            "blue": 0,
+            "green": 3,
+            "red": 0,
+            "white": 3
           },
           "income": "black"
-        },
-        {
-          "id": 56,
-          "tier": 2,
-          "points": 2,
-          "cost": {
-            "black": 0,
-            "blue": 0,
-            "green": 5,
-            "red": 0,
-            "white": 0
-          },
-          "income": "green"
-        },
-        {
-          "id": 0,
-          "tier": 2,
-          "points": 0,
-          "cost": null,
-          "income": ""
         },
         {
           "id": 0,
@@ -576,51 +597,51 @@
       ],
       "3": [
         {
-          "id": 85,
-          "tier": 3,
-          "points": 4,
-          "cost": {
-            "black": 0,
-            "blue": 3,
-            "green": 6,
-            "red": 3,
-            "white": 0
-          },
-          "income": "red"
-        },
-        {
-          "id": 86,
+          "id": 90,
           "tier": 3,
           "points": 5,
           "cost": {
-            "black": 0,
+            "black": 7,
             "blue": 0,
-            "green": 7,
-            "red": 3,
-            "white": 0
-          },
-          "income": "red"
-        },
-        {
-          "id": 87,
-          "tier": 3,
-          "points": 3,
-          "cost": {
-            "black": 3,
-            "blue": 3,
-            "green": 3,
-            "red": 5,
-            "white": 0
+            "green": 0,
+            "red": 0,
+            "white": 3
           },
           "income": "white"
         },
         {
-          "id": 76,
+          "id": 73,
           "tier": 3,
           "points": 4,
           "cost": {
-            "black": 0,
+            "black": 3,
             "blue": 0,
+            "green": 3,
+            "red": 6,
+            "white": 0
+          },
+          "income": "black"
+        },
+        {
+          "id": 77,
+          "tier": 3,
+          "points": 4,
+          "cost": {
+            "black": 3,
+            "blue": 3,
+            "green": 0,
+            "red": 0,
+            "white": 6
+          },
+          "income": "blue"
+        },
+        {
+          "id": 78,
+          "tier": 3,
+          "points": 5,
+          "cost": {
+            "black": 0,
+            "blue": 3,
             "green": 0,
             "red": 0,
             "white": 7
@@ -743,17 +764,6 @@
     },
     "elites": [
       {
-        "id": 1,
-        "points": 3,
-        "cost": {
-          "black": 0,
-          "blue": 0,
-          "green": 4,
-          "red": 4,
-          "white": 0
-        }
-      },
-      {
         "id": 6,
         "points": 3,
         "cost": {
@@ -774,16 +784,27 @@
           "red": 0,
           "white": 4
         }
+      },
+      {
+        "id": 8,
+        "points": 3,
+        "cost": {
+          "black": 4,
+          "blue": 0,
+          "green": 0,
+          "red": 4,
+          "white": 0
+        }
       }
     ],
     "bank": {
       "black": 4,
-      "blue": 4,
-      "green": 4,
-      "red": 4,
-      "white": 4,
-      "yellow": 5
+      "blue": 1,
+      "green": 2,
+      "red": 2,
+      "white": 3,
+      "yellow": 3
     }
   },
-  "turn": 1
+  "turn": 4
 }

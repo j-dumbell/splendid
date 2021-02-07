@@ -8,6 +8,7 @@ import FlexContainer from "../../common/FlexContainer";
 import { validateMax } from "./helpers";
 import { ResourceListProps } from ".";
 
+const canBeTaken = (resource: string): boolean => resource !== "yellow";
 const constructInitialValues = (resourceList: Record<string, number>) =>
   Object.keys(resourceList)
     .reduce((prev, next) => ({ ...prev, [next]: 0 }), {});
@@ -45,7 +46,7 @@ export const BoardResourceList = ({ resourceList }: ResourceListProps) => (
                   -
                   </button>
                 <button
-                  disabled={Boolean(errors[resource])}
+                  disabled={Boolean(errors[resource]) || !canBeTaken(resource)}
                   type="button"
                   value={resource}
                   onClick={async ({ currentTarget: { value } }) => {

@@ -6,6 +6,7 @@ import FlexContainer from "../../common/FlexContainer";
 import Card from "../Card";
 import { PlayerResourceList as ResourceList } from "../ResourceList";
 import { State } from "../../../state/domain";
+import { PlayersContainer, PlayerContainer } from './styled';
 
 type Props = {
   players: SplendidPlayer[];
@@ -15,17 +16,14 @@ type Props = {
 const Players = ({ players, activePlayerIndex }: Props) => {
   const playerNames = useSelector(({ playerNames }: State) => playerNames);
   return (
-    <div style={{ marginLeft: "50px" }}>
+    <PlayersContainer>
       {players.map((player, i) => (
-        <FlexContainer
+        <PlayerContainer
           column
           key={`player-${i}`}
-          style={{
-            padding: "10px",
-            border: `${i === activePlayerIndex ? "solid 2px white" : "solid 0px black"}`,
-          }}
+          isActive={i === activePlayerIndex}
         >
-          <h2>{playerNames[player.id]}</h2>
+          <h2>{playerNames[player.id] || `Player#${player.id}`}</h2>
           <FlexContainer color="white">
             <ResourceList
               resourceList={player.bank}
@@ -46,9 +44,9 @@ const Players = ({ players, activePlayerIndex }: Props) => {
               ))}
             </FlexContainer>
           </FlexContainer>
-        </FlexContainer>
+        </PlayerContainer>
       ))}
-    </div>
+    </PlayersContainer>
   );
 };
 
