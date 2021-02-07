@@ -30,9 +30,27 @@ func TestMaskDecks(t *testing.T) {
 
 	actual := maskDecks(decks)
 	if !reflect.DeepEqual(expectedDecks, actual) {
-		t.Fatalf("actual not expected \nActual: %v \n Expected: %v", actual, expectedDecks)
+		t.Fatalf("actual decks not expected \nActual: %v \n Expected: %v", actual, expectedDecks)
 	}
 	if reflect.DeepEqual(actual, decks) {
-		t.Fatalf("original mutated %v", decks)
+		t.Fatalf("original decks mutated %v", decks)
+	}
+}
+
+func TestMaskPlayerHands(t *testing.T) {
+	player1 := Player{ID: 1, ReservedHidden: []card{{ID: 1}, {ID: 2}}}
+	player2 := Player{ID: 2, ReservedHidden: []card{{ID: 3}, {ID: 4}}}
+	players := []Player{player1, player2}
+
+	expectedPlayer1 := Player{ID: 1, ReservedHidden: []card{{ID: 1}, {ID: 2}}}
+	expectedPlayer2 := Player{ID: 2, ReservedHidden: []card{{ID: 3}, {ID: 4}}}
+	expectedPlayers := []Player{expectedPlayer1, expectedPlayer2}
+
+	actual := maskPlayerHands(player1.ID, players)
+	if !reflect.DeepEqual(expectedPlayers, actual) {
+		t.Fatalf("actual players not expected \nActual: %v \n Expected: %v", actual, expectedPlayers)
+	}
+	if reflect.DeepEqual(actual, players) {
+		t.Fatalf("original players mutated %v", players)
 	}
 }
