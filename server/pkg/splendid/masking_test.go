@@ -43,7 +43,7 @@ func TestMaskPlayerHands(t *testing.T) {
 	players := []Player{player1, player2}
 
 	expectedPlayer1 := Player{ID: 1, ReservedHidden: []card{{ID: 1}, {ID: 2}}}
-	expectedPlayer2 := Player{ID: 2, ReservedHidden: []card{{ID: 3}, {ID: 4}}}
+	expectedPlayer2 := Player{ID: 2, ReservedHidden: []card{{}, {}}}
 	expectedPlayers := []Player{expectedPlayer1, expectedPlayer2}
 
 	actual := maskPlayerHands(player1.ID, players)

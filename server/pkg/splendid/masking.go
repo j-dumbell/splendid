@@ -34,12 +34,16 @@ func maskDecks(decks map[int][]card) map[int][]card {
 }
 
 func maskPlayerHands(id int, players []Player) []Player {
+	maskedPlayers := make([]Player, len(players))
 	for i, player := range players {
+		maskedPlayers[i] = players[i]
 		if player.ID != id {
-			players[i].ReservedHidden = maskCards(players[i].ReservedHidden)
+			reservedHiddenCopy := make([]card, len(players[i].ReservedHidden))
+			copy(reservedHiddenCopy, players[i].ReservedHidden)
+			maskedPlayers[i].ReservedHidden = maskCards(reservedHiddenCopy)
 		}
 	}
-	return players
+	return maskedPlayers
 }
 
 type gameDetails struct {
