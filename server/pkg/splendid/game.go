@@ -134,7 +134,8 @@ type payload struct {
 }
 
 type buyCardParams struct {
-	CardID int `json:"cardId"`
+	CardID    int            `json:"cardId"`
+	Resources resourceParams `json:"resources"`
 }
 
 type reserveHiddenParams struct {
@@ -145,21 +146,23 @@ type reserveVisibleParams struct {
 	CardID int `json:"cardId"`
 }
 
-type takeResourcesParams struct {
-	Black int `json:"black"`
-	White int `json:"white"`
-	Blue  int `json:"blue"`
-	Green int `json:"green"`
-	Red   int `json:"red"`
+type resourceParams struct {
+	Black  int `json:"black"`
+	White  int `json:"white"`
+	Blue   int `json:"blue"`
+	Green  int `json:"green"`
+	Red    int `json:"red"`
+	Yellow int `json:"yellow"`
 }
 
-func paramsToBank(params takeResourcesParams) map[resource]int {
+func paramsToBank(params resourceParams) map[resource]int {
 	bank := map[resource]int{}
 	bank[Black] = params.Black
 	bank[White] = params.White
 	bank[Blue] = params.Blue
 	bank[Green] = params.Green
 	bank[Red] = params.Red
+	bank[Yellow] = params.Yellow
 	return bank
 }
 
@@ -245,7 +248,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		return mkMaskedDetails(*game)
 	case "takeResources":
 		fmt.Println("taking resources")
-		var p takeResourcesParams
+		var p resourceParams
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
