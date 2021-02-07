@@ -58,11 +58,10 @@ func newBoard(decks map[int]Cards, elites []elite, gameConfig config.GameConfig)
 
 func getCard(decks map[int]Cards, ID int) (Card, error) {
 	maskedDecks := maskDecks(decks)
-	for _, deck := range maskedDecks {
-		for _, card := range deck {
-			if card.ID == ID {
-				return card, nil
-			}
+	f := func(card Card) bool { return card.ID == ID }
+	for _, cards := range maskedDecks {
+		if filtered := cards.filter(f); len(filtered) == 1 {
+			return filtered[0], nil
 		}
 	}
 	return Card{}, errors.New("invalid card selected")
