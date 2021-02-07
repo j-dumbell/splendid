@@ -18,12 +18,13 @@ export const BoardResourceList = ({ resourceList }: ResourceListProps) => (
   <Formik
     validate={validateMax}
     initialValues={constructInitialValues(resourceList)}
-    onSubmit={(values) =>
+    onSubmit={(values, { resetForm }) => {
       sendJSON({
         action: "game",
         params: { ...values, gameAction: "takeResources" },
-      })
-    }
+      });
+      resetForm();
+    }}
   >
     {({ values, errors, setFieldValue }: FormikProps<any>) => (
       <Form>

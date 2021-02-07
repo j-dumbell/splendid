@@ -33,7 +33,7 @@ const PurchaseButtons = (props: SplendidCard & { selectedCard: boolean }) => (
           params={{ cardId: props.id }}
         />
         <PurchaseButton
-          gameAction="reserveCard"
+          gameAction="reserveVisible"
           text="Reserve"
           params={{ cardId: props.id }}
         />
