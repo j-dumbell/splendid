@@ -8,10 +8,8 @@ import FlexContainer from "../../common/FlexContainer";
 import { validateMax } from "./helpers";
 import { ResourceListProps } from ".";
 
-const canBeTaken = (resource: string): boolean => resource !== "yellow";
 const constructInitialValues = (resourceList: Record<string, number>) =>
   Object.keys(resourceList)
-    .filter(canBeTaken)
     .reduce((prev, next) => ({ ...prev, [next]: 0 }), {});
 
 export const BoardResourceList = ({ resourceList }: ResourceListProps) => (
@@ -30,50 +28,43 @@ export const BoardResourceList = ({ resourceList }: ResourceListProps) => (
       <Form>
         {splendidResource.map((resource, i) => (
           <FlexContainer key={i}>
-            {canBeTaken(resource) ? (
-              <>
-                <ResourceCount
-                  resource={resource}
-                  count={resourceList[resource]}
-                />
-                <div>
-                  <button
-                    disabled={values[resource] <= 0}
-                    type="button"
-                    value={resource}
-                    onClick={async ({ currentTarget: { value } }) => {
-                      setFieldValue(value, values[value] - 1);
-                    }}
-                  >
-                    -
-                  </button>
-                  <button
-                    disabled={Boolean(errors[resource])}
-                    type="button"
-                    value={resource}
-                    onClick={async ({ currentTarget: { value } }) => {
-                      setFieldValue(value, values[value] + 1);
-                    }}
-                  >
-                    +
-                  </button>
-                  <Field
-                    style={{ marginLeft: "5px", marginRight: "5px" }}
-                    type="text"
-                    name={resource}
-                    disabled
-                    value={values[resource]}
-                    id={resource}
-                    size={6}
-                  />
-                </div>
-              </>
-            ) : (
+            <>
               <ResourceCount
                 resource={resource}
                 count={resourceList[resource]}
               />
-            )}
+              <div>
+                <button
+                  disabled={values[resource] <= 0}
+                  type="button"
+                  value={resource}
+                  onClick={async ({ currentTarget: { value } }) => {
+                    setFieldValue(value, values[value] - 1);
+                  }}
+                >
+                  -
+                  </button>
+                <button
+                  disabled={Boolean(errors[resource])}
+                  type="button"
+                  value={resource}
+                  onClick={async ({ currentTarget: { value } }) => {
+                    setFieldValue(value, values[value] + 1);
+                  }}
+                >
+                  +
+                  </button>
+                <Field
+                  style={{ marginLeft: "5px", marginRight: "5px" }}
+                  type="text"
+                  name={resource}
+                  disabled
+                  value={values[resource]}
+                  id={resource}
+                  size={6}
+                />
+              </div>
+            </>
           </FlexContainer>
         ))}
         <button type="submit" disabled={Object.values(errors).some(Boolean)}>

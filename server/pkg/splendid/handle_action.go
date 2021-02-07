@@ -43,7 +43,7 @@ func validateTake(toTake map[resource]int) error {
 	for _, num := range toTake {
 		countFreq[num]++
 	}
-	if !(reflect.DeepEqual(countFreq, map[int]int{0: 4, 2: 1}) || reflect.DeepEqual(countFreq, map[int]int{0: 2, 1: 3})) {
+	if !(reflect.DeepEqual(countFreq, map[int]int{0: 5, 2: 1}) || reflect.DeepEqual(countFreq, map[int]int{0: 3, 1: 3})) {
 		return errors.New("invalid resource combination")
 	}
 	return nil
