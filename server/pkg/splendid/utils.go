@@ -22,3 +22,14 @@ func mkErrorDetails(id int, message string) map[int]m.DetailsGame {
 	details, _ := json.Marshal(m.MessageParams{Message: message})
 	return map[int]m.DetailsGame{id: {Ok: false, Details: details}}
 }
+
+func paramsToBank(params resourceParams) map[resource]int {
+	bank := map[resource]int{}
+	bank[Black] = params.Black
+	bank[White] = params.White
+	bank[Blue] = params.Blue
+	bank[Green] = params.Green
+	bank[Red] = params.Red
+	bank[Yellow] = params.Yellow
+	return bank
+}
