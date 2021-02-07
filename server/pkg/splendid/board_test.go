@@ -9,7 +9,7 @@ import (
 
 func TestFilterFn(t *testing.T) {
 	i := 1
-	card := card{
+	card := Card{
 		ID:     1,
 		Tier:   1,
 		Points: 1,
@@ -22,10 +22,10 @@ func TestFilterFn(t *testing.T) {
 }
 
 func TestNewBoard(t *testing.T) {
-	deck1 := []card{{ID: 1}}
+	deck1 := Cards{{ID: 1}}
 	elites := []elite{{ID: 1}, {ID: 2}}
 	gc := config.GameConfig{ElitesCount: 1, ResourceCount: 2}
-	result := newBoard(map[int][]card{1: deck1}, elites, gc)
+	result := newBoard(map[int]Cards{1: deck1}, elites, gc)
 	if len(result.Elites) != gc.ElitesCount {
 		t.Fatalf("unexpected number of elites \nExpected: %v \nActual %v", gc.ElitesCount, result.Elites)
 	}
@@ -35,13 +35,13 @@ func TestNewBoard(t *testing.T) {
 }
 
 func TestGetCard(t *testing.T) {
-	deck1 := []card{{ID: 0}, {ID: 1}, {ID: 2}, {ID: 3}}
-	deck2 := []card{{ID: 4}, {ID: 5}, {ID: 6}}
-	deck3 := []card{{ID: 7}}
-	decks := map[int][]card{1: deck1, 2: deck2, 3: deck3}
+	deck1 := Cards{{ID: 0}, {ID: 1}, {ID: 2}, {ID: 3}}
+	deck2 := Cards{{ID: 4}, {ID: 5}, {ID: 6}}
+	deck3 := Cards{{ID: 7}}
+	decks := map[int]Cards{1: deck1, 2: deck2, 3: deck3}
 
 	rec, _ := getCard(decks, 6)
-	if !reflect.DeepEqual(card{ID: 6}, rec) {
+	if !reflect.DeepEqual(Card{ID: 6}, rec) {
 		t.Fail()
 	}
 

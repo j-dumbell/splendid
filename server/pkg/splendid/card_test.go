@@ -6,7 +6,7 @@ import (
 )
 
 func TestFilterCards(t *testing.T) {
-	cards := []card{
+	cards := Cards{
 		{
 			ID:     1,
 			Tier:   1,
@@ -23,15 +23,15 @@ func TestFilterCards(t *testing.T) {
 		},
 	}
 
-	f := func(c card) bool {
+	f := func(c Card) bool {
 		return c.Tier == 1
 	}
 
-	if !reflect.DeepEqual([]card{cards[0]}, filterCards(cards, f)) {
+	if !reflect.DeepEqual(Cards{cards[0]}, filterCards(cards, f)) {
 		t.Fail()
 	}
 
-	if reflect.DeepEqual([]card{cards[1]}, filterCards(cards, f)) {
+	if reflect.DeepEqual(Cards{cards[1]}, filterCards(cards, f)) {
 		t.Fail()
 	}
 }
@@ -42,7 +42,7 @@ func TestCreateCards(t *testing.T) {
 		{"2", "red", "1", "1", "1", "1", "0", "0"},
 	}
 
-	expectedCards := []card{
+	expectedCards := Cards{
 		{
 			ID:     1,
 			Tier:   1,
@@ -65,15 +65,15 @@ func TestCreateCards(t *testing.T) {
 }
 
 func TestMoveCard(t *testing.T) {
-	fromDeck := []card{{ID: 1}, {ID: 2}, {ID: 3}}
-	toDeck := []card{{ID: 4}, {ID: 5}, {ID: 6}}
-	expFromDeck := []card{{ID: 2}, {ID: 3}}
-	expToDeck := []card{{ID: 4}, {ID: 5}, {ID: 6}, {ID: 1}}
-	recFromDeck, recToDeck, _ := moveCard(card{ID: 1}, fromDeck, toDeck)
+	fromDeck := Cards{{ID: 1}, {ID: 2}, {ID: 3}}
+	toDeck := Cards{{ID: 4}, {ID: 5}, {ID: 6}}
+	expFromDeck := Cards{{ID: 2}, {ID: 3}}
+	expToDeck := Cards{{ID: 4}, {ID: 5}, {ID: 6}, {ID: 1}}
+	recFromDeck, recToDeck, _ := moveCard(Card{ID: 1}, fromDeck, toDeck)
 	if !(reflect.DeepEqual(recFromDeck, expFromDeck) && reflect.DeepEqual(expToDeck, recToDeck)) {
 		t.Fail()
 	}
-	_, _, err := moveCard(card{ID: 10}, fromDeck, toDeck)
+	_, _, err := moveCard(Card{ID: 10}, fromDeck, toDeck)
 	if err == nil {
 		t.Fail()
 	}

@@ -20,7 +20,7 @@ type Game struct {
 }
 
 // StartGame starts the game
-func (game *Game) StartGame(decks map[int][]Card, elites []elite) error {
+func (game *Game) StartGame(decks map[int]Cards, elites []elite) error {
 	numPlayers := len(game.Players)
 	if game.Turn >= 1 {
 		return errors.New("game already started")

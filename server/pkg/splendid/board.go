@@ -9,7 +9,7 @@ import (
 )
 
 type board struct {
-	Decks  map[int][]Card   `json:"decks"`
+	Decks  map[int]Cards   `json:"decks"`
 	Elites []elite          `json:"elites"`
 	Bank   map[resource]int `json:"bank"`
 }
@@ -20,11 +20,11 @@ func filterFn(tier int) func(c Card) bool {
 	}
 }
 
-func createDecks(cardsPath string, elitesPath string) (map[int][]Card, []elite) {
+func createDecks(cardsPath string, elitesPath string) (map[int]Cards, []elite) {
 	cardRows, _ := util.ReadCSV(cardsPath)
 	cards := createCards(cardRows)
 
-	decks := make(map[int][]Card)
+	decks := make(map[int]Cards)
 	for i := 1; i <= 3; i++ {
 		decks[i] = filterCards(cards, filterFn(i))
 	}
@@ -35,11 +35,11 @@ func createDecks(cardsPath string, elitesPath string) (map[int][]Card, []elite) 
 	return decks, elites
 }
 
-func newBoard(decks map[int][]Card, elites []elite, gameConfig config.GameConfig) board {
+func newBoard(decks map[int]Cards, elites []elite, gameConfig config.GameConfig) board {
 	seed := time.Now().Unix()
 
 	for i := 1; i <= 3; i++ {
-		decks[i] = util.Shuffle(decks[i], seed+int64(i)).([]Card)
+		decks[i] = util.Shuffle(decks[i], seed+int64(i)).(Cards)
 	}
 	shuffledElites := util.Shuffle(elites, seed).([]elite)
 	return board{
@@ -56,7 +56,7 @@ func newBoard(decks map[int][]Card, elites []elite, gameConfig config.GameConfig
 	}
 }
 
-func getCard(decks map[int][]Card, ID int) (Card, error) {
+func getCard(decks map[int]Cards, ID int) (Card, error) {
 	maskedDecks := maskDecks(decks)
 	for _, deck := range maskedDecks {
 		for _, card := range deck {
