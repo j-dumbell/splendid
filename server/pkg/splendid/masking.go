@@ -35,8 +35,8 @@ func maskDecks(decks map[int][]card) map[int][]card {
 
 func maskPlayerHands(id int, players []Player) []Player {
 	maskedPlayers := make([]Player, len(players))
+	copy(maskedPlayers, players)
 	for i, player := range players {
-		maskedPlayers[i] = players[i]
 		if player.ID != id {
 			reservedHiddenCopy := make([]card, len(players[i].ReservedHidden))
 			copy(reservedHiddenCopy, players[i].ReservedHidden)
