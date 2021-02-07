@@ -22,7 +22,7 @@ const Players = ({ players, activePlayerIndex }: Props) => {
           key={`player-${i}`}
           style={{
             padding: "10px",
-            border: `${i === activePlayerIndex && "solid 2px white"}`,
+            border: `${i === activePlayerIndex ? "solid 2px white" : "solid 0px black"}`,
           }}
         >
           <h2>{playerNames[player.id]}</h2>

@@ -8,35 +8,35 @@ import FlexContainer from "../../common/FlexContainer";
 import { validateMax } from "./helpers";
 import { ResourceListProps } from ".";
 
+const canBeTaken = (resource: string): boolean => resource !== "yellow";
+const constructInitialValues = (resourceList: Record<string, number>) =>
+  Object.keys(resourceList)
+    .filter(canBeTaken)
+    .reduce((prev, next) => ({ ...prev, [next]: 0 }), {});
+
 export const BoardResourceList = ({ resourceList }: ResourceListProps) => (
   <Formik
     validate={validateMax}
-    initialValues={Object.keys(resourceList)
-      .filter((resource) => resource !== "yellow")
-      .reduce((prev, next) => ({ ...prev, [next]: 0 }), {})}
-    onSubmit={(values) =>
+    initialValues={constructInitialValues(resourceList)}
+    onSubmit={(values, { resetForm }) => {
       sendJSON({
         action: "game",
         params: { ...values, gameAction: "takeResources" },
-      })
-    }
+      });
+      resetForm();
+    }}
   >
     {({ values, errors, setFieldValue }: FormikProps<any>) => (
       <Form>
         {splendidResource.map((resource, i) => (
           <FlexContainer key={i}>
-            {resource === "yellow" ? (
-              <ResourceCount
-                resource={resource}
-                count={resourceList[resource]}
-              />
-            ) : (
+            {canBeTaken(resource) ? (
               <>
                 <ResourceCount
                   resource={resource}
                   count={resourceList[resource]}
                 />
-                <FlexContainer>
+                <div>
                   <button
                     disabled={values[resource] <= 0}
                     type="button"
@@ -66,8 +66,13 @@ export const BoardResourceList = ({ resourceList }: ResourceListProps) => (
                     id={resource}
                     size={6}
                   />
-                </FlexContainer>
+                </div>
               </>
+            ) : (
+              <ResourceCount
+                resource={resource}
+                count={resourceList[resource]}
+              />
             )}
           </FlexContainer>
         ))}
