@@ -5,34 +5,35 @@ import (
 	"testing"
 )
 
-func TestFilterCards(t *testing.T) {
-	cards := Cards{
-		{
-			ID:     1,
-			Tier:   1,
-			Points: 10,
-			Cost:   map[resource]int{Blue: 1},
-			Income: Black,
-		},
-		{
-			ID:     1,
-			Tier:   2,
-			Points: 10,
-			Cost:   map[resource]int{Blue: 1},
-			Income: Green,
-		},
+func TestFilter(t *testing.T) {
+	cards := Cards{{ID: 1}, {ID: 2}, {ID: 3}}
+	f := func(c Card) bool { return c.ID == 1 || c.ID == 2 }
+
+	actual := cards.filter(f)
+	expected := Cards{{ID: 1}, {ID: 2}}
+	if !reflect.DeepEqual(expected, actual) {
+		t.Fatalf("Actual: %v. Expected: %v", actual, expected)
 	}
 
-	f := func(c Card) bool {
-		return c.Tier == 1
+	original := Cards{{ID: 1}, {ID: 2}, {ID: 3}}
+	if !reflect.DeepEqual(cards, original) {
+		t.Fatalf("original Cards mutated. Actual: %v. Original: %v", cards, original)
+	}
+}
+
+func TestApply(t *testing.T) {
+	cards := Cards{{ID: 1}, {ID: 2}, {ID: 3}}
+	f := func(c Card) Card { return Card{ID: c.ID * 10} }
+
+	actual := cards.apply(f)
+	expected := Cards{{ID: 10}, {ID: 20}, {ID: 30}}
+	if !reflect.DeepEqual(expected, actual) {
+		t.Fatalf("Actual: %v. Expected: %v", actual, expected)
 	}
 
-	if !reflect.DeepEqual(Cards{cards[0]}, cards.filter(f)) {
-		t.Fail()
-	}
-
-	if reflect.DeepEqual(Cards{cards[1]}, cards.filter(f)) {
-		t.Fail()
+	original := Cards{{ID: 1}, {ID: 2}, {ID: 3}}
+	if !reflect.DeepEqual(cards, original) {
+		t.Fatalf("original Cards mutated. Actual: %v. Original: %v", cards, original)
 	}
 }
 

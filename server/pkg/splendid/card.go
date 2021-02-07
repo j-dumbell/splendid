@@ -36,8 +36,6 @@ func createCards(rows [][]string) (cards Cards) {
 	return cards
 }
 
-// FilterCards returns a slice of Card structs that pass the
-// test implemented by the provided function
 func (cards *Cards) filter(f func(Card) bool) (filtered Cards) {
 	for _, v := range *cards {
 		if f(v) {
@@ -45,6 +43,13 @@ func (cards *Cards) filter(f func(Card) bool) (filtered Cards) {
 		}
 	}
 	return filtered
+}
+
+func (cards *Cards) apply(f func(Card) Card) (mapped Cards) {
+	for _, v := range *cards {
+		mapped = append(mapped, f(v))
+	}
+	return mapped
 }
 
 // MoveCard removes <card> from <fromDeck> and appends to <toDeck>
