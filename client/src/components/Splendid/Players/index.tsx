@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useFormikContext } from "formik";
 
 import { State } from "../../../state/domain";
 import { SplendidPlayer } from "../domain";
@@ -14,7 +13,6 @@ type Props = {
 };
 
 const Players = ({ players, activePlayerIndex }: Props) => {
-  const { values } = useFormikContext<any>();
   const { clientId, playerNames } = useSelector(
     ({ clientId, playerNames }: State) => ({
       clientId,
@@ -26,15 +24,15 @@ const Players = ({ players, activePlayerIndex }: Props) => {
     <PlayersContainer>
       {players.map((player, i) => (
         <PlayerContainer
-          column
           key={`player-${i}`}
           isActive={i === activePlayerIndex}
+          column
         >
           <h2 style={{ color: clientId === player.id ? "white" : "inherit" }}>
             {playerNames[player.id] || `Player#${player.id}`}
           </h2>
           <PlayerResourceList {...player} />
-          <PlayerDeck {...player} selected={values.selected} />
+          <PlayerDeck {...player} />
         </PlayerContainer>
       ))}
     </PlayersContainer>

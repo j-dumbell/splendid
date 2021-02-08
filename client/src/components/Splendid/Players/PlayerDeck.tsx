@@ -1,48 +1,34 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { State } from "../../../state/domain";
-import { SplendidCard, SplendidPlayer } from "../domain";
+import { SplendidPlayer } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import DeckCard from "../Decks/DeckCard";
 import Card from "../Card";
 
-const PlayerCard = ({
-  selected,
-  ...card
-}: SplendidCard & { selected: string }) => {
-  const { isActivePlayer } = useSelector(({ isActivePlayer }: State) => ({
-    isActivePlayer,
-  }));
-
-  return isActivePlayer ? (
-    <DeckCard reserved mini card={card} selected={selected} />
-  ) : (
-    <Card reserved mini {...card} />
-  );
-};
-
 const PlayerDeck = ({
-  selected,
-  ...player
-}: SplendidPlayer & { selected: string }) => (
+  purchased,
+  reservedVisible,
+  reservedHidden,
+}: SplendidPlayer) => (
   <FlexContainer>
-    {player.purchased.map((card, j) => (
+    {purchased.map((card, j) => (
       <Card key={`player-purchased-card-${j}`} mini {...card} />
     ))}
     <FlexContainer>
-      {player.reservedVisible.map((card, k) => (
-        <PlayerCard
+      {reservedVisible.map((card, k) => (
+        <DeckCard
           key={`player-reserved-vis-card-${k}`}
-          selected={selected}
-          {...card}
+          card={card}
+          reserved
+          mini
         />
       ))}
-      {player.reservedHidden.map((card, l) => (
-        <PlayerCard
+      {reservedHidden.map((card, l) => (
+        <DeckCard
           key={`player-reserved-hid-card-${l}`}
-          selected={selected}
-          {...card}
+          card={card}
+          reserved
+          mini
         />
       ))}
     </FlexContainer>

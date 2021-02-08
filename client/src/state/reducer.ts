@@ -35,8 +35,9 @@ const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  isActivePlayer: false,
+  isActivePlayer: true,
   game: (fixtures as unknown) as SplendidGame,
+  clientId: 2,
 };
 
 function reducer(
