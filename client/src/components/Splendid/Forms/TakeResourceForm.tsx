@@ -1,8 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form, FormikProps, Field } from "formik";
+import { Formik, Form, FormikProps, useFormikContext } from "formik";
 
-import { splendidResource } from "../domain";
+import {
+  SplendidResource,
+  splendidResource,
+  SplendidResourceList,
+} from "../domain";
 import ResourceCount from "../ResourceList/ResourceCount";
 import { sendJSON } from "../../../hooks/useWebsocket";
 import FlexContainer from "../../common/FlexContainer";
@@ -18,11 +22,37 @@ const constructInitialValues = (resourceList: Record<string, number>) =>
     {}
   );
 
+type ButtonProps = {
+  disabled: boolean;
+  resource: SplendidResource;
+  nextValueFn: (value: number) => number;
+};
+
+const Button = ({ disabled, resource, nextValueFn }: ButtonProps) => {
+  const dispatch = useDispatch();
+  const { values, setValues } = useFormikContext<SplendidResourceList>();
+  const currentValue = values[resource];
+  const nextValue = nextValueFn(currentValue);
+  return (
+    <button
+      disabled={disabled}
+      type="button"
+      value={resource}
+      onClick={async () => {
+        const nextValues = { ...values, [resource]: nextValue };
+        setValues(nextValues);
+        dispatch(updateSplendidPlayerResources(nextValues));
+      }}
+    >
+      {nextValue < currentValue ? "-" : "+"}
+    </button>
+  );
+};
+
 export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
   const isActivePlayer = useSelector(
     ({ isActivePlayer }: State) => isActivePlayer
   );
-  const dispatch = useDispatch();
 
   return isActivePlayer ? (
     <Formik
@@ -36,7 +66,7 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
         resetForm();
       }}
     >
-      {({ values, errors, setFieldValue }: FormikProps<any>) => (
+      {({ values, errors }: FormikProps<any>) => (
         <Form>
           <FlexContainer color="white">
             {splendidResource.map((resource, i) => (
@@ -47,49 +77,19 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                   offsetTemp={-values[resource]}
                 />
                 <div>
-                  <button
+                  <Button
+                    resource={resource}
+                    nextValueFn={(v) => v - 1}
                     disabled={values[resource] <= 0}
-                    type="button"
-                    value={resource}
-                    onClick={async ({ currentTarget: { value } }) => {
-                      const nextValue = values[value] - 1;
-                      setFieldValue(value, nextValue);
-                      dispatch(
-                        updateSplendidPlayerResources({
-                          ...values,
-                          [resource]: nextValue,
-                        })
-                      );
-                    }}
-                  >
-                    -
-                  </button>
-                  <button
+                  />
+                  <Button
+                    resource={resource}
+                    nextValueFn={(v) => v + 1}
                     disabled={
                       Boolean(errors[resource]) ||
                       values[resource] >= resourceList[resource] ||
                       !canBeTaken(resource)
                     }
-                    type="button"
-                    value={resource}
-                    onClick={async ({ currentTarget: { value } }) => {
-                      const nextValue = values[value] + 1;
-                      setFieldValue(value, nextValue);
-                      dispatch(
-                        updateSplendidPlayerResources({
-                          ...values,
-                          [resource]: nextValue,
-                        })
-                      );
-                    }}
-                  >
-                    +
-                  </button>
-                  <Field
-                    type="hidden"
-                    name={resource}
-                    value={values[resource]}
-                    id={resource}
                   />
                 </div>
               </FlexContainer>
