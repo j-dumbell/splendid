@@ -4,13 +4,13 @@ import { sendJSON } from "../../../hooks/useWebsocket";
 import { SplendidCard } from "../domain";
 import { PurchaseContainer } from "./styled";
 
-type Props = {
+type PurchaseButtonProps = {
   gameAction: string;
   text: string;
   params: Record<string, unknown>;
 };
 
-const PurchaseButton = ({ gameAction, text, params }: Props) => (
+const PurchaseButton = ({ gameAction, text, params }: PurchaseButtonProps) => (
   <button
     onClick={() =>
       sendJSON({
@@ -23,9 +23,20 @@ const PurchaseButton = ({ gameAction, text, params }: Props) => (
   </button>
 );
 
-const PurchaseButtons = (props: SplendidCard & { selectedCard: boolean }) => (
-  <PurchaseContainer selectedCard={props.selectedCard}>
-    {props.id ? (
+type PurchaseButtonsProps = SplendidCard & {
+  selected: boolean;
+  reserved?: boolean;
+};
+
+const PurchaseButtons = (props: PurchaseButtonsProps) => (
+  <PurchaseContainer selected={props.selected}>
+    {props.reserved ? (
+      <PurchaseButton
+        gameAction="buyCard"
+        text="Buy"
+        params={{ cardId: props.id }}
+      />
+    ) : props.id ? (
       <>
         <PurchaseButton
           gameAction="buyCard"

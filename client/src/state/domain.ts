@@ -1,4 +1,4 @@
-import { SplendidGame } from "../components/Splendid/domain";
+import { SplendidGame, SplendidResourceList } from "../components/Splendid/domain";
 
 export type Message = {
   message: string;
@@ -26,6 +26,7 @@ export type State = {
   history: History[];
   game?: SplendidGame;
   playerNames: Record<number, string>;
+  isActivePlayer: boolean;
 };
 
 export const actionTypes = [
@@ -34,6 +35,7 @@ export const actionTypes = [
   "ADD_CHAT_MESSAGE",
   "ADD_HISTORY_ACTION",
   "UPDATE_GAME",
+  "UPDATE_PLAYER_RESOURCE",
 ] as const;
 export type ActionType = typeof actionTypes[number];
 
@@ -47,3 +49,4 @@ export type ExitLobbyAction = BaseAction<typeof actionTypes[1], Lobby>;
 export type MessageAction = BaseAction<typeof actionTypes[2], Message>;
 export type HistoryAction = BaseAction<typeof actionTypes[3], History>;
 export type SplendidAction = BaseAction<typeof actionTypes[4], SplendidGame>;
+export type SplendidResourceAction = BaseAction<typeof actionTypes[5], SplendidResourceList>;

@@ -33,6 +33,7 @@ export type SplendidBoard = {
 export type SplendidPlayer = {
   id: number;
   bank: SplendidResourceList;
+  bankOffsetTemp?: SplendidResourceList;
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];
   reservedHidden: SplendidCard[];

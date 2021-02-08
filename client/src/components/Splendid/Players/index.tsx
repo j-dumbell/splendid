@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { SplendidPlayer } from "../domain";
-import FlexContainer from "../../common/FlexContainer";
-import Card from "../Card";
-import { PlayerResourceList as ResourceList } from "../ResourceList";
 import { State } from "../../../state/domain";
+import { SplendidPlayer } from "../domain";
+import PlayerDeck from "./PlayerDeck";
+import { PlayersContainer, PlayerContainer } from "./styled";
+import PlayerResourceList from "./PlayerResourceList";
 
 type Props = {
   players: SplendidPlayer[];
@@ -13,42 +13,29 @@ type Props = {
 };
 
 const Players = ({ players, activePlayerIndex }: Props) => {
-  const playerNames = useSelector(({ playerNames }: State) => playerNames);
+  const { clientId, playerNames } = useSelector(
+    ({ clientId, playerNames }: State) => ({
+      clientId,
+      playerNames,
+    })
+  );
+
   return (
-    <div style={{ marginLeft: "50px" }}>
+    <PlayersContainer>
       {players.map((player, i) => (
-        <FlexContainer
-          column
+        <PlayerContainer
           key={`player-${i}`}
-          style={{
-            padding: "10px",
-            border: `${i === activePlayerIndex ? "solid 2px white" : "solid 0px black"}`,
-          }}
+          isActive={i === activePlayerIndex}
+          column
         >
-          <h2>{playerNames[player.id]}</h2>
-          <FlexContainer color="white">
-            <ResourceList
-              resourceList={player.bank}
-              purchased={player.purchased}
-              hideEmpty
-            />
-          </FlexContainer>
-          <FlexContainer>
-            {player.purchased.map((card, j) => (
-              <Card key={`player-purchased-card-${j}`} mini {...card} />
-            ))}
-            <FlexContainer style={{ opacity: 0.3 }}>
-              {player.reservedVisible.map((card, j) => (
-                <Card key={`player-reserved-vis-card-${j}`} mini {...card} />
-              ))}
-              {player.reservedHidden.map((card, j) => (
-                <Card key={`player-reserved-hid-card-${j}`} mini {...card} />
-              ))}
-            </FlexContainer>
-          </FlexContainer>
-        </FlexContainer>
+          <h2 style={{ color: clientId === player.id ? "white" : "inherit" }}>
+            {playerNames[player.id] || `Player#${player.id}`}
+          </h2>
+          <PlayerResourceList {...player} />
+          <PlayerDeck {...player} />
+        </PlayerContainer>
       ))}
-    </div>
+    </PlayersContainer>
   );
 };
 

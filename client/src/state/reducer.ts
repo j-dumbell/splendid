@@ -1,6 +1,9 @@
-// import fixtures from './gameFixtures.json';
-// import { SplendidGame } from '../components/Splendid/domain';
+// import fixtures from "./gameFixtures.json";
 
+import {
+  SplendidGame,
+  SplendidResourceList,
+} from "../components/Splendid/domain";
 import {
   State,
   JoinLobbyAction,
@@ -10,12 +13,29 @@ import {
   BaseAction,
   ActionType,
   ExitLobbyAction,
+  SplendidResourceAction,
 } from "./domain";
+
+const isActivePlayer = (game: SplendidGame, clientId?: number) =>
+  game.players[game.activePlayerIndex].id === clientId;
+
+const playersWithOffsets = (
+  game: SplendidGame,
+  bankOffset: SplendidResourceList,
+  clientId?: number
+) => {
+  const players = game.players.map((player) => ({
+    ...player,
+    bankOffsetTemp: player.id === clientId ? bankOffset : undefined,
+  }));
+  return { ...game, players };
+};
 
 const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
+  isActivePlayer: false,
   // game: (fixtures as unknown) as SplendidGame,
 };
 
@@ -70,6 +90,17 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
+        isActivePlayer: isActivePlayer(splendidAction.payload, state.clientId),
+      };
+    case "UPDATE_PLAYER_RESOURCE":
+      const splendidResourceAction = action as SplendidResourceAction;
+      return {
+        ...state,
+        game: playersWithOffsets(
+          state.game!,
+          splendidResourceAction.payload,
+          state.clientId
+        ),
       };
     default:
       return state;
