@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, FormikProps, Field } from "formik";
 
 import { splendidResource } from "../domain";
@@ -9,6 +9,7 @@ import FlexContainer from "../../common/FlexContainer";
 import { ResourceListProps } from "../ResourceList";
 import { validateMax } from "./helpers";
 import { State } from "../../../state/domain";
+import { updateSplendidPlayerResources } from "../../../state/actionCreator";
 
 const canBeTaken = (resource: string): boolean => resource !== "yellow";
 const constructInitialValues = (resourceList: Record<string, number>) =>
@@ -21,6 +22,7 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
   const isActivePlayer = useSelector(
     ({ isActivePlayer }: State) => isActivePlayer
   );
+  const dispatch = useDispatch();
 
   return isActivePlayer ? (
     <Formik
@@ -43,6 +45,7 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                   resource={resource}
                   count={resourceList[resource]}
                   offsetTemp={-values[resource]}
+                  offsetPerm={-values[resource]}
                 />
                 <div>
                   <button
@@ -65,6 +68,7 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                     value={resource}
                     onClick={async ({ currentTarget: { value } }) => {
                       setFieldValue(value, values[value] + 1);
+                      dispatch(updateSplendidPlayerResources(values));
                     }}
                   >
                     +

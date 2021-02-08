@@ -17,8 +17,9 @@ type Props = {
 
 const Players = ({ players, activePlayerIndex }: Props) => {
   const { values } = useFormikContext<any>();
-  const { playerNames, isActivePlayer } = useSelector(
-    ({ playerNames, isActivePlayer }: State) => ({
+  const { clientId, playerNames, isActivePlayer } = useSelector(
+    ({ clientId, playerNames, isActivePlayer }: State) => ({
+      clientId,
       playerNames,
       isActivePlayer,
     })
@@ -32,7 +33,9 @@ const Players = ({ players, activePlayerIndex }: Props) => {
           key={`player-${i}`}
           isActive={i === activePlayerIndex}
         >
-          <h2>{playerNames[player.id]}</h2>
+          <h2 style={{ color: clientId === player.id ? "white" : "inherit" }}>
+            {playerNames[player.id] || `Player#${player.id}`}
+          </h2>
           <FlexContainer color="white">
             <ResourceList
               resourceList={player.bank}
