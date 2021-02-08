@@ -1,5 +1,5 @@
-import fixtures from "./gameFixtures.json";
-import { SplendidGame } from "../components/Splendid/domain";
+// import fixtures from "./gameFixtures.json";
+// import { SplendidGame } from "../components/Splendid/domain";
 
 import {
   State,
@@ -17,8 +17,8 @@ const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  game: (fixtures as unknown) as SplendidGame,
   isActivePlayer: false,
+  // game: (fixtures as unknown) as SplendidGame,
 };
 
 function reducer(
@@ -94,7 +94,6 @@ function reducer(
           }),
         },
       };
-      console.log('@@@', newstate.game.players);
 
       return newstate;
     default:
