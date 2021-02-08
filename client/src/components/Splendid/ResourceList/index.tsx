@@ -5,7 +5,8 @@ import ResourceCount from "./ResourceCount";
 
 export type ResourceListProps = {
   resourceList: Record<string, number>;
-  offsets?: Record<string, number>;
+  offsetsTemp?: Record<string, number>;
+  offsetsPerm?: Record<string, number>;
   hideEmpty?: boolean;
   mini?: boolean;
   column?: boolean;
@@ -13,15 +14,16 @@ export type ResourceListProps = {
 
 export const ResourceList = ({
   resourceList,
-  offsets,
+  offsetsPerm,
+  offsetsTemp,
   hideEmpty,
   mini,
   column,
 }: ResourceListProps) => (
   <>
     {splendidResource.map((resource, i) => {
-      const offset = offsets ? offsets[resource] : 0;
-      const totals = (resourceList[resource] ?? 0) + offset;
+      const offsetPerm = offsetsPerm ? offsetsPerm[resource] : 0;
+      const totals = (resourceList[resource] ?? 0) + offsetPerm;
       if (totals <= 0 && hideEmpty) {
         return null;
       }
@@ -32,7 +34,7 @@ export const ResourceList = ({
           count={resourceList[resource]}
           mini={mini}
           column={column}
-          offset={offset}
+          offsetPerm={offsetPerm}
         />
       );
     })}

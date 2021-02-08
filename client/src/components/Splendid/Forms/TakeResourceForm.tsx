@@ -42,7 +42,7 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                 <ResourceCount
                   resource={resource}
                   count={resourceList[resource]}
-                  offset={-values[resource]}
+                  offsetTemp={-values[resource]}
                 />
                 <div>
                   <button

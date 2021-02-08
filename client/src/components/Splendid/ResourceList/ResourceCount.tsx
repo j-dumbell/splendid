@@ -6,18 +6,34 @@ import ResourceContainer from "./styled";
 
 type Props = {
   resource: SplendidResource;
-  offset?: number;
+  offsetTemp?: number;
+  offsetPerm?: number;
   count: number;
   mini?: boolean;
   column?: boolean;
 };
 
-const ResourceCount = ({ resource, offset, count, mini, column }: Props) => (
+const ResourceCount = ({
+  resource,
+  offsetTemp,
+  offsetPerm,
+  count,
+  mini,
+  column,
+}: Props) => (
   <ResourceContainer column={column}>
     <Resource resourceType={resource} mini={mini} />
     <p>
-      {count}
-      {offset ? (offset < 0 ? `(${offset})` : `(+${offset})`) : null}
+      {offsetTemp ? (
+        <span style={{ color: "red" }}>{count + offsetTemp}</span>
+      ) : (
+        <span>{count}</span>
+      )}
+      {offsetPerm
+        ? offsetPerm < 0
+          ? `(${offsetPerm})`
+          : `(+${offsetPerm})`
+        : null}
     </p>
   </ResourceContainer>
 );

@@ -36,7 +36,7 @@ const Players = ({ players, activePlayerIndex }: Props) => {
           <FlexContainer color="white">
             <ResourceList
               resourceList={player.bank}
-              offsets={splendidResource.reduce(
+              offsetsPerm={splendidResource.reduce(
                 (prev, next) => ({
                   ...prev,
                   [next]: player.purchased?.filter(
