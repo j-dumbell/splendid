@@ -2,6 +2,10 @@
 // import { SplendidGame } from "../components/Splendid/domain";
 
 import {
+  SplendidGame,
+  SplendidResourceList,
+} from "../components/Splendid/domain";
+import {
   State,
   JoinLobbyAction,
   MessageAction,
@@ -12,6 +16,21 @@ import {
   ExitLobbyAction,
   SplendidResourceAction,
 } from "./domain";
+
+const isActivePlayer = (game: SplendidGame, clientId?: number) =>
+  game.players[game.activePlayerIndex].id === clientId;
+
+const playersWithOffsets = (
+  game: SplendidGame,
+  bankOffset: SplendidResourceList,
+  clientId?: number
+) => {
+  const players = game.players.map((player) => ({
+    ...player,
+    bankOffsetTemp: player.id === clientId ? bankOffset : undefined,
+  }));
+  return { ...game, players };
+};
 
 const defaultState: State = {
   chat: [],
@@ -72,30 +91,18 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
-        isActivePlayer:
-          splendidAction.payload.players[
-            splendidAction.payload.activePlayerIndex
-          ].id === state.clientId,
+        isActivePlayer: isActivePlayer(splendidAction.payload, state.clientId),
       };
     case "UPDATE_PLAYER_RESOURCE":
       const splendidResourceAction = action as SplendidResourceAction;
-      const newstate = {
+      return {
         ...state,
-        game: {
-          ...state.game!,
-          players: state.game!.players.map((player) => {
-            if (player.id !== state.clientId) {
-              return player;
-            }
-            return {
-              ...player,
-              bankOffsetTemp: splendidResourceAction.payload,
-            };
-          }),
-        },
+        game: playersWithOffsets(
+          state.game!,
+          splendidResourceAction.payload,
+          state.clientId
+        ),
       };
-
-      return newstate;
     default:
       return state;
   }
