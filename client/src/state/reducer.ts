@@ -14,12 +14,11 @@ import {
 } from "./domain";
 
 const defaultState: State = {
-  clientId: 2,
   chat: [],
   history: [],
   playerNames: {},
   game: (fixtures as unknown) as SplendidGame,
-  isActivePlayer: true,
+  isActivePlayer: false,
 };
 
 function reducer(

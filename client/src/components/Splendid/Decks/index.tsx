@@ -31,13 +31,17 @@ const Decks = ({ decks }: Props) => {
     <>
       {getDeckKeys(decks).map((tier, i) => (
         <FlexContainer key={`deck-${i}`}>
-          {constructVisible(tier, decks).map((card, j) => (
-            <DeckCard
-              key={`cards-${j}`}
-              card={card}
-              selected={values.selected}
-            />
-          ))}
+          {constructVisible(tier, decks).map((card, j) =>
+            isActivePlayer ? (
+              <DeckCard
+                key={`cards-${j}`}
+                card={card}
+                selected={values.selected}
+              />
+            ) : (
+              <Card key={`cards-${j}`} {...card} />
+            )
+          )}
           <DeckStack>
             <StackCount>{constructDeck(tier, decks).length}</StackCount>
             {isActivePlayer ? (
