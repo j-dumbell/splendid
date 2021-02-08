@@ -2,13 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useFormikContext } from "formik";
 
-import { SplendidPlayer, splendidResource } from "../domain";
-import FlexContainer from "../../common/FlexContainer";
-import Card from "../Card";
-import ResourceList from "../ResourceList";
 import { State } from "../../../state/domain";
+import { SplendidPlayer } from "../domain";
+import PlayerDeck from "./PlayerDeck";
 import { PlayersContainer, PlayerContainer } from "./styled";
-import DeckCard from "../Decks/DeckCard";
+import PlayerResourceList from "./PlayerResourceList";
 
 type Props = {
   players: SplendidPlayer[];
@@ -17,11 +15,10 @@ type Props = {
 
 const Players = ({ players, activePlayerIndex }: Props) => {
   const { values } = useFormikContext<any>();
-  const { clientId, playerNames, isActivePlayer } = useSelector(
-    ({ clientId, playerNames, isActivePlayer }: State) => ({
+  const { clientId, playerNames } = useSelector(
+    ({ clientId, playerNames }: State) => ({
       clientId,
       playerNames,
-      isActivePlayer,
     })
   );
 
@@ -36,65 +33,8 @@ const Players = ({ players, activePlayerIndex }: Props) => {
           <h2 style={{ color: clientId === player.id ? "white" : "inherit" }}>
             {playerNames[player.id] || `Player#${player.id}`}
           </h2>
-          <FlexContainer color="white">
-            <ResourceList
-              resourceList={player.bank}
-              offsetsPerm={splendidResource.reduce(
-                (prev, next) => ({
-                  ...prev,
-                  [next]: player.purchased?.filter(
-                    (card) => card.income === next
-                  ).length,
-                }),
-                {}
-              )}
-              offsetsTemp={player.bankOffsetTemp}
-              hideEmpty
-            />
-          </FlexContainer>
-          <FlexContainer>
-            {player.purchased.map((card, j) => (
-              <Card key={`player-purchased-card-${j}`} mini {...card} />
-            ))}
-            <FlexContainer>
-              {player.reservedVisible.map((card, j) =>
-                isActivePlayer ? (
-                  <DeckCard
-                    reserved
-                    mini
-                    key={`player-reserved-vis-card-${j}`}
-                    card={card}
-                    selected={values.selected}
-                  />
-                ) : (
-                  <Card
-                    reserved
-                    mini
-                    key={`player-reserved-vis-card-${j}`}
-                    {...card}
-                  />
-                )
-              )}
-              {player.reservedHidden.map((card, j) =>
-                isActivePlayer ? (
-                  <DeckCard
-                    reserved
-                    mini
-                    key={`player-reserved-hid-card-${j}`}
-                    card={card}
-                    selected={values.selected}
-                  />
-                ) : (
-                  <Card
-                    reserved
-                    mini
-                    key={`player-reserved-vis-card-${j}`}
-                    {...card}
-                  />
-                )
-              )}
-            </FlexContainer>
-          </FlexContainer>
+          <PlayerResourceList {...player} />
+          <PlayerDeck {...player} selected={values.selected} />
         </PlayerContainer>
       ))}
     </PlayersContainer>

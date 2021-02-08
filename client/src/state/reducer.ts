@@ -1,5 +1,4 @@
-// import fixtures from "./gameFixtures.json";
-// import { SplendidGame } from "../components/Splendid/domain";
+import fixtures from "./gameFixtures.json";
 
 import {
   SplendidGame,
@@ -37,7 +36,7 @@ const defaultState: State = {
   history: [],
   playerNames: {},
   isActivePlayer: false,
-  // game: (fixtures as unknown) as SplendidGame,
+  game: (fixtures as unknown) as SplendidGame,
 };
 
 function reducer(
