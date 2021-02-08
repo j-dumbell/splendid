@@ -12,7 +12,7 @@ const Splendid = () => {
     return null;
   }
   return (
-    <FlexContainer column style={{ marginLeft: "20px" }}>
+    <FlexContainer column style={{ marginLeft: "50px" }}>
       <FlexContainer>
         <TakeResourceForm resourceList={game.board.bank} />
       </FlexContainer>
