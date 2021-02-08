@@ -23,7 +23,8 @@ export const ResourceList = ({
   <>
     {splendidResource.map((resource, i) => {
       const offsetPerm = offsetsPerm ? offsetsPerm[resource] : 0;
-      const totals = (resourceList[resource] ?? 0) + offsetPerm;
+      const offsetTemp = offsetsTemp ? offsetsTemp[resource] : 0;
+      const totals = (resourceList[resource] ?? 0) + offsetPerm + offsetTemp;
       if (totals <= 0 && hideEmpty) {
         return null;
       }
@@ -35,6 +36,7 @@ export const ResourceList = ({
           mini={mini}
           column={column}
           offsetPerm={offsetPerm}
+          offsetTemp={offsetTemp}
         />
       );
     })}

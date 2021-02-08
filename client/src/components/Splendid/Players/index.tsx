@@ -48,6 +48,7 @@ const Players = ({ players, activePlayerIndex }: Props) => {
                 }),
                 {}
               )}
+              offsetsTemp={player.bankOffsetTemp}
               hideEmpty
             />
           </FlexContainer>

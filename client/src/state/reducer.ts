@@ -10,9 +10,11 @@ import {
   BaseAction,
   ActionType,
   ExitLobbyAction,
+  SplendidResourceAction,
 } from "./domain";
 
 const defaultState: State = {
+  clientId: 2,
   chat: [],
   history: [],
   playerNames: {},
@@ -76,6 +78,26 @@ function reducer(
             splendidAction.payload.activePlayerIndex
           ].id === state.clientId,
       };
+    case "UPDATE_PLAYER_RESOURCE":
+      const splendidResourceAction = action as SplendidResourceAction;
+      const newstate = {
+        ...state,
+        game: {
+          ...state.game!,
+          players: state.game!.players.map((player) => {
+            if (player.id !== state.clientId) {
+              return player;
+            }
+            return {
+              ...player,
+              bankOffsetTemp: splendidResourceAction.payload,
+            };
+          }),
+        },
+      };
+      console.log('@@@', newstate.game.players);
+
+      return newstate;
     default:
       return state;
   }

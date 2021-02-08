@@ -45,7 +45,6 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                   resource={resource}
                   count={resourceList[resource]}
                   offsetTemp={-values[resource]}
-                  offsetPerm={-values[resource]}
                 />
                 <div>
                   <button
@@ -53,7 +52,14 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                     type="button"
                     value={resource}
                     onClick={async ({ currentTarget: { value } }) => {
-                      setFieldValue(value, values[value] - 1);
+                      const nextValue = values[value] - 1;
+                      setFieldValue(value, nextValue);
+                      dispatch(
+                        updateSplendidPlayerResources({
+                          ...values,
+                          [resource]: nextValue,
+                        })
+                      );
                     }}
                   >
                     -
@@ -67,8 +73,14 @@ export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
                     type="button"
                     value={resource}
                     onClick={async ({ currentTarget: { value } }) => {
-                      setFieldValue(value, values[value] + 1);
-                      dispatch(updateSplendidPlayerResources(values));
+                      const nextValue = values[value] + 1;
+                      setFieldValue(value, nextValue);
+                      dispatch(
+                        updateSplendidPlayerResources({
+                          ...values,
+                          [resource]: nextValue,
+                        })
+                      );
                     }}
                   >
                     +

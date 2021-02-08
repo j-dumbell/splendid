@@ -1,4 +1,7 @@
-import { SplendidGame, SplendidResourceList } from "../components/Splendid/domain";
+import {
+  SplendidGame,
+  SplendidResourceList,
+} from "../components/Splendid/domain";
 import {
   JoinLobbyAction,
   ExitLobbyAction,
@@ -39,10 +42,12 @@ export const updateSplendidGame = (payload: SplendidGame): SplendidAction => ({
   payload,
 });
 
-export const updateSplendidPlayerResources = (payload: SplendidResourceList): SplendidResourceAction => ({
+export const updateSplendidPlayerResources = (
+  payload: SplendidResourceList
+): SplendidResourceAction => ({
   type: "UPDATE_PLAYER_RESOURCE",
   payload,
-})
+});
 
 export const addHistoryAction = (
   actionType: HistoryActionType,
