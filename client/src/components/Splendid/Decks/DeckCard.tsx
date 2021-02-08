@@ -8,21 +8,20 @@ import Card from "../Card";
 import PurchaseButtons from "./PurchaseButtons";
 import { DeckCardContainer } from "./styled";
 
-type Props = {
-  card: SplendidCard;
+type Props = SplendidCard & {
   mini?: boolean;
   reserved?: boolean;
 };
 
-const PurchasableCard = ({ card, reserved, mini }: Props) => {
+const PurchasableCard = ({ reserved, mini, ...card }: Props) => {
   const { values } = useFormikContext<any>();
-  const ref = card.id ? `visible-${card.id}` : `hidden-${card.tier}`;
+  const cardRef = card.id ? `visible-${card.id}` : `hidden-${card.tier}`;
   return (
     <DeckCardContainer>
-      <Field type="radio" name="selected" value={ref} />
+      <Field type="radio" name="selectedCard" value={cardRef} />
       <PurchaseButtons
         {...card}
-        selectedCard={values.selected === ref}
+        selected={values.selectedCard === cardRef}
         reserved={reserved}
       />
       <Card {...card} mini={mini} reserved={reserved} />
@@ -30,7 +29,7 @@ const PurchasableCard = ({ card, reserved, mini }: Props) => {
   );
 };
 
-const DeckCard = ({ reserved, mini, card }: Props) => {
+const DeckCard = ({ reserved, mini, ...card }: Props) => {
   const { isActivePlayer } = useSelector(({ isActivePlayer }: State) => ({
     isActivePlayer,
   }));
@@ -38,7 +37,7 @@ const DeckCard = ({ reserved, mini, card }: Props) => {
     <PurchasableCard
       reserved={reserved}
       mini={mini}
-      card={card}
+      {...card}
     />
   ) : (
     <Card reserved={reserved} mini={mini} {...card} />

@@ -23,11 +23,11 @@ const Decks = ({ decks }: Props) => (
     {getDeckKeys(decks).map((tier, i) => (
       <FlexContainer key={`deck-${i}`}>
         {constructVisible(tier, decks).map((card, j) => (
-          <DeckCard key={`cards-${j}`} card={card} />
+          <DeckCard key={`cards-${j}`} {...card} />
         ))}
         <DeckStack>
           <StackCount>{constructDeck(tier, decks).length}</StackCount>
-          <DeckCard card={{ tier: Number(tier) }} />
+          <DeckCard tier={Number(tier)} />
         </DeckStack>
       </FlexContainer>
     ))}

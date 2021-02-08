@@ -18,17 +18,17 @@ const PlayerDeck = ({
       {reservedVisible.map((card, k) => (
         <DeckCard
           key={`player-reserved-vis-card-${k}`}
-          card={card}
           reserved
           mini
+          {...card}
         />
       ))}
       {reservedHidden.map((card, l) => (
         <DeckCard
           key={`player-reserved-hid-card-${l}`}
-          card={card}
           reserved
           mini
+          {...card}
         />
       ))}
     </FlexContainer>

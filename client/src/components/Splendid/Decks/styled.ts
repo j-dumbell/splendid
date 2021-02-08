@@ -16,8 +16,8 @@ export const PurchaseContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -15px);
   width: 80%;
-  visibility: ${({ selectedCard }: { selectedCard: boolean }) =>
-    selectedCard ? "visible" : "hidden"};
+  visibility: ${({ selected }: { selected: boolean }) =>
+    selected ? "visible" : "hidden"};
 
   button {
     margin-bottom: 5px;
