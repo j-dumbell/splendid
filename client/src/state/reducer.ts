@@ -1,4 +1,4 @@
-import fixtures from "./gameFixtures.json";
+// import fixtures from "./gameFixtures.json";
 
 import {
   SplendidGame,
@@ -35,9 +35,8 @@ const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  isActivePlayer: true,
-  game: (fixtures as unknown) as SplendidGame,
-  clientId: 2,
+  isActivePlayer: false,
+  // game: (fixtures as unknown) as SplendidGame,
 };
 
 function reducer(
