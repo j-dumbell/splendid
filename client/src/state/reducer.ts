@@ -1,4 +1,4 @@
-// import fixtures from "./gameFixtures.json";
+import fixtures from "./gameFixtures.json";
 
 import {
   SplendidGame,
@@ -16,9 +16,6 @@ import {
   SplendidResourceAction,
 } from "./domain";
 
-const isActivePlayer = (game: SplendidGame, clientId?: number) =>
-  game.players[game.activePlayerIndex].id === clientId;
-
 const playersWithOffsets = (
   game: SplendidGame,
   bankOffset: SplendidResourceList,
@@ -35,8 +32,8 @@ const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  isActivePlayer: false,
-  // game: (fixtures as unknown) as SplendidGame,
+  game: (fixtures as unknown) as SplendidGame,
+  clientId: 1,
 };
 
 function reducer(
@@ -90,7 +87,6 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
-        isActivePlayer: isActivePlayer(splendidAction.payload, state.clientId),
       };
     case "UPDATE_PLAYER_RESOURCE":
       const splendidResourceAction = action as SplendidResourceAction;

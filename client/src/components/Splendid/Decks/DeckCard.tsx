@@ -1,8 +1,7 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Field, useFormikContext } from "formik";
 
-import { State } from "../../../state/domain";
+import { useActivePlayer } from "../../../hooks/useActivePlayer";
 import { SplendidCard } from "../domain";
 import Card from "../Card";
 import PurchaseButtons from "./PurchaseButtons";
@@ -30,9 +29,7 @@ const PurchasableCard = ({ reserved, mini, ...card }: Props) => {
 };
 
 const DeckCard = ({ reserved, mini, ...card }: Props) => {
-  const { isActivePlayer } = useSelector(({ isActivePlayer }: State) => ({
-    isActivePlayer,
-  }));
+  const [isActivePlayer] = useActivePlayer();
   return isActivePlayer ? (
     <PurchasableCard
       reserved={reserved}

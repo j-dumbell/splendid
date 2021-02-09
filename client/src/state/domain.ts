@@ -26,7 +26,6 @@ export type State = {
   history: History[];
   game?: SplendidGame;
   playerNames: Record<number, string>;
-  isActivePlayer: boolean;
 };
 
 export const actionTypes = [

@@ -1,7 +1,8 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Formik, Form, FormikProps, useFormikContext } from "formik";
 
+import { useActivePlayer } from "../../../hooks/useActivePlayer";
 import {
   SplendidResource,
   splendidResource,
@@ -12,7 +13,6 @@ import { sendJSON } from "../../../hooks/useWebsocket";
 import FlexContainer from "../../common/FlexContainer";
 import { ResourceListProps } from "../ResourceList";
 import { validateMax } from "./helpers";
-import { State } from "../../../state/domain";
 import { updateSplendidPlayerResources } from "../../../state/actionCreator";
 
 const canBeTaken = (resource: string): boolean => resource !== "yellow";
@@ -50,10 +50,7 @@ const Button = ({ disabled, resource, nextValueFn }: ButtonProps) => {
 };
 
 export const TakeResourceForm = ({ resourceList }: ResourceListProps) => {
-  const isActivePlayer = useSelector(
-    ({ isActivePlayer }: State) => isActivePlayer
-  );
-
+  const [isActivePlayer] = useActivePlayer();
   return isActivePlayer ? (
     <Formik
       validate={validateMax}
