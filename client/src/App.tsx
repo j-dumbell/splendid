@@ -2,7 +2,7 @@ import React from "react";
 
 import { useWebSocket, WsStatus } from "./hooks/useWebsocket";
 import Sidebar from "./components/Sidebar";
-import Splendid from "./components/Splendid";
+import Splendid from "./components/Splendid/ActionForm";
 import FlexContainer from "./components/common/FlexContainer";
 
 function App() {

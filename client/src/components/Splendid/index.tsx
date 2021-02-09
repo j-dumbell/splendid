@@ -1,24 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { State } from "../../state/domain";
-import TakeResourceForm from "./Forms/TakeResourceForm";
-import CardActionForm from "./Forms/CardActionForm";
 import FlexContainer from "../common/FlexContainer";
+import ActionForm from "./ActionForm";
 
-const Splendid = () => {
-  const game = useSelector(({ game }: State) => game);
-  if (!game) {
-    return null;
-  }
-  return (
-    <FlexContainer column style={{ marginLeft: "50px" }}>
-      <FlexContainer>
-        <TakeResourceForm resourceList={game.board.bank} />
-      </FlexContainer>
-      <CardActionForm {...game} />
-    </FlexContainer>
-  );
-};
+const Splendid = () => (
+  <FlexContainer style={{ marginLeft: "50px" }}>
+    <ActionForm />
+  </FlexContainer>
+);
 
 export default Splendid;
