@@ -28,12 +28,12 @@ export type SplendidBoard = {
   decks: Record<string, SplendidCard[]>;
   elites: SplendidElite[];
   bank: SplendidResourceList;
+  bankOffsetTemp?: SplendidResourceList;
 };
 
 export type SplendidPlayer = {
   id: number;
   bank: SplendidResourceList;
-  bankOffsetTemp?: SplendidResourceList;
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];
   reservedHidden: SplendidCard[];

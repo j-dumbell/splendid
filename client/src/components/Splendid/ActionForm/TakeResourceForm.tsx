@@ -13,7 +13,7 @@ import { sendJSON } from "../../../hooks/useWebsocket";
 import FlexContainer from "../../common/FlexContainer";
 import { ResourceListProps } from "../ResourceList";
 import { validateMax } from "./helpers";
-import { updateSplendidPlayerResources } from "../../../state/actionCreator";
+import { updateBankResources } from "../../../state/actionCreator";
 
 const canBeTaken = (resource: string): boolean => resource !== "yellow";
 const constructInitialValues = (resourceList: Record<string, number>) =>
@@ -41,7 +41,7 @@ const Button = ({ disabled, resource, nextValueFn }: ButtonProps) => {
       onClick={async () => {
         const nextValues = { ...values, [resource]: nextValue };
         setValues(nextValues);
-        dispatch(updateSplendidPlayerResources(nextValues));
+        dispatch(updateBankResources(nextValues));
       }}
     >
       {nextValue < currentValue ? "-" : "+"}

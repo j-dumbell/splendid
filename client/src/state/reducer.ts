@@ -16,18 +16,6 @@ import {
   SplendidResourceAction,
 } from "./domain";
 
-const playersWithOffsets = (
-  game: SplendidGame,
-  bankOffset: SplendidResourceList,
-  clientId?: number
-) => {
-  const players = game.players.map((player) => ({
-    ...player,
-    bankOffsetTemp: player.id === clientId ? bankOffset : undefined,
-  }));
-  return { ...game, players };
-};
-
 const defaultState: State = {
   chat: [],
   history: [],
@@ -88,15 +76,17 @@ function reducer(
         ...state,
         game: splendidAction.payload,
       };
-    case "UPDATE_PLAYER_RESOURCE":
+    case "UPDATE_BANK_RESOURCE":
       const splendidResourceAction = action as SplendidResourceAction;
       return {
         ...state,
-        game: playersWithOffsets(
-          state.game!,
-          splendidResourceAction.payload,
-          state.clientId
-        ),
+        game: {
+          ...state.game!,
+          board: {
+            ...state.game!.board,
+            bankOffsetTemp: splendidResourceAction.payload,
+          },
+        }
       };
     default:
       return state;

@@ -34,7 +34,7 @@ export const actionTypes = [
   "ADD_CHAT_MESSAGE",
   "ADD_HISTORY_ACTION",
   "UPDATE_GAME",
-  "UPDATE_PLAYER_RESOURCE",
+  "UPDATE_BANK_RESOURCE",
 ] as const;
 export type ActionType = typeof actionTypes[number];
 
