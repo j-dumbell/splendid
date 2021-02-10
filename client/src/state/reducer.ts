@@ -1,9 +1,6 @@
 import fixtures from "./gameFixtures.json";
 
-import {
-  SplendidGame,
-  SplendidResourceList,
-} from "../components/Splendid/domain";
+import { SplendidGame } from "../components/Splendid/domain";
 import {
   State,
   JoinLobbyAction,
@@ -86,7 +83,7 @@ function reducer(
             ...state.game!.board,
             bankOffsetTemp: splendidResourceAction.payload,
           },
-        }
+        },
       };
     default:
       return state;

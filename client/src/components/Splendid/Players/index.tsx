@@ -4,8 +4,9 @@ import { useSelector } from "react-redux";
 import { State } from "../../../state/domain";
 import { SplendidPlayer } from "../domain";
 import PlayerDeck from "./PlayerDeck";
+import PlayerActionForm from "./PlayerActionForm";
+import PlayerResourceForm from "./PlayerResourceForm";
 import { PlayersContainer, PlayerContainer } from "./styled";
-import PlayerResourceList from "./PlayerResourceList";
 
 type Props = {
   players: SplendidPlayer[];
@@ -31,7 +32,8 @@ const Players = ({ players, activePlayerIndex }: Props) => {
           <h2 style={{ color: clientId === player.id ? "white" : "inherit" }}>
             {playerNames[player.id] || `Player#${player.id}`}
           </h2>
-          <PlayerResourceList {...player} />
+          <PlayerActionForm id={player.id} />
+          <PlayerResourceForm {...player} />
           <PlayerDeck {...player} />
         </PlayerContainer>
       ))}
