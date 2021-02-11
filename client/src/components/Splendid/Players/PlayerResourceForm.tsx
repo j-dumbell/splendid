@@ -64,7 +64,7 @@ export const PlayerResourceForm = ({
   const { bank, bankOffsetTemp } = useSelector(
     ({ game }: State) => game!.board
   );
-  const { values } = useFormikContext<any>();
+  const { values, setFieldValue, submitForm } = useFormikContext<any>();
   const [isActivePlayer, clientId] = useActivePlayer();
   return isActivePlayer && clientId === id ? (
     <FlexContainer color="white">
@@ -94,6 +94,15 @@ export const PlayerResourceForm = ({
           </div>
         </FlexContainer>
       ))}
+      <button
+        type="button"
+        onClick={() => {
+          setFieldValue("gameAction", "takeResources");
+          submitForm();
+        }}
+      >
+        Take resources
+      </button>
     </FlexContainer>
   ) : (
     <FlexContainer>

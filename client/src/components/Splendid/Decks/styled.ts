@@ -16,14 +16,10 @@ export const PurchaseContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -15px);
   width: 80%;
-
-  border: ${({ selected }: { selected: boolean }) =>
-    selected ? "solid 2px white" : "none"};
+  visibility: ${({ selected }: { selected: boolean }) =>
+    selected ? "visible" : "hidden"};
 
   button {
-    visibility: ${({ selected }: { selected: boolean }) =>
-      selected ? "hidden" : "hidden"};
-
     margin-bottom: 5px;
     width: 100%;
   }

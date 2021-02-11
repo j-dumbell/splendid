@@ -40,7 +40,7 @@ const CardActionForm = ({
         const tier = values.selectedCard.startsWith("hidden")
           ? Number(values.selectedCard.replace("hidden-", ""))
           : undefined;
-        const payload = {
+        sendJSON({
           action: "game",
           params: {
             gameAction: values.gameAction,
@@ -48,8 +48,7 @@ const CardActionForm = ({
             cardId,
             tier,
           },
-        };
-        sendJSON(payload);
+        });
         dispatch(updateBankResources(constructInitialResources()))
         resetForm();
       }}

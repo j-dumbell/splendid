@@ -1,27 +1,27 @@
+import { useFormikContext } from "formik";
 import React from "react";
 
-import { sendJSON } from "../../../hooks/useWebsocket";
 import { SplendidCard } from "../domain";
 import { PurchaseContainer } from "./styled";
 
 type PurchaseButtonProps = {
   gameAction: string;
   text: string;
-  params: Record<string, unknown>;
 };
 
-const PurchaseButton = ({ gameAction, text, params }: PurchaseButtonProps) => (
-  <button
-    onClick={() =>
-      sendJSON({
-        action: "game",
-        params: { gameAction, ...params },
-      })
-    }
-  >
-    {text}
-  </button>
-);
+const PurchaseButton = ({ gameAction, text }: PurchaseButtonProps) => {
+  const { setFieldValue, submitForm } = useFormikContext<any>();
+  return (
+    <button
+      onClick={() => {
+        setFieldValue("gameAction", gameAction);
+        submitForm();
+      }}
+    >
+      {text}
+    </button>
+  );
+};
 
 type PurchaseButtonsProps = SplendidCard & {
   selected: boolean;
@@ -31,30 +31,14 @@ type PurchaseButtonsProps = SplendidCard & {
 const PurchaseButtons = (props: PurchaseButtonsProps) => (
   <PurchaseContainer selected={props.selected}>
     {props.reserved ? (
-      <PurchaseButton
-        gameAction="buyCard"
-        text="Buy"
-        params={{ cardId: props.id }}
-      />
+      <PurchaseButton gameAction="buyCard" text="Buy" />
     ) : props.id ? (
       <>
-        <PurchaseButton
-          gameAction="buyCard"
-          text="Buy"
-          params={{ cardId: props.id }}
-        />
-        <PurchaseButton
-          gameAction="reserveVisible"
-          text="Reserve"
-          params={{ cardId: props.id }}
-        />
+        <PurchaseButton gameAction="buyCard" text="Buy" />
+        <PurchaseButton gameAction="reserveVisible" text="Reserve" />
       </>
     ) : (
-      <PurchaseButton
-        gameAction="reserveHidden"
-        text="Reserve"
-        params={{ tier: props.tier }}
-      />
+      <PurchaseButton gameAction="reserveHidden" text="Reserve" />
     )}
   </PurchaseContainer>
 );
