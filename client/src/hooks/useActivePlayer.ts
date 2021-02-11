@@ -9,6 +9,5 @@ export const useActivePlayer = (): [boolean?, number?] => {
   const isActivePlayer = game
     ? game.players[game.activePlayerIndex].id === clientId
     : undefined;
-    
   return [isActivePlayer, clientId];
 };

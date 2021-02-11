@@ -12,6 +12,7 @@ import Decks from "../Decks";
 import Players from "../Players";
 import { useDispatch } from "react-redux";
 import { updateBankResources } from "../../../state/actionCreator";
+import { sendJSON } from "../../../hooks/useWebsocket";
 
 const constructInitialResources = (): SplendidResourceList =>
   splendidResource.reduce((prev, next) => {
@@ -48,7 +49,7 @@ const CardActionForm = ({
             tier,
           },
         };
-        console.log("SendJSON", payload);
+        sendJSON(payload);
         dispatch(updateBankResources(constructInitialResources()))
         resetForm();
       }}
