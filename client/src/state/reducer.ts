@@ -12,6 +12,7 @@ import {
   ExitLobbyAction,
   SplendidResourceAction,
 } from "./domain";
+import { constructInitialResources } from "../components/Splendid/ActionForm/CardActionForm";
 
 const defaultState: State = {
   chat: [],
@@ -84,7 +85,11 @@ function reducer(
           ...state.game!,
           board: {
             ...state.game!.board,
-            bankOffsetTemp: splendidResourceAction.payload,
+            bankOffsetTemp: {
+              ...constructInitialResources(),
+              ...state.game!.board.bankOffsetTemp,
+              ...splendidResourceAction.payload,
+            },
           },
         },
       };

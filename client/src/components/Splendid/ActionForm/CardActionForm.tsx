@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { updateBankResources } from "../../../state/actionCreator";
 import { sendJSON } from "../../../hooks/useWebsocket";
 
-const constructInitialResources = (): SplendidResourceList =>
+export const constructInitialResources = (): SplendidResourceList =>
   splendidResource.reduce((prev, next) => {
     return { ...prev, [next]: 0 };
   }, {}) as SplendidResourceList;

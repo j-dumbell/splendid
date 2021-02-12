@@ -43,7 +43,7 @@ export const updateSplendidGame = (payload: SplendidGame): SplendidAction => ({
 });
 
 export const updateBankResources = (
-  payload: SplendidResourceList
+  payload: Partial<SplendidResourceList>
 ): SplendidResourceAction => ({
   type: "UPDATE_BANK_RESOURCE",
   payload,

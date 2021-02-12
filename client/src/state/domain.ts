@@ -48,4 +48,4 @@ export type ExitLobbyAction = BaseAction<typeof actionTypes[1], Lobby>;
 export type MessageAction = BaseAction<typeof actionTypes[2], Message>;
 export type HistoryAction = BaseAction<typeof actionTypes[3], History>;
 export type SplendidAction = BaseAction<typeof actionTypes[4], SplendidGame>;
-export type SplendidResourceAction = BaseAction<typeof actionTypes[5], SplendidResourceList>;
+export type SplendidResourceAction = BaseAction<typeof actionTypes[5], Partial<SplendidResourceList>>;

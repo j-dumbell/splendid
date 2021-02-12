@@ -1,17 +1,23 @@
-export const validateMax = (form: Record<string, number>) => {
-  const keys = Object.keys(form);
-  const values = Object.values(form);
-  const maxTotal = keys.reduce((prev, next) => prev + form[next], 0);
-  if (maxTotal > 3) {
-    return keys.reduce((prev, next) => ({ ...prev, [next]: "max" }), {});
+import { SplendidResourceList, SplendidResource } from "../domain";
+
+export const validateMax = (values: SplendidResourceList): boolean => {
+  console.log(values);
+  const totalCount = Object.keys(values).reduce((prev, next) => values[next as SplendidResource] + prev, 0);
+  const counts = Object.keys(values).reduce((prev, next) => {
+    const count = values[next as SplendidResource];
+    return {
+      ...prev,
+      [count]: prev[count] ? prev[count] + 1 : 1,
+    };
+  }, {} as Record<string, number>);
+
+  if (
+    (counts[1] === 3 && counts[0] === 3) ||
+    (counts[2] === 1 && counts[0] === 5) || 
+    totalCount <= 2
+  ) {
+    return true;
   }
-  const maxSingle = values.some((value) => value > 2);
-  if (maxSingle) {
-    return keys.reduce((prev, next) => ({ ...prev, [next]: "max" }), {});
-  }
-  const maxMixture = values.some((value) => value === 2) && maxTotal > 2;
-  if (maxMixture) {
-    return keys.reduce((prev, next) => ({ ...prev, [next]: "max" }), {});
-  }
-  return {};
+
+  return false;
 };

@@ -13,6 +13,7 @@ import ResourceCount from "../ResourceList/ResourceCount";
 import FlexContainer from "../../common/FlexContainer";
 import { updateBankResources } from "../../../state/actionCreator";
 import { State } from "../../../state/domain";
+import { validateMax } from "./helpers";
 
 type ButtonProps = {
   disabled: boolean;
@@ -27,28 +28,19 @@ const constructOffsetsPerm = (
 
 const Button = ({ disabled, resource, nextValueFn }: ButtonProps) => {
   const dispatch = useDispatch();
-  const { values, setValues } = useFormikContext<any>();
+  const { values, setFieldValue } = useFormikContext<any>();
   const currentValue = values.resources[resource];
   const nextValue = nextValueFn(currentValue);
   return (
     <button
       disabled={disabled}
       type="button"
-      value={resource}
-      onClick={async () => {
-        setValues({
-          ...values,
-          resources: {
-            ...values.resources,
-            [resource]: nextValue,
-          },
+      onClick={() => {
+        dispatch(updateBankResources({ [resource]: -nextValue }));
+        setFieldValue("resources", {
+          ...values.resources,
+          [resource]: nextValue,
         });
-        dispatch(
-          updateBankResources({
-            ...values.resources,
-            [resource]: -nextValue,
-          })
-        );
       }}
     >
       {nextValue < currentValue ? "-" : "+"}
@@ -88,7 +80,11 @@ export const PlayerResourceForm = ({
               disabled={
                 (bankOffsetTemp ? bankOffsetTemp[resource] : 0) +
                   bank[resource] <=
-                0
+                  0 ||
+                !validateMax({
+                  ...values.resources,
+                  [resource]: values.resources[resource] + 1,
+                })
               }
             />
           </div>
