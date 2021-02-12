@@ -14,12 +14,18 @@ import {
 } from "./domain";
 import { constructEmptyResourceList } from "../components/Splendid/helpers";
 
+/**
+ * Create a `.env.development.local` file and set this env to
+ * enable game fixtures when rendering the initial state.
+ */
+const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
+
 const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  clientId: 1,
-  game: (fixtures as unknown) as SplendidGame,
+  clientId: withFixtureEnv ? 1 : undefined,
+  game: withFixtureEnv ? ((fixtures as unknown) as SplendidGame) : undefined,
 };
 
 function reducer(
