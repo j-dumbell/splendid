@@ -2,21 +2,13 @@ import React from "react";
 
 import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
+import { getDeckKeys, constructVisible, constructDeck } from "./helpers";
 import DeckCard from "./DeckCard";
 import { DeckStack, StackCount } from "./styled";
 
 type Props = {
   decks: SplendidBoard["decks"];
 };
-
-const getDeckKeys = (decks: SplendidBoard["decks"]) =>
-  Object.keys(decks).reverse();
-
-const constructVisible = (tier: string, decks: SplendidBoard["decks"]) =>
-  decks[tier].filter((card) => card.id);
-
-const constructDeck = (tier: string, decks: SplendidBoard["decks"]) =>
-  decks[tier].filter((card) => !card.id);
 
 const Decks = ({ decks }: Props) => (
   <>

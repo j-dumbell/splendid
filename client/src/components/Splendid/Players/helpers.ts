@@ -33,3 +33,8 @@ export const getScore = (purchased: SplendidCard[]): number =>
     (prev, next) => (next.points ? prev + next.points : prev),
     0
   );
+
+export const constructOffsetsPerm = (
+  resource: SplendidResource,
+  purchased?: SplendidCard[]
+) => purchased?.filter((card) => card.income === resource).length || 0;
