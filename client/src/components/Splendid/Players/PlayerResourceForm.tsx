@@ -84,7 +84,7 @@ export const PlayerResourceForm = ({
                 !validateMax({
                   ...values.resources,
                   [resource]: values.resources[resource] + 1,
-                })
+                }) || resource === 'yellow'
               }
             />
           </div>
