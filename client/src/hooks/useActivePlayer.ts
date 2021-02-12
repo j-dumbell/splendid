@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+
 import { State } from "../state/domain";
 
 export const useActivePlayer = (): [boolean?, number?] => {

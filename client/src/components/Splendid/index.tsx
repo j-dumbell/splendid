@@ -1,38 +1,45 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { Formik, Form } from "formik";
+import { useDispatch } from "react-redux";
 
-import { State } from "../../state/domain";
-import FlexContainer from "../common/FlexContainer";
-import ActionForm from "./ActionForm";
-import { splendidResource } from "./domain";
-import ResourceCount from "./ResourceList/ResourceCount";
+import { updateBankResources } from "../../state/actionCreator";
+import { sendJSON } from "../../hooks/useWebsocket";
+import { useGame } from "../../hooks/useGame";
+import { constructEmptyResourceList, constructPayload } from "./helpers";
+import Board from "./Board";
+import Players from "./Players";
+
+const initialValues = {
+  cardId: "",
+  gameAction: "",
+  selectedCard: "",
+  resources: constructEmptyResourceList(),
+};
 
 const Splendid = () => {
-  const game = useSelector(({ game }: State) => game);
+  const dispatch = useDispatch();
+  const [game] = useGame();
   if (!game) {
     return null;
   }
+
   return (
-    <FlexContainer style={{ marginLeft: "50px" }}>
-      <FlexContainer column>
-        <FlexContainer>
-          {splendidResource.map((resource, i) => (
-            <FlexContainer key={i} color="white">
-              <ResourceCount
-                resource={resource}
-                count={game.board.bank[resource]}
-                offsetTemp={
-                  game?.board?.bankOffsetTemp
-                    ? game.board.bankOffsetTemp[resource]
-                    : undefined
-                }
-              />
-            </FlexContainer>
-          ))}
-        </FlexContainer>
-        <ActionForm {...game} />
-      </FlexContainer>
-    </FlexContainer>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values, { resetForm }) => {
+        sendJSON(constructPayload(values));
+        dispatch(updateBankResources(initialValues.resources));
+        resetForm();
+      }}
+    >
+      <Form style={{ display: "flex", marginLeft: "50px" }}>
+        <Board board={game.board} />
+        <Players
+          players={game.players}
+          activePlayerIndex={game.activePlayerIndex}
+        />
+      </Form>
+    </Formik>
   );
 };
 

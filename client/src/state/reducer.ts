@@ -12,7 +12,7 @@ import {
   ExitLobbyAction,
   SplendidResourceAction,
 } from "./domain";
-import { constructInitialResources } from "../components/Splendid/ActionForm";
+import { constructEmptyResourceList } from "../components/Splendid/helpers";
 
 const defaultState: State = {
   chat: [],
@@ -86,7 +86,7 @@ function reducer(
           board: {
             ...state.game!.board,
             bankOffsetTemp: {
-              ...constructInitialResources(),
+              ...constructEmptyResourceList(),
               ...state.game!.board.bankOffsetTemp,
               ...splendidResourceAction.payload,
             },
