@@ -4,13 +4,14 @@ import { SplendidPlayer } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import DeckCard from "../Decks/DeckCard";
 import Card from "../Card";
+import { PlayerDeckContainer } from './styled';
 
 const PlayerDeck = ({
   purchased,
   reservedVisible,
   reservedHidden,
 }: SplendidPlayer) => (
-  <FlexContainer>
+  <PlayerDeckContainer>
     {purchased.map((card, j) => (
       <Card key={`player-purchased-card-${j}`} mini {...card} />
     ))}
@@ -32,7 +33,7 @@ const PlayerDeck = ({
         />
       ))}
     </FlexContainer>
-  </FlexContainer>
+  </PlayerDeckContainer>
 );
 
 export default PlayerDeck;

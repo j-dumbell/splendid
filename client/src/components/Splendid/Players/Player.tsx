@@ -19,10 +19,6 @@ type Props = {
 const Player = ({ isActive, player }: Props) => {
   const playerNames = useSelector(({ playerNames }: State) => playerNames);
   const [isActivePlayer, clientId] = useActivePlayer();
-  // const {
-  //   board: { bank, bankOffsetTemp },
-  // } = game!;
-  // return isActivePlayer && clientId === id ? (
 
   return (
     <PlayerContainer isActive={isActive} column>

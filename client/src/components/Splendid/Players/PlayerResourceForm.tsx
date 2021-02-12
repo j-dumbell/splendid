@@ -7,6 +7,7 @@ import { constructOffsetsPerm, validateMax } from "./helpers";
 import FlexContainer from "../../common/FlexContainer";
 import ResourceCount from "../ResourceList/ResourceCount";
 import PlayerResourceButton from "./PlayerResourceButton";
+import { PlayerResourceFormContainer } from './styled';
 
 export const PlayerResourceForm = ({
   bank: playerBank,
@@ -23,7 +24,7 @@ export const PlayerResourceForm = ({
   } = game!;
 
   return (
-    <FlexContainer color="white">
+    <PlayerResourceFormContainer color="white">
       {splendidResource.map((resource, i) => (
         <FlexContainer key={i} column justify="space-between">
           <ResourceCount
@@ -64,7 +65,7 @@ export const PlayerResourceForm = ({
       >
         Take resources
       </button>
-    </FlexContainer>
+    </PlayerResourceFormContainer>
   );
 };
 
