@@ -18,8 +18,8 @@ const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  game: (fixtures as unknown) as SplendidGame,
   clientId: 1,
+  game: (fixtures as unknown) as SplendidGame,
 };
 
 function reducer(
