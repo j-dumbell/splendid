@@ -1,6 +1,6 @@
-import fixtures from "./gameFixtures.json";
+// import fixtures from "./gameFixtures.json";
 
-import { SplendidGame } from "../components/Splendid/domain";
+// import { SplendidGame } from "../components/Splendid/domain";
 import {
   State,
   JoinLobbyAction,
@@ -18,8 +18,8 @@ const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  clientId: 1,
-  game: (fixtures as unknown) as SplendidGame,
+  // clientId: 1,
+  // game: (fixtures as unknown) as SplendidGame,
 };
 
 function reducer(
