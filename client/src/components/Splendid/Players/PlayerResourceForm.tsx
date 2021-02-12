@@ -22,7 +22,6 @@ export const PlayerResourceForm = ({
   const {
     board: { bank, bankOffsetTemp },
   } = game!;
-
   return (
     <PlayerResourceFormContainer color="white">
       {splendidResource.map((resource, i) => (

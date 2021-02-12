@@ -1,7 +1,7 @@
 import { useFormikContext } from "formik";
 import React from "react";
 
-import { SplendidCard } from "../domain";
+import { SplendidCard, SplendidForm } from "../domain";
 import { PurchaseContainer } from "./styled";
 
 type PurchaseButtonProps = {
@@ -10,7 +10,7 @@ type PurchaseButtonProps = {
 };
 
 const PurchaseButton = ({ gameAction, text }: PurchaseButtonProps) => {
-  const { setFieldValue, submitForm } = useFormikContext<any>();
+  const { setFieldValue, submitForm } = useFormikContext<SplendidForm>();
   return (
     <button
       onClick={() => {

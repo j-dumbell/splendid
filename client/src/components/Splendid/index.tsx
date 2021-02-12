@@ -8,8 +8,9 @@ import { useGame } from "../../hooks/useGame";
 import { constructEmptyResourceList, constructPayload } from "./helpers";
 import Board from "./Board";
 import Players from "./Players";
+import { SplendidForm } from "./domain";
 
-const initialValues = {
+const initialValues: SplendidForm = {
   cardId: "",
   gameAction: "",
   selectedCard: "",
@@ -22,7 +23,6 @@ const Splendid = () => {
   if (!game) {
     return null;
   }
-
   return (
     <Formik
       initialValues={initialValues}

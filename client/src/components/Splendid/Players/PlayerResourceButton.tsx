@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useFormikContext } from "formik";
 
-import { SplendidResource } from "../domain";
+import { SplendidForm, SplendidResource } from "../domain";
 import { updateBankResources } from "../../../state/actionCreator";
 
 type Props = {
@@ -13,8 +13,11 @@ type Props = {
 
 const PlayerResourceButton = ({ disabled, resource, nextValueFn }: Props) => {
   const dispatch = useDispatch();
-  const { values, setFieldValue } = useFormikContext<any>();
-  const currentValue = values.resources[resource];
+  const {
+    values: { resources },
+    setFieldValue,
+  } = useFormikContext<SplendidForm>();
+  const currentValue = resources[resource];
   const nextValue = nextValueFn(currentValue);
   return (
     <button
@@ -23,7 +26,7 @@ const PlayerResourceButton = ({ disabled, resource, nextValueFn }: Props) => {
       onClick={() => {
         dispatch(updateBankResources({ [resource]: -nextValue }));
         setFieldValue("resources", {
-          ...values.resources,
+          ...resources,
           [resource]: nextValue,
         });
       }}

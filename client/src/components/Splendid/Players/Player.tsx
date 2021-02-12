@@ -19,7 +19,6 @@ type Props = {
 const Player = ({ isActive, player }: Props) => {
   const playerNames = useSelector(({ playerNames }: State) => playerNames);
   const [isActivePlayer, clientId] = useActivePlayer();
-
   return (
     <PlayerContainer isActive={isActive} column>
       <FlexContainer
