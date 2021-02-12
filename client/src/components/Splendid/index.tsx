@@ -1,23 +1,45 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { Formik, Form } from "formik";
+import { useDispatch } from "react-redux";
 
-import { State } from "../../state/domain";
-import TakeResourceForm from "./Forms/TakeResourceForm";
-import CardActionForm from "./Forms/CardActionForm";
-import FlexContainer from "../common/FlexContainer";
+import { updateBankResources } from "../../state/actionCreator";
+import { sendJSON } from "../../hooks/useWebsocket";
+import { useGame } from "../../hooks/useGame";
+import { constructEmptyResourceList, constructPayload } from "./helpers";
+import Board from "./Board";
+import Players from "./Players";
+import { SplendidForm } from "./domain";
+
+const initialValues: SplendidForm = {
+  cardId: "",
+  gameAction: "",
+  selectedCard: "",
+  resources: constructEmptyResourceList(),
+};
 
 const Splendid = () => {
-  const game = useSelector(({ game }: State) => game);
+  const dispatch = useDispatch();
+  const [game] = useGame();
   if (!game) {
     return null;
   }
   return (
-    <FlexContainer column style={{ marginLeft: "50px" }}>
-      <FlexContainer>
-        <TakeResourceForm resourceList={game.board.bank} />
-      </FlexContainer>
-      <CardActionForm {...game} />
-    </FlexContainer>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values, { resetForm }) => {
+        sendJSON(constructPayload(values));
+        dispatch(updateBankResources(initialValues.resources));
+        resetForm();
+      }}
+    >
+      <Form style={{ display: "flex", marginLeft: "50px" }}>
+        <Board board={game.board} />
+        <Players
+          players={game.players}
+          activePlayerIndex={game.activePlayerIndex}
+        />
+      </Form>
+    </Formik>
   );
 };
 

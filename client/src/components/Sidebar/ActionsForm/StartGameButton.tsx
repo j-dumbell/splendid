@@ -1,14 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
+import { useGame } from "../../../hooks/useGame";
+import { useLobbyId } from "../../../hooks/useLobbyId";
 import { sendJSON } from "../../../hooks/useWebsocket";
-import { State } from "../../../state/domain";
 
 const StartGameButton = () => {
-  const { lobbyId, game } = useSelector(({ lobbyId, game }: State) => ({
-    lobbyId,
-    game,
-  }));
+  const [lobbyId] = useLobbyId();
+  const [game] = useGame();
   if (!lobbyId || game) {
     return null;
   }

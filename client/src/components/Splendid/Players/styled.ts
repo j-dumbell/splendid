@@ -11,3 +11,13 @@ export const PlayerContainer = styled(FlexContainer)`
   padding: 10px;
   border: ${({ isActive }: Props) => (isActive ? "solid 2px white" : "none")}
 `;
+
+export const PlayerDeckContainer = styled(FlexContainer)`
+  padding-top: 10px;
+`;
+
+export const PlayerResourceFormContainer = styled(FlexContainer)`
+  button {
+    margin: 5px 0;
+  }
+`;

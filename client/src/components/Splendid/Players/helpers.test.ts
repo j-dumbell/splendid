@@ -8,8 +8,21 @@ describe("validateMax()", () => {
       blue: 0,
       black: 0,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toEqual({});
+    expect(validateMax(values)).toEqual(true);
+  });
+
+  it("should not error when only 2 colours selected", () => {
+    const values = {
+      red: 1,
+      green: 0,
+      blue: 0,
+      black: 1,
+      white: 0,
+      yellow: 0,
+    };
+    expect(validateMax(values)).toEqual(true);
   });
 
   it("should not error when only 3 colours selected", () => {
@@ -19,8 +32,9 @@ describe("validateMax()", () => {
       blue: 1,
       black: 0,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toEqual({});
+    expect(validateMax(values)).toEqual(true);
   });
 
   it("should not error when 2 of the same colour have been selected", () => {
@@ -30,8 +44,9 @@ describe("validateMax()", () => {
       blue: 0,
       black: 0,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toEqual({});
+    expect(validateMax(values)).toEqual(true);
   });
 
   it("should error when 3 of the same colour have been selected", () => {
@@ -41,14 +56,9 @@ describe("validateMax()", () => {
       blue: 0,
       black: 0,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toMatchObject({
-      red: "max",
-      green: "max",
-      blue: "max",
-      black: "max",
-      white: "max",
-    });
+    expect(validateMax(values)).toEqual(false);
   });
 
   it("should error when 2 of the same colour and more have been selected", () => {
@@ -58,14 +68,9 @@ describe("validateMax()", () => {
       blue: 0,
       black: 0,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toMatchObject({
-      red: "max",
-      green: "max",
-      blue: "max",
-      black: "max",
-      white: "max",
-    });
+    expect(validateMax(values)).toEqual(false);
   });
 
   it("should not error when 3 different colours have been selected", () => {
@@ -75,8 +80,9 @@ describe("validateMax()", () => {
       blue: 1,
       black: 0,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toEqual({});
+    expect(validateMax(values)).toEqual(true);
   });
 
   it("should error when 4 different colours have been selected", () => {
@@ -86,13 +92,8 @@ describe("validateMax()", () => {
       blue: 1,
       black: 1,
       white: 0,
+      yellow: 0,
     };
-    expect(validateMax(values)).toMatchObject({
-      red: "max",
-      green: "max",
-      blue: "max",
-      black: "max",
-      white: "max",
-    });
+    expect(validateMax(values)).toEqual(false);
   });
 });

@@ -1,9 +1,6 @@
-// import fixtures from "./gameFixtures.json";
+import fixtures from "./gameFixtures.json";
 
-import {
-  SplendidGame,
-  SplendidResourceList,
-} from "../components/Splendid/domain";
+import { SplendidGame } from "../components/Splendid/domain";
 import {
   State,
   JoinLobbyAction,
@@ -15,28 +12,20 @@ import {
   ExitLobbyAction,
   SplendidResourceAction,
 } from "./domain";
+import { constructEmptyResourceList } from "../components/Splendid/helpers";
 
-const isActivePlayer = (game: SplendidGame, clientId?: number) =>
-  game.players[game.activePlayerIndex].id === clientId;
-
-const playersWithOffsets = (
-  game: SplendidGame,
-  bankOffset: SplendidResourceList,
-  clientId?: number
-) => {
-  const players = game.players.map((player) => ({
-    ...player,
-    bankOffsetTemp: player.id === clientId ? bankOffset : undefined,
-  }));
-  return { ...game, players };
-};
+/**
+ * Create a `.env.development.local` file and set this env to
+ * enable game fixtures when rendering the initial state.
+ */
+const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
 
 const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  isActivePlayer: false,
-  // game: (fixtures as unknown) as SplendidGame,
+  clientId: withFixtureEnv ? 1 : undefined,
+  game: withFixtureEnv ? ((fixtures as unknown) as SplendidGame) : undefined,
 };
 
 function reducer(
@@ -45,6 +34,9 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
+      if (state.clientId) {
+        return state;
+      }
       const {
         payload: {
           lobbyId: joinLobbyId,
@@ -90,17 +82,22 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
-        isActivePlayer: isActivePlayer(splendidAction.payload, state.clientId),
       };
-    case "UPDATE_PLAYER_RESOURCE":
+    case "UPDATE_BANK_RESOURCE":
       const splendidResourceAction = action as SplendidResourceAction;
       return {
         ...state,
-        game: playersWithOffsets(
-          state.game!,
-          splendidResourceAction.payload,
-          state.clientId
-        ),
+        game: {
+          ...state.game!,
+          board: {
+            ...state.game!.board,
+            bankOffsetTemp: {
+              ...constructEmptyResourceList(),
+              ...state.game!.board.bankOffsetTemp,
+              ...splendidResourceAction.payload,
+            },
+          },
+        },
       };
     default:
       return state;

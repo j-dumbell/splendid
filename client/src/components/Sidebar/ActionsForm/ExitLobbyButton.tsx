@@ -1,11 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
+import { useLobbyId } from "../../../hooks/useLobbyId";
 import { sendJSON } from "../../../hooks/useWebsocket";
-import { State } from "../../../state/domain";
 
 const ExitLobbyButton = () => {
-  const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
+  const [lobbyId] = useLobbyId();
   if (!lobbyId) {
     return null;
   }

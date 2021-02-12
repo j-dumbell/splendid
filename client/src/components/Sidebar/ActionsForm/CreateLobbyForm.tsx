@@ -1,13 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import { sendJSON } from "../../../hooks/useWebsocket";
 import { useCookie } from "../../../hooks/useCookie";
-import { State } from "../../../state/domain";
+import { useLobbyId } from "../../../hooks/useLobbyId";
 
 export const CreateLobbyForm = () => {
-  const lobbyId = useSelector(({ lobbyId }: State) => lobbyId);
   const [username] = useCookie("username");
+  const [lobbyId] = useLobbyId();
   if (lobbyId) {
     return null;
   }

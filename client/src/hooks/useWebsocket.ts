@@ -54,7 +54,7 @@ export const useWebSocket = (path: string) => {
         dispatch(addHistoryAction(response.action, response.details));
         switch (response.action) {
           case "join":
-            dispatch(joinLobby(username, response.details.id, response.details.playerNames));
+            dispatch(joinLobby(username, response.details.clientId, response.details.playerNames));
             break;
           case "exit":
             dispatch(exitLobby(username, response.details.playerNames));

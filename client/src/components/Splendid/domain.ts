@@ -18,6 +18,8 @@ export type SplendidCard = {
   cost?: SplendidResourceList;
 };
 
+export type SplendidDeck = Record<string, SplendidCard[]>;
+
 export type SplendidElite = {
   id: number;
   points: number;
@@ -25,15 +27,15 @@ export type SplendidElite = {
 };
 
 export type SplendidBoard = {
-  decks: Record<string, SplendidCard[]>;
+  decks: SplendidDeck;
   elites: SplendidElite[];
   bank: SplendidResourceList;
+  bankOffsetTemp?: SplendidResourceList;
 };
 
 export type SplendidPlayer = {
   id: number;
   bank: SplendidResourceList;
-  bankOffsetTemp?: SplendidResourceList;
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];
   reservedHidden: SplendidCard[];
@@ -44,4 +46,11 @@ export type SplendidGame = {
   turn: number;
   board: SplendidBoard;
   players: SplendidPlayer[];
+};
+
+export type SplendidForm = {
+  cardId: string;
+  gameAction: string;
+  selectedCard: string;
+  resources: SplendidResourceList;
 };
