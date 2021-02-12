@@ -1,7 +1,6 @@
 import { SplendidResourceList, SplendidResource } from "../domain";
 
 export const validateMax = (values: SplendidResourceList): boolean => {
-  console.log(values);
   const totalCount = Object.keys(values).reduce((prev, next) => values[next as SplendidResource] + prev, 0);
   const counts = Object.keys(values).reduce((prev, next) => {
     const count = values[next as SplendidResource];

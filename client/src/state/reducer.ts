@@ -12,7 +12,7 @@ import {
   ExitLobbyAction,
   SplendidResourceAction,
 } from "./domain";
-import { constructInitialResources } from "../components/Splendid/ActionForm/CardActionForm";
+import { constructInitialResources } from "../components/Splendid/ActionForm";
 
 const defaultState: State = {
   chat: [],

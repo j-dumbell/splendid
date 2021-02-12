@@ -1,37 +1,73 @@
+import { Formik, Form } from "formik";
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { State } from "../../../state/domain";
-import CardActionForm from "./CardActionForm";
+import {
+  SplendidGame,
+  splendidResource,
+  SplendidResourceList,
+} from "../domain";
 import FlexContainer from "../../common/FlexContainer";
-import { splendidResource } from "../domain";
-import ResourceCount from "../ResourceList/ResourceCount";
+import Elite from "../Elite";
+import Decks from "../Decks";
+import Players from "../Players";
+import { useDispatch } from "react-redux";
+import { updateBankResources } from "../../../state/actionCreator";
+import { sendJSON } from "../../../hooks/useWebsocket";
 
-const ActionForm = () => {
-  const game = useSelector(({ game }: State) => game);
-  if (!game) {
-    return null;
-  }
+export const constructInitialResources = (): SplendidResourceList =>
+  splendidResource.reduce((prev, next) => {
+    return { ...prev, [next]: 0 };
+  }, {}) as SplendidResourceList;
+
+const CardActionForm = ({
+  board,
+  players,
+  activePlayerIndex,
+}: SplendidGame) => {
+  const dispatch = useDispatch();
   return (
-    <FlexContainer column>
-      <FlexContainer>
-        {splendidResource.map((resource, i) => (
-          <FlexContainer key={i} color="white">
-            <ResourceCount
-              resource={resource}
-              count={game.board.bank[resource]}
-              offsetTemp={
-                game?.board?.bankOffsetTemp
-                  ? game.board.bankOffsetTemp[resource]
-                  : undefined
-              }
-            />
+    <Formik
+      initialValues={{
+        cardId: "",
+        gameAction: "",
+        selectedCard: "",
+        resources: constructInitialResources(),
+      }}
+      onSubmit={(values, { resetForm }) => {
+        const cardId = values.selectedCard.startsWith("visible")
+          ? Number(values.selectedCard.replace("visible-", ""))
+          : undefined;
+        const tier = values.selectedCard.startsWith("hidden")
+          ? Number(values.selectedCard.replace("hidden-", ""))
+          : undefined;
+        sendJSON({
+          action: "game",
+          params: {
+            gameAction: values.gameAction,
+            resources: values.resources,
+            cardId,
+            tier,
+          },
+        });
+        dispatch(updateBankResources(constructInitialResources()))
+        resetForm();
+      }}
+    >
+      <Form style={{ display: "flex" }}>
+        <FlexContainer column>
+          <FlexContainer>
+            {board.elites
+              .filter((card) => card.id)
+              .map((elite, i) => (
+                <Elite key={`elite-${i}`} {...elite} />
+              ))}
           </FlexContainer>
-        ))}
-      </FlexContainer>
-      <CardActionForm {...game} />
-    </FlexContainer>
+          <Decks decks={board.decks} />
+        </FlexContainer>
+        <Players activePlayerIndex={activePlayerIndex} players={players} />
+      </Form>
+    </Formik>
   );
 };
 
-export default ActionForm;
+export default CardActionForm;
