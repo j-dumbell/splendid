@@ -6,16 +6,14 @@ import Player from "./Player";
 
 type Props = {
   players: SplendidPlayer[];
-  activePlayerIndex: number;
 };
 
-const Players = ({ players, activePlayerIndex }: Props) => (
+const Players = ({ players }: Props) => (
   <FlexContainer column justify="flex-end">
     {players.map((player, i) => (
       <Player
         key={`player-${i}`}
         player={player}
-        isActive={i === activePlayerIndex}
       />
     ))}
   </FlexContainer>

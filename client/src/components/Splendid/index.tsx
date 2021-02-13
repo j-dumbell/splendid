@@ -9,7 +9,7 @@ import { constructEmptyResourceList, constructPayload } from "./helpers";
 import Board from "./Board";
 import Players from "./Players";
 import { SplendidForm } from "./domain";
-import { SplendidContainer } from './styled';
+import { SplendidContainer } from "./styled";
 
 const initialValues: SplendidForm = {
   cardId: "",
@@ -35,10 +35,7 @@ const Splendid = () => {
     >
       <SplendidContainer>
         <Board board={game.board} />
-        <Players
-          players={game.players}
-          activePlayerIndex={game.activePlayerIndex}
-        />
+        <Players players={game.players} />
       </SplendidContainer>
     </Formik>
   );

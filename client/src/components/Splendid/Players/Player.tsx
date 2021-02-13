@@ -13,14 +13,18 @@ import { PlayerContainer } from "./styled";
 
 type Props = {
   player: SplendidPlayer;
-  isActive: boolean;
 };
 
-const Player = ({ isActive, player }: Props) => {
-  const playerNames = useSelector(({ playerNames }: State) => playerNames);
-  const [isActivePlayer, clientId] = useActivePlayer();
+const Player = ({ player }: Props) => {
+  const { playerNames, clientId } = useSelector(
+    ({ playerNames, clientId }: State) => ({
+      playerNames,
+      clientId,
+    })
+  );
+  const [isActivePlayer, activePlayerId] = useActivePlayer();
   return (
-    <PlayerContainer isActive={isActive} column>
+    <PlayerContainer isActive={activePlayerId === player.id} column>
       <FlexContainer
         justify="space-between"
         color={clientId === player.id ? "white" : "inherit"}
@@ -31,7 +35,7 @@ const Player = ({ isActive, player }: Props) => {
       {isActivePlayer && clientId === player.id ? (
         <PlayerResourceForm {...player} />
       ) : (
-        <PlayerResourceList {...player}  />
+        <PlayerResourceList {...player} />
       )}
       <PlayerDeck {...player} />
     </PlayerContainer>
