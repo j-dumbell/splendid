@@ -26,4 +26,8 @@ const FlexContainer = styled.div`
     `}
 `;
 
+export const FlexChild = styled(FlexContainer)`
+  flex: 1;
+`;
+
 export default FlexContainer;

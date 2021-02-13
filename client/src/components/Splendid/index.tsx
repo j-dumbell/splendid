@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form } from "formik";
+import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 
 import { updateBankResources } from "../../state/actionCreator";
@@ -9,6 +9,7 @@ import { constructEmptyResourceList, constructPayload } from "./helpers";
 import Board from "./Board";
 import Players from "./Players";
 import { SplendidForm } from "./domain";
+import { SplendidContainer } from './styled';
 
 const initialValues: SplendidForm = {
   cardId: "",
@@ -32,13 +33,13 @@ const Splendid = () => {
         resetForm();
       }}
     >
-      <Form style={{ display: "flex", marginLeft: "50px" }}>
+      <SplendidContainer>
         <Board board={game.board} />
         <Players
           players={game.players}
           activePlayerIndex={game.activePlayerIndex}
         />
-      </Form>
+      </SplendidContainer>
     </Formik>
   );
 };
