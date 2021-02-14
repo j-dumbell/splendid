@@ -6,7 +6,6 @@ export const SplendidContainer = styled(Form)`
   flex: 3;
 
   & > * {
-    padding: 0 30px;
     border-left: solid 2px #494945;
   }
 `;

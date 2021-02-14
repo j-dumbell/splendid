@@ -1,7 +1,7 @@
 import React from "react";
 
 import { WsStatus } from "../../hooks/useWebsocket";
-import { FlexChild } from "../common/FlexContainer";
+import { PaddedChild } from "../common/FlexContainer";
 import ActionsForm from "./ActionsForm";
 import LatestResponse from "./LatestResponse";
 import ChatHistory from "./ChatHistory";
@@ -12,7 +12,7 @@ type ActionProps = {
 };
 
 const Sidebar = ({ status, error }: ActionProps) => (
-  <FlexChild column>
+  <PaddedChild column>
     <h2>Server {error ? `errored: ${error}` : status}</h2>
     {status === "open" && (
       <>
@@ -21,7 +21,7 @@ const Sidebar = ({ status, error }: ActionProps) => (
       </>
     )}
     <ChatHistory />
-  </FlexChild>
+  </PaddedChild>
 );
 
 export default Sidebar;

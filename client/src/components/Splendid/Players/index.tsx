@@ -1,7 +1,7 @@
 import React from "react";
 
 import { SplendidPlayer } from "../domain";
-import FlexContainer from "../../common/FlexContainer";
+import { PaddedContainer } from "../../common/FlexContainer";
 import Player from "./Player";
 
 type Props = {
@@ -9,14 +9,14 @@ type Props = {
 };
 
 const Players = ({ players }: Props) => (
-  <FlexContainer column justify="flex-end">
+  <PaddedContainer column justify="flex-end">
     {players.map((player, i) => (
       <Player
         key={`player-${i}`}
         player={player}
       />
     ))}
-  </FlexContainer>
+  </PaddedContainer>
 );
 
 export default Players;
