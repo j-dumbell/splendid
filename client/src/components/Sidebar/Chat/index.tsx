@@ -1,31 +1,21 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { State } from "../../../state/domain";
-import Text from "../../common/Text";
+import { useLobbyId } from "../../../hooks/useLobbyId";
+import ChatHistory from './ChatHistory';
 import ChatForm from './ChatForm';
-import { MaxHeightContainer, Timestamp } from './styled';
 
-const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
-
-const ChatHistory = () => {
-  const chat = useSelector(({ chat }: State) => chat);
-  if (!chat.length) {
+const Chat = () => {
+  const [lobbyId] = useLobbyId();
+  if (!lobbyId) {
     return null;
   }
   return (
     <>
       <h2>Chat History</h2>
-      <MaxHeightContainer>
-        {chat.map((m, i) => (
-          <Text key={`message-${i}`} color="white">
-            <Timestamp>{formatTimestamp(m.timestamp)}</Timestamp> {m.message}
-          </Text>
-        ))}
-      </MaxHeightContainer>
+      <ChatHistory />
       <ChatForm />
     </>
   );
 };
 
-export default ChatHistory;
+export default Chat;

@@ -1,9 +1,10 @@
 import React from "react";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik } from "formik";
 import { sendJSON } from "../../../hooks/useWebsocket";
 import { useCookie } from "../../../hooks/useCookie";
 import { useLobbyId } from "../../../hooks/useLobbyId";
+import { FlexForm, FlexField } from "../../common/FlexContainer";
 
 export const JoinLobbyForm = () => {
   const [username] = useCookie("username");
@@ -21,13 +22,12 @@ export const JoinLobbyForm = () => {
       }}
     >
       {({ isSubmitting }) => (
-        <Form>
-          <Field type="text" name="id" placeholder="id" required />
-          <ErrorMessage name="id" component="div" />
+        <FlexForm>
+          <FlexField type="text" name="id" placeholder="id" required />
           <button type="submit" disabled={isSubmitting}>
             Join Lobby
           </button>
-        </Form>
+        </FlexForm>
       )}
     </Formik>
   );

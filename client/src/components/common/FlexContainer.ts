@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { Field, Form } from "formik";
 
 type Props = {
   column?: boolean;
@@ -36,6 +37,14 @@ export const PaddedChild = styled(FlexChild)`
 
 export const PaddedContainer = styled(FlexContainer)`
   padding: 0 30px;
+`;
+
+export const FlexForm = styled(Form)`
+  display: flex;
+`;
+
+export const FlexField = styled(Field)`
+  flex: 1;
 `;
 
 export default FlexContainer;
