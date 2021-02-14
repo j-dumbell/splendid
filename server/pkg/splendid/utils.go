@@ -2,6 +2,7 @@ package splendid
 
 import (
 	"encoding/json"
+	"fmt"
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
@@ -44,4 +45,25 @@ func flattenVisibleCards(decks map[int]Cards) (allCards []Cards) {
 		}
 	}
 	return allCards
+}
+
+func countPurchased(cards Cards) map[resource]int {
+	counts := createEmptyBank()
+	for _, c := range cards {
+		counts[c.Income]++
+	}
+	return counts
+}
+
+func moveResources(fromBank, toBank, cost map[resource]int) (map[resource]int, map[resource]int, error) {
+	newFromBank := copyBank(fromBank)
+	newToBank := copyBank(toBank)
+	for res, amount := range cost {
+		newFromBank[res] -= amount
+		if newFromBank[res] < 0 {
+			return nil, nil, fmt.Errorf("can't afford %v: %v", res, amount)
+		}
+		newToBank[res] += amount
+	}
+	return newFromBank, newToBank, nil
 }
