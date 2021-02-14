@@ -1,7 +1,7 @@
 import React from "react";
 
 import { SplendidBoard } from "../domain";
-import { PaddedContainer } from "../../common/FlexContainer";
+import { LeftPaddedContainer } from "../../common/FlexContainer";
 import Bank from "../Bank";
 import Elites from "../Elites";
 import Decks from "../Decks";
@@ -11,11 +11,11 @@ const Board = ({
 }: {
   board: SplendidBoard;
 }) => (
-  <PaddedContainer column>
+  <LeftPaddedContainer column>
     <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
     <Elites elites={elites} />
     <Decks decks={decks} />
-  </PaddedContainer>
+  </LeftPaddedContainer>
 );
 
 export default Board;

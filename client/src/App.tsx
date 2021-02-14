@@ -7,7 +7,7 @@ import Splendid from "./components/Splendid";
 import FlexContainer from "./components/common/FlexContainer";
 
 const AppContainer = styled.div`
-  padding-left: 30px;
+  padding: 0 30px;
 `;
 
 function App() {
