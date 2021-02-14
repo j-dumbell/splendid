@@ -2,7 +2,8 @@ import React from "react";
 import JSONPretty from "react-json-pretty";
 import { useSelector } from "react-redux";
 
-import { State } from "../../state/domain";
+import { State } from "../../../state/domain";
+import { MaxHeightContainer } from './styled';
 
 const jsonTheme = {
   main: "color:#66d9ef;",
@@ -20,7 +21,9 @@ const LatestResponse = () => {
   return (
     <>
       <h2>Latest Response</h2>
-      <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
+      <MaxHeightContainer>
+        <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
+      </MaxHeightContainer>
     </>
   );
 };

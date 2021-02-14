@@ -4,7 +4,7 @@ import { WsStatus } from "../../hooks/useWebsocket";
 import { PaddedChild } from "../common/FlexContainer";
 import ActionsForm from "./ActionsForm";
 import LatestResponse from "./LatestResponse";
-import ChatHistory from "./ChatHistory";
+import Chat from "./Chat";
 
 type ActionProps = {
   status: WsStatus;
@@ -20,7 +20,7 @@ const Sidebar = ({ status, error }: ActionProps) => (
         <LatestResponse />
       </>
     )}
-    <ChatHistory />
+    <Chat />
   </PaddedChild>
 );
 

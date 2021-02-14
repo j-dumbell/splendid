@@ -1,15 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 
-import { State } from "../../state/domain";
-import Text from "../common/Text";
+import { State } from "../../../state/domain";
+import Text from "../../common/Text";
+import ChatForm from './ChatForm';
+import { MaxHeightContainer, Timestamp } from './styled';
 
 const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
-
-const Timestamp = styled.span`
-  color: #ac81fe;
-`;
 
 const ChatHistory = () => {
   const chat = useSelector(({ chat }: State) => chat);
@@ -19,13 +16,14 @@ const ChatHistory = () => {
   return (
     <>
       <h2>Chat History</h2>
-      <div>
+      <MaxHeightContainer>
         {chat.map((m, i) => (
           <Text key={`message-${i}`} color="white">
             <Timestamp>{formatTimestamp(m.timestamp)}</Timestamp> {m.message}
           </Text>
         ))}
-      </div>
+      </MaxHeightContainer>
+      <ChatForm />
     </>
   );
 };
