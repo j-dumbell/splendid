@@ -18,7 +18,7 @@ import { constructEmptyResourceList } from "../components/Splendid/helpers";
  * Create a `.env.development.local` file and set this env to
  * enable game fixtures when rendering the initial state.
  */
-const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
+export const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
 
 const defaultState: State = {
   chat: [],
