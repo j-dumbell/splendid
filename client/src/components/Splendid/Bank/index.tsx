@@ -1,8 +1,13 @@
 import React from "react";
+import styled from "styled-components";
 
-import FlexContainer from "../../common/FlexContainer";
 import { splendidResource, SplendidResourceList } from "../domain";
+import FlexContainer from "../../common/FlexContainer";
 import ResourceCount from "../ResourceList/ResourceCount";
+
+const BankContainer = styled(FlexContainer)`
+  margin-bottom: 30px;
+`;
 
 const Bank = ({
   bank,
@@ -11,7 +16,7 @@ const Bank = ({
   bank: SplendidResourceList;
   bankOffsetTemp?: SplendidResourceList;
 }) => (
-  <FlexContainer color="white">
+  <BankContainer color="white" justify="center">
     {splendidResource.map((resource, i) => (
       <ResourceCount
         key={i}
@@ -20,7 +25,7 @@ const Bank = ({
         offsetTemp={bankOffsetTemp ? bankOffsetTemp[resource] : undefined}
       />
     ))}
-  </FlexContainer>
+  </BankContainer>
 );
 
 export default Bank;

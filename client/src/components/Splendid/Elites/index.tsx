@@ -5,7 +5,7 @@ import FlexContainer from "../../common/FlexContainer";
 import Elite from "./Elite";
 
 const Elites = ({ elites }: { elites: SplendidElite[]} ) => (
-  <FlexContainer>
+  <FlexContainer justify="flex-end">
     {elites
       .filter((card) => card.id)
       .map((elite, i) => (

@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
-import FlexContainer from "../../common/FlexContainer";
+import FlexContainer, { FlexChild } from "../../common/FlexContainer";
 
-export const PlayersContainer = styled.div`
-  margin-left: 50px;
+export const PlayersContainer = styled(FlexContainer)`
 `;
 
 type Props = { isActive: boolean };
@@ -12,7 +11,7 @@ export const PlayerContainer = styled(FlexContainer)`
   border: ${({ isActive }: Props) => (isActive ? "solid 2px white" : "none")}
 `;
 
-export const PlayerDeckContainer = styled(FlexContainer)`
+export const PlayerDeckContainer = styled(FlexChild)`
   padding-top: 10px;
 `;
 
