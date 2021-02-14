@@ -45,7 +45,7 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      if (state.clientId) {
+      if (state.clientId && state.lobbyId) {
         return state;
       }
       const {
