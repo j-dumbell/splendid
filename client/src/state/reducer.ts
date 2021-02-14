@@ -20,12 +20,23 @@ import { constructEmptyResourceList } from "../components/Splendid/helpers";
  */
 export const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
 
+const withFixtures: Partial<State> | undefined = withFixtureEnv
+  ? {
+      lobbyId: "abc123",
+      chat: new Array(50).fill({
+        message: "hello i am message",
+        timestamp: new Date(),
+      }),
+      clientId: 1,
+      game: (fixtures as unknown) as SplendidGame,
+    }
+  : undefined;
+
 const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  clientId: withFixtureEnv ? 1 : undefined,
-  game: withFixtureEnv ? ((fixtures as unknown) as SplendidGame) : undefined,
+  ...withFixtures,
 };
 
 function reducer(
