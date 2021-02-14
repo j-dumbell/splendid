@@ -1,12 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 
 import { State } from "../../../state/domain";
 import Scrollable from "../../common/Scrollable";
 import Text from "../../common/Text";
-import { Timestamp } from "./styled";
 
 const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
+
+const Timestamp = styled.span`
+  color: #ac81fe;
+`;
 
 const AlwaysScrollToBottom = () => {
   const elementRef = useRef<any>();
