@@ -2,7 +2,8 @@ import React from "react";
 import JSONPretty from "react-json-pretty";
 import { useSelector } from "react-redux";
 
-import { State } from "../../state/domain";
+import { State } from "../../../state/domain";
+import Scrollable from "../../common/Scrollable";
 
 const jsonTheme = {
   main: "color:#66d9ef;",
@@ -19,8 +20,10 @@ const LatestResponse = () => {
   }
   return (
     <>
-      <h2>Latest Response</h2>
-      <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
+      <h3>Latest Response</h3>
+      <Scrollable>
+        <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
+      </Scrollable>
     </>
   );
 };

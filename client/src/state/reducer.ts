@@ -18,14 +18,24 @@ import { constructEmptyResourceList } from "../components/Splendid/helpers";
  * Create a `.env.development.local` file and set this env to
  * enable game fixtures when rendering the initial state.
  */
-const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
+export const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
+const withFixtures: Partial<State> | undefined = withFixtureEnv
+  ? {
+      lobbyId: "abc123",
+      chat: new Array(50).fill({
+        message: "hello i am message",
+        timestamp: new Date(),
+      }),
+      clientId: 1,
+      game: (fixtures as unknown) as SplendidGame,
+    }
+  : undefined;
 
 const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
-  clientId: withFixtureEnv ? 1 : undefined,
-  game: withFixtureEnv ? ((fixtures as unknown) as SplendidGame) : undefined,
+  ...withFixtures,
 };
 
 function reducer(
@@ -34,7 +44,7 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      if (state.clientId) {
+      if (state.clientId && state.lobbyId) {
         return state;
       }
       const {

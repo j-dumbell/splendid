@@ -1,24 +1,22 @@
 import React from "react";
 
 import { SplendidPlayer } from "../domain";
-import { PlayersContainer } from "./styled";
+import { LeftPaddedContainer } from "../../common/FlexContainer";
 import Player from "./Player";
 
 type Props = {
   players: SplendidPlayer[];
-  activePlayerIndex: number;
 };
 
-const Players = ({ players, activePlayerIndex }: Props) => (
-  <PlayersContainer>
+const Players = ({ players }: Props) => (
+  <LeftPaddedContainer column justify="flex-end">
     {players.map((player, i) => (
       <Player
         key={`player-${i}`}
         player={player}
-        isActive={i === activePlayerIndex}
       />
     ))}
-  </PlayersContainer>
+  </LeftPaddedContainer>
 );
 
 export default Players;
