@@ -20,7 +20,7 @@ const LatestResponse = () => {
   }
   return (
     <>
-      <h2>Latest Response</h2>
+      <h3>Latest Response</h3>
       <MaxHeightContainer>
         <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
       </MaxHeightContainer>

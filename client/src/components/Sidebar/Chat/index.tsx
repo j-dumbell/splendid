@@ -11,7 +11,6 @@ const Chat = () => {
   }
   return (
     <>
-      <h2>Chat History</h2>
       <ChatHistory />
       <ChatForm />
     </>

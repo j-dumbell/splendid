@@ -31,10 +31,6 @@ export const FlexChild = styled(FlexContainer)`
   flex: 1;
 `;
 
-export const PaddedChild = styled(FlexChild)`
-  padding: 0 30px;
-`;
-
 export const PaddedContainer = styled(FlexContainer)`
   padding: 0 30px;
 `;

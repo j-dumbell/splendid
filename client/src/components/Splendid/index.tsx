@@ -9,7 +9,7 @@ import { constructEmptyResourceList, constructPayload } from "./helpers";
 import Board from "./Board";
 import Players from "./Players";
 import { SplendidForm } from "./domain";
-import { SplendidContainer } from "./styled";
+import { SplendidContainer, SplendidFormContainer } from "./styled";
 
 const initialValues: SplendidForm = {
   cardId: "",
@@ -22,7 +22,7 @@ const Splendid = () => {
   const dispatch = useDispatch();
   const [game] = useGame();
   if (!game) {
-    return null;
+    return <SplendidContainer />;
   }
   return (
     <Formik
@@ -33,10 +33,10 @@ const Splendid = () => {
         resetForm();
       }}
     >
-      <SplendidContainer>
+      <SplendidFormContainer>
         <Board board={game.board} />
         <Players players={game.players} />
-      </SplendidContainer>
+      </SplendidFormContainer>
     </Formik>
   );
 };

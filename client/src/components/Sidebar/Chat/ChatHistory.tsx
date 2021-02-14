@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import { State } from "../../../state/domain";
@@ -8,16 +8,26 @@ import { Timestamp } from "./styled";
 
 const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
 
+const AlwaysScrollToBottom = () => {
+  const elementRef = useRef<any>();
+  useEffect(() => elementRef.current.scrollIntoView());
+  return <div ref={elementRef} />;
+};
+
 const ChatHistory = () => {
   const chat = useSelector(({ chat }: State) => chat);
   return (
-    <Scrollable>
-      {chat.map((m, i) => (
-        <Text key={`message-${i}`} color="white">
-          <Timestamp>{formatTimestamp(m.timestamp)}</Timestamp> {m.message}
-        </Text>
-      ))}
-    </Scrollable>
+    <>
+      <h3>Chat History</h3>
+      <Scrollable>
+        {chat.map((m, i) => (
+          <Text key={`message-${i}`} color="white">
+            <Timestamp>{formatTimestamp(m.timestamp)}</Timestamp> {m.message}
+          </Text>
+        ))}
+        <AlwaysScrollToBottom />
+      </Scrollable>
+    </>
   );
 };
 
