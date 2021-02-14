@@ -3,7 +3,7 @@ import JSONPretty from "react-json-pretty";
 import { useSelector } from "react-redux";
 
 import { State } from "../../../state/domain";
-import { MaxHeightContainer } from './styled';
+import Scrollable from "../../common/Scrollable";
 
 const jsonTheme = {
   main: "color:#66d9ef;",
@@ -21,9 +21,9 @@ const LatestResponse = () => {
   return (
     <>
       <h3>Latest Response</h3>
-      <MaxHeightContainer>
+      <Scrollable>
         <JSONPretty data={history.slice(-1)} theme={jsonTheme} />
-      </MaxHeightContainer>
+      </Scrollable>
     </>
   );
 };

@@ -18,9 +18,9 @@ const Sidebar = ({ status, error }: ActionProps) => (
       <>
         <ActionsForm />
         <LatestResponse />
+        <Chat />
       </>
     )}
-    <Chat />
   </FlexChild>
 );
 

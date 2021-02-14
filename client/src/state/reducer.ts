@@ -19,7 +19,6 @@ import { constructEmptyResourceList } from "../components/Splendid/helpers";
  * enable game fixtures when rendering the initial state.
  */
 export const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
-
 const withFixtures: Partial<State> | undefined = withFixtureEnv
   ? {
       lobbyId: "abc123",
