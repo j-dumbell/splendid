@@ -2,6 +2,7 @@ package splendid
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
@@ -82,4 +83,55 @@ func subtractResources(b1, b2 map[resource]int) map[resource]int {
 		total[res] = b1[res] - b2[res]
 	}
 	return total
+}
+
+// yellows count for any resource
+// Any shortfall should be paid with Yellow
+// Use tokens instead of cards when overpayment
+// When paying more than the card is worth, use min tokens required.
+
+func abc(inputResources, cardResources, cardCost map[resource]int) (map[resource]int, error) {
+	deduction := createEmptyBank()
+
+	// Remove inputted resources from what the card costs to calc shortfall
+	outstandingCost := subtractResources(cardCost, inputResources)
+
+	// Remove purchased cards from the shortfall
+	newOutstandingCost := createEmptyBank()
+	for res, amount := range outstandingCost {
+		if amount > 0 {
+			// Underpaid
+			calc := amount - cardResources[res]
+			if calc < 0 {
+				deduction[res] = inputResources[res]
+			} else {
+				newOutstandingCost[res] = calc
+			}
+		} else {
+			// Overpaid, exact or Yellow
+			deduction[res] = cardCost[res]
+		}
+	}
+
+	// newOutstandingCost := {
+	// 	Yellow: 0
+	// 	Black: 1
+	// 	Blue: 1
+	// 	Green: 0
+	// 	Red: 0
+	// 	White: 0
+	// }
+
+	// Summing the total shortfall as a value
+	totalUnderpaid := 0
+	for res, amount := range newOutstandingCost {
+		totalUnderpaid += amount
+	}
+
+	// Check if there are enough yellows to cover this shortfall
+	if totalUnderpaid-inputResources[Yellow] > 0 {
+		return nil, errors.New("can't afford")
+	}
+
+	return deduction, nil
 }
