@@ -80,7 +80,7 @@ func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 	}
 
 	purchasedBank := countPurchased(activePlayer.Purchased)
-	newCost := calcResources(card.Cost, purchasedBank, Subtraction)
+	newCost := addResources(card.Cost, purchasedBank)
 	newPBank, newGBank, resErr := moveResources(activePlayer.Bank, game.Board.Bank, newCost)
 	if resErr != nil {
 		return resErr

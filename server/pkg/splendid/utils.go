@@ -68,22 +68,18 @@ func moveResources(fromBank, toBank, cost map[resource]int) (map[resource]int, m
 	return newFromBank, newToBank, nil
 }
 
-type sign string
-
-var Addition sign = "add"
-var Subtraction sign = "subtract"
-
-func calcResources(poo, bum map[resource]int, s sign) map[resource]int {
+func addResources(b1, b2 map[resource]int) map[resource]int {
 	total := createEmptyBank()
 	for res := range total {
-		if s == Addition {
-			total[res] = poo[res] + bum[res]
-		} else {
-			total[res] = poo[res] - bum[res]
-		}
+		total[res] = b1[res] + b2[res]
 	}
 	return total
 }
 
-// c.cost, resParams, purchasedcnt
-// (cost - purchasedCnt) - resParams
+func subtractResources(b1, b2 map[resource]int) map[resource]int {
+	total := createEmptyBank()
+	for res := range total {
+		total[res] = b1[res] - b2[res]
+	}
+	return total
+}
