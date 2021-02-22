@@ -18,6 +18,10 @@ type buyCardParams struct {
 	Resources resourceParams `json:"resources"`
 }
 
+type takeResourceParams struct {
+	Resources resourceParams `json:"resources"`
+}
+
 type reserveHiddenParams struct {
 	Tier int `json:"tier"`
 }
@@ -83,11 +87,11 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		return mkMaskedDetails(*game)
 	case "takeResources":
 		fmt.Println("taking resources")
-		var p resourceParams
+		var p takeResourceParams
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		toTake := paramsToBank(p)
+		toTake := paramsToBank(p.Resources)
 		if err := game.takeResources(toTake); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
