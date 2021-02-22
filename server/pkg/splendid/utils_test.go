@@ -81,9 +81,42 @@ func TestSubtractResources(t *testing.T) {
 			expected: map[resource]int{Red: 1, Blue: 1, Green: 1, Yellow: 0, Black: -1, White: 0},
 		},
 	}
-	
+
 	for _, cfg := range configs {
 		actual := subtractResources(cfg.input[0], cfg.input[1])
+		if !reflect.DeepEqual(actual, cfg.expected) {
+			t.Errorf("actual != expected \nActual:\n%v\nExpected:\n%v", actual, cfg.expected)
+		}
+	}
+}
+
+func TestAmountPayable(t *testing.T) {
+	type testConfig struct {
+		input    [3]map[resource]int
+		expected map[resource]int
+	}
+
+	configs := []testConfig{
+		{
+			input: [3]map[resource]int{
+				{Red: 1, Blue: 2, Green: 0, Yellow: 0, Black: 0, White: 0, Yellow: 1},
+				{Red: 3, Blue: 2, Green: 0, Yellow: 0, Black: 1, White: 0},
+				{Red: 1, Blue: 2, Green: 0, Yellow: 0, Black: 1, White: 1},
+			},
+			expected: map[resource]int{Red: 1, Blue: 2, Green: 0, Yellow: 0, Black: 0, White: 0, Yellow: 1},
+		},
+		{
+			input: [3]map[resource]int{
+				{Red: 1, Blue: 2, Green: 0, Yellow: 0, Black: 0, White: 0, Yellow: 3},
+				{Red: 0, Blue: 0, Green: 1, Yellow: 0, Black: 1, White: 0},
+				{Red: 1, Blue: 2, Green: 0, Yellow: 0, Black: 1, White: 0},
+			},
+			expected: map[resource]int{Red: 1, Blue: 2, Green: 0, Yellow: 0, Black: 0, White: 0, Yellow: 0},
+		},
+	}
+
+	for _, cfg := range configs {
+		actual, _ := amountPayable(cfg.input[0], cfg.input[1], cfg.input[2])
 		if !reflect.DeepEqual(actual, cfg.expected) {
 			t.Errorf("actual != expected \nActual:\n%v\nExpected:\n%v", actual, cfg.expected)
 		}

@@ -7,6 +7,7 @@ import (
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
+	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
 func copyBank(bank map[resource]int) map[resource]int {
@@ -85,53 +86,21 @@ func subtractResources(b1, b2 map[resource]int) map[resource]int {
 	return total
 }
 
-// yellows count for any resource
-// Any shortfall should be paid with Yellow
-// Use tokens instead of cards when overpayment
-// When paying more than the card is worth, use min tokens required.
-
-func abc(inputResources, cardResources, cardCost map[resource]int) (map[resource]int, error) {
-	deduction := createEmptyBank()
-
-	// Remove inputted resources from what the card costs to calc shortfall
-	outstandingCost := subtractResources(cardCost, inputResources)
-
-	// Remove purchased cards from the shortfall
-	newOutstandingCost := createEmptyBank()
-	for res, amount := range outstandingCost {
-		if amount > 0 {
-			// Underpaid
-			calc := amount - cardResources[res]
-			if calc < 0 {
-				deduction[res] = inputResources[res]
-			} else {
-				newOutstandingCost[res] = calc
-			}
+func amountPayable(inputResources, cardResources, cardCost map[resource]int) (map[resource]int, error) {
+	deductable := createEmptyBank()
+	totalAssets := subtractResources(cardCost, addResources(inputResources, cardResources))
+	fmt.Println(totalAssets)
+	outstandingCount := 0
+	for res, amount := range totalAssets {
+		if amount <= 0 {
+			deductable[res] = util.MinInt(inputResources[res], cardCost[res])
 		} else {
-			// Overpaid, exact or Yellow
-			deduction[res] = cardCost[res]
+			outstandingCount += amount
 		}
 	}
-
-	// newOutstandingCost := {
-	// 	Yellow: 0
-	// 	Black: 1
-	// 	Blue: 1
-	// 	Green: 0
-	// 	Red: 0
-	// 	White: 0
-	// }
-
-	// Summing the total shortfall as a value
-	totalUnderpaid := 0
-	for res, amount := range newOutstandingCost {
-		totalUnderpaid += amount
-	}
-
-	// Check if there are enough yellows to cover this shortfall
-	if totalUnderpaid-inputResources[Yellow] > 0 {
+	if outstandingCount-inputResources[Yellow] > 0 {
 		return nil, errors.New("can't afford")
 	}
-
-	return deduction, nil
+	deductable[Yellow] = util.MinInt(outstandingCount, inputResources[Yellow])
+	return deductable, nil
 }
