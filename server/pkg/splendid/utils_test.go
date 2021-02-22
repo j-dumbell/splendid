@@ -122,3 +122,33 @@ func TestAmountPayable(t *testing.T) {
 		}
 	}
 }
+
+func TestWinner(t *testing.T) {
+	type testConfig struct {
+		input    []Player
+		expected int
+	}
+
+	configs := []testConfig{
+		{
+			input: []Player{
+				{ID: 1, Purchased: Cards{{Points: 10}, {Points: 3}}, Elites: []elite{{Points: 2}}},
+				{ID: 2, Purchased: Cards{{Points: 3}}},
+			},
+			expected: 1,
+		},
+		{
+			input: []Player{
+				{ID: 1, Purchased: Cards{{Points: 10}, {Points: 3}, {Points: 3}}},
+				{ID: 2, Purchased: Cards{{Points: 3}, {Points: 13}}},
+			},
+			expected: 2,
+		},
+	}
+
+	for _, tc := range configs {
+		if actual := winner(tc.input); actual != tc.expected {
+			t.Fatalf("unexpected winner.  Actual: %v, Expected: %v", actual, tc.expected)
+		}
+	}
+}

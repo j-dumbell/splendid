@@ -102,9 +102,11 @@ func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 func (game *Game) nextPlayer() {
 	newIndex := (game.ActivePlayerIndex + 1) % len(game.Players)
 	game.ActivePlayerIndex = newIndex
-	if newIndex == 0 {
-		game.Turn++
+	if newIndex != 0 {
+		return
 	}
+
+	game.Turn++
 }
 
 func (game *Game) reserveHidden(tier int) error {
