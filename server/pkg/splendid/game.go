@@ -94,19 +94,18 @@ func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 	newDeck, newHand, _ := moveCard(card, game.Board.Decks[tier], activePlayer.Purchased)
 	game.Board.Decks[tier] = newDeck
 	activePlayer.Purchased = newHand
-	game.nextPlayer()
 	return nil
 }
 
-// NextPlayer sets the next activeplayer and updates turn if necessary
-func (game *Game) nextPlayer() {
+// EndTurn sets the next activeplayer and updates turn if necessary, also checking for a winner
+func (game *Game) endTurn() int {
 	newIndex := (game.ActivePlayerIndex + 1) % len(game.Players)
 	game.ActivePlayerIndex = newIndex
 	if newIndex != 0 {
-		return
+		return 0
 	}
-
 	game.Turn++
+	return winner(game.Players)
 }
 
 func (game *Game) reserveHidden(tier int) error {
@@ -132,7 +131,6 @@ func (game *Game) reserveHidden(tier int) error {
 	)
 	game.Players[game.ActivePlayerIndex].ReservedHidden = newReserved
 	game.Board.Decks[tier] = newTier
-	game.nextPlayer()
 	return nil
 }
 
@@ -146,7 +144,6 @@ func (game *Game) takeResources(toTake map[resource]int) error {
 	}
 	game.Players[game.ActivePlayerIndex].Bank = playerBank
 	game.Board.Bank = gameBank
-	game.nextPlayer()
 	return nil
 }
 
@@ -168,6 +165,5 @@ func (game *Game) reserveVisible(cardID int) error {
 	game.Players[game.ActivePlayerIndex].ReservedVisible = hand
 	game.Board.Bank = gameBank
 	game.Players[game.ActivePlayerIndex].Bank = playerBank
-	game.nextPlayer()
 	return nil
 }

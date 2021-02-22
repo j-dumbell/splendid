@@ -48,16 +48,16 @@ func TestGame_BuyCard(t *testing.T) {
 	}
 }
 
-func TestGame_NextPlayer(t *testing.T) {
+func TestGame_endTurn(t *testing.T) {
 	players := []Player{{ID: 1}, {ID: 2}}
 	g1 := Game{Players: players, ActivePlayerIndex: 0, Turn: 1}
-	g1.nextPlayer()
+	g1.endTurn()
 	if g1.ActivePlayerIndex != 1 || g1.Turn != 1 {
 		t.Fail()
 	}
 
 	g2 := Game{Players: players, ActivePlayerIndex: 1, Turn: 1}
-	g2.nextPlayer()
+	g2.endTurn()
 	if g2.ActivePlayerIndex != 0 || g2.Turn != 2 {
 		t.Fail()
 	}
@@ -84,7 +84,7 @@ func TestGame_ReserveHidden(t *testing.T) {
 			{ID: 1, ReservedHidden: Cards{{ID: 5}}, Bank: map[resource]int{Yellow: 1}},
 			{ID: 2},
 		},
-		ActivePlayerIndex: 1,
+		ActivePlayerIndex: 0,
 		Board:             expBoard,
 	}
 	err := g.reserveHidden(1)
