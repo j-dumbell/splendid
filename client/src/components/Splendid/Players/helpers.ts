@@ -2,6 +2,7 @@ import {
   SplendidResourceList,
   SplendidResource,
   SplendidCard,
+  SplendidPlayer,
 } from "../domain";
 
 export const validateMax = (values: SplendidResourceList): boolean => {
@@ -38,3 +39,12 @@ export const constructOffsetsPerm = (
   resource: SplendidResource,
   purchased?: SplendidCard[]
 ) => purchased?.filter((card) => card.income === resource).length || 0;
+
+export const sortPlayers = (players: SplendidPlayer[], clientId?: number) => {
+  if (!clientId) {
+    return players;
+  }
+  
+  const index = players.findIndex((p) => p.id === clientId);
+  return players.slice(index+1).concat(players.slice(0, index+1));
+};
