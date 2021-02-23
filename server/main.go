@@ -20,10 +20,15 @@ var nameToGame = map[gameName]func() api.Game{
 	SplendidGame: func() api.Game { return &splendid.Game{} },
 }
 
+func health(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "200")
+}
+
 func main() {
 	allLobbies := make(map[string]*api.Lobby)
 	fmt.Println("Starting on port " + strconv.Itoa(globals.Port))
 	wsHandler := api.MkWsHandler(nameToGame[SplendidGame], allLobbies, config.MaxPlayersDefault)
 	http.Handle("/", websocket.Handler(wsHandler))
+	http.HandleFunc("/health", health)
 	http.ListenAndServe(":"+strconv.Itoa(globals.Port), nil)
 }
