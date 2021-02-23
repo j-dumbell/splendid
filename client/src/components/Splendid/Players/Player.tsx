@@ -5,6 +5,7 @@ import { useActivePlayer } from "../../../hooks/useActivePlayer";
 import { State } from "../../../state/domain";
 import FlexContainer from "../../common/FlexContainer";
 import { SplendidPlayer } from "../domain";
+import Elites from "../Elites";
 import { getScore } from "./helpers";
 import PlayerDeck from "./PlayerDeck";
 import PlayerResourceForm from "./PlayerResourceForm";
@@ -38,6 +39,7 @@ const Player = ({ player }: Props) => {
         <PlayerResourceList {...player} />
       )}
       <PlayerDeck {...player} />
+      <Elites mini elites={player.elites} />
     </PlayerContainer>
   );
 };

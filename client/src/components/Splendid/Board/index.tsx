@@ -13,7 +13,7 @@ const Board = ({
 }) => (
   <LeftPaddedContainer column>
     <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
-    <Elites elites={elites} />
+    <Elites elites={elites} justify="center" />
     <Decks decks={decks} />
   </LeftPaddedContainer>
 );
