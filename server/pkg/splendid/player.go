@@ -7,6 +7,7 @@ type Player struct {
 	ReservedVisible Cards            `json:"reservedVisible"`
 	ReservedHidden  Cards            `json:"reservedHidden"`
 	Bank            map[resource]int `json:"bank"`
+	Elites          []elite          `json:"elites"`
 }
 
 // NewPlayer creates a new Player

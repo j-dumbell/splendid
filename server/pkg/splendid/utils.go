@@ -104,3 +104,55 @@ func amountPayable(inputResources, cardResources, cardCost map[resource]int) (ma
 	deductable[Yellow] = util.MinInt(outstandingCount, inputResources[Yellow])
 	return deductable, nil
 }
+
+func playerPoints(p Player) int {
+	points := 0
+	for _, c := range p.Purchased {
+		points += c.Points
+	}
+	for _, e := range p.Elites {
+		points += e.Points
+	}
+	return points
+}
+
+func winnerID(players []Player) int {
+	type playerMetric struct {
+		player         Player
+		points         int
+		purchasedCount int
+	}
+
+	playerMetrics := []playerMetric{}
+	maxPoints := 0
+	for _, p := range players {
+		points := playerPoints(p)
+		playerMetrics = append(playerMetrics, playerMetric{player: p, points: points, purchasedCount: len(p.Purchased)})
+		if points > maxPoints {
+			maxPoints = points
+		}
+	}
+	if maxPoints < 15 {
+		return 0
+	}
+	tiedPlayers := []playerMetric{}
+	for _, pm := range playerMetrics {
+		if pm.points == maxPoints {
+			tiedPlayers = append(tiedPlayers, pm)
+		}
+	}
+
+	if len(tiedPlayers) == 1 {
+		return tiedPlayers[0].player.ID
+	}
+
+	winningPlayer := tiedPlayers[0].player
+	minPurchased := tiedPlayers[0].purchasedCount
+	for _, pm := range tiedPlayers[1:] {
+		if pm.purchasedCount < minPurchased {
+			minPurchased = pm.purchasedCount
+			winningPlayer = pm.player
+		}
+	}
+	return winningPlayer.ID
+}

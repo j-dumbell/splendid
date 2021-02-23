@@ -39,6 +39,11 @@ type resourceParams struct {
 	Yellow int `json:"yellow"`
 }
 
+type GameOver struct {
+	Action   string `json:"action"`
+	playerID int    `json:"playerId"`
+}
+
 func validateTake(toTake map[resource]int) error {
 	if count, exists := toTake[Yellow]; exists && count >= 1 {
 		return errors.New("cannot take yellow resources")
@@ -72,7 +77,6 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.StartGame(decks, elites); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		return mkMaskedDetails(*game)
 	case "buyCard":
 		fmt.Println("buying card")
 		var p buyCardParams
@@ -84,7 +88,6 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if buyErr != nil {
 			return mkErrorDetails(id, buyErr.Error())
 		}
-		return mkMaskedDetails(*game)
 	case "takeResources":
 		fmt.Println("taking resources")
 		var p takeResourceParams
@@ -95,7 +98,6 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.takeResources(toTake); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		return mkMaskedDetails(*game)
 	case "reserveHidden":
 		fmt.Println("reserving hidden card")
 		var p reserveHiddenParams
@@ -105,7 +107,6 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.reserveHidden(p.Tier); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		return mkMaskedDetails(*game)
 	case "reserveVisible":
 		fmt.Println("reserving visible card")
 		var p reserveVisibleParams
@@ -115,8 +116,20 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.reserveVisible(p.CardID); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-		return mkMaskedDetails(*game)
 	default:
 		return mkErrorDetails(id, "unrecognized action")
 	}
+
+	if winnerID := game.endTurn(); winnerID != 0 {
+		winnerRes := map[int]m.DetailsGame{}
+		details, _ := json.Marshal(GameOver{Action: "gameOver", playerID: winnerID})
+		for _, p := range game.Players {
+			winnerRes[p.ID] = m.DetailsGame{
+				Ok:      true,
+				Details: details,
+			}
+		}
+		return winnerRes
+	}
+	return mkMaskedDetails(*game)
 }

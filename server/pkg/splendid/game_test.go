@@ -48,16 +48,16 @@ func TestGame_BuyCard(t *testing.T) {
 	}
 }
 
-func TestGame_NextPlayer(t *testing.T) {
+func TestGame_endTurn(t *testing.T) {
 	players := []Player{{ID: 1}, {ID: 2}}
 	g1 := Game{Players: players, ActivePlayerIndex: 0, Turn: 1}
-	g1.nextPlayer()
+	g1.endTurn()
 	if g1.ActivePlayerIndex != 1 || g1.Turn != 1 {
 		t.Fail()
 	}
 
 	g2 := Game{Players: players, ActivePlayerIndex: 1, Turn: 1}
-	g2.nextPlayer()
+	g2.endTurn()
 	if g2.ActivePlayerIndex != 0 || g2.Turn != 2 {
 		t.Fail()
 	}
@@ -84,7 +84,7 @@ func TestGame_ReserveHidden(t *testing.T) {
 			{ID: 1, ReservedHidden: Cards{{ID: 5}}, Bank: map[resource]int{Yellow: 1}},
 			{ID: 2},
 		},
-		ActivePlayerIndex: 1,
+		ActivePlayerIndex: 0,
 		Board:             expBoard,
 	}
 	err := g.reserveHidden(1)
@@ -117,5 +117,36 @@ func Test_validateTake(t *testing.T) {
 		if err := validateTake(toTake); err == nil {
 			t.Fatalf("input: %v \nerror not thrown", toTake)
 		}
+	}
+}
+
+func TestMoveElite(t *testing.T) {
+	game := Game{
+		Board: board{
+			Elites: []elite{
+				{ID: 1, Cost: map[resource]int{Blue: 1, Black: 1}},
+				{ID: 2, Cost: map[resource]int{Black: 2}},
+				{ID: 2, Cost: map[resource]int{Red: 1}},
+			},
+		},
+		Players:           []Player{{ID: 1, Purchased: Cards{{ID: 1, Income: Black}, {ID: 2, Income: Black}, {ID: 3, Income: Blue}}}},
+		ActivePlayerIndex: 0,
+	}
+	game.moveElite()
+	expected := Game{
+		Board: board{
+			Elites: []elite{{ID: 2, Cost: map[resource]int{Red: 1}}},
+		},
+		Players: []Player{
+			{
+				ID:        1,
+				Purchased: Cards{{ID: 1, Income: Black}, {ID: 2, Income: Black}, {ID: 3, Income: Blue}},
+				Elites:    []elite{{ID: 1, Cost: map[resource]int{Blue: 1, Black: 1}}, {ID: 2, Cost: map[resource]int{Black: 2}}},
+			},
+		},
+		ActivePlayerIndex: 0,
+	}
+	if !reflect.DeepEqual(game, expected) {
+		t.Fatalf("actual != expected. \nActual\n%v \nExpected\n%v", game, expected)
 	}
 }
