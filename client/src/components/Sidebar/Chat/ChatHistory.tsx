@@ -19,14 +19,20 @@ const AlwaysScrollToBottom = () => {
 };
 
 const ChatHistory = () => {
-  const chat = useSelector(({ chat }: State) => chat);
+  const { chat, playerNames } = useSelector(({ chat, playerNames }: State) => ({
+    chat,
+    playerNames,
+  }));
   return (
     <>
       <h3>Chat History</h3>
       <Scrollable>
         {chat.map((m, i) => (
           <Text key={`message-${i}`} color="white">
-            <Timestamp>{formatTimestamp(m.timestamp)}</Timestamp> {m.message}
+            <Timestamp>
+              {formatTimestamp(m.timestamp)} {playerNames[m.clientId]}{" "}
+            </Timestamp>
+            {m.message}
           </Text>
         ))}
         <AlwaysScrollToBottom />
