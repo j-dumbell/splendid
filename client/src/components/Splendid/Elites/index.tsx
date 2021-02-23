@@ -6,12 +6,11 @@ import Elite from "./Elite";
 
 type Props = {
   elites: SplendidElite[];
-  justify?: string;
   mini?: boolean;
 };
 
-const Elites = ({ elites, justify, mini }: Props) => (
-  <FlexContainer justify={justify}>
+const Elites = ({ elites, mini }: Props) => (
+  <FlexContainer>
     {elites
       .filter((card) => card.id)
       .map((elite, i) => (
