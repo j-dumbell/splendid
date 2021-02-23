@@ -116,7 +116,7 @@ func playerPoints(p Player) int {
 	return points
 }
 
-func winner(players []Player) int {
+func winnerID(players []Player) int {
 	type playerMetric struct {
 		player         Player
 		points         int

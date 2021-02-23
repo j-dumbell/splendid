@@ -106,7 +106,7 @@ func (game *Game) endTurn() int {
 		return 0
 	}
 	game.Turn++
-	return winner(game.Players)
+	return winnerID(game.Players)
 }
 
 func (game *Game) reserveHidden(tier int) error {

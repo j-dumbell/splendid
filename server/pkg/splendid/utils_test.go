@@ -147,7 +147,7 @@ func TestWinner(t *testing.T) {
 	}
 
 	for _, tc := range configs {
-		if actual := winner(tc.input); actual != tc.expected {
+		if actual := winnerID(tc.input); actual != tc.expected {
 			t.Fatalf("unexpected winner.  Actual: %v, Expected: %v", actual, tc.expected)
 		}
 	}
