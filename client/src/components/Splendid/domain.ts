@@ -39,6 +39,7 @@ export type SplendidPlayer = {
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];
   reservedHidden: SplendidCard[];
+  elites: SplendidElite[];
 };
 
 export type SplendidGame = {

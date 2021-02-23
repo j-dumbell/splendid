@@ -18,5 +18,6 @@ func NewPlayer(id int) Player {
 		ReservedVisible: Cards{},
 		ReservedHidden:  Cards{},
 		Bank:            createEmptyBank(),
+		Elites:          []elite{},
 	}
 }
