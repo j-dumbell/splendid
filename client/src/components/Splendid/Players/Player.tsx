@@ -30,7 +30,7 @@ const Player = ({ player }: Props) => {
         color={clientId === player.id ? "white" : "inherit"}
       >
         <h2>{playerNames[player.id] || `Player #${player.id}`}</h2>
-        <h2>Points: {getScore(player.purchased)}</h2>
+        <h2>Points: {getScore(player)}</h2>
       </FlexContainer>
       {isActivePlayer && clientId === player.id ? (
         <PlayerResourceForm {...player} />
