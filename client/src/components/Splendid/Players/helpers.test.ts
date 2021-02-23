@@ -1,4 +1,5 @@
-import { validateMax } from "./helpers";
+import { SplendidPlayer } from "../domain";
+import { sortPlayers, validateMax } from "./helpers";
 
 describe("validateMax()", () => {
   it("should not error when only 1 colour selected", () => {
@@ -96,4 +97,40 @@ describe("validateMax()", () => {
     };
     expect(validateMax(values)).toEqual(false);
   });
+});
+
+describe("sortPlayers()", () => {
+  const players = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+  ] as SplendidPlayer[];
+
+  const testCases = [
+    {
+      clientId: 1,
+      expected: [{ id: 2 }, { id: 3 }, { id: 4 }, { id: 1 }],
+    },
+    {
+      clientId: 2,
+      expected: [{ id: 3 }, { id: 4 }, { id: 1 }, { id: 2 }],
+    },
+    {
+      clientId: 3,
+      expected: [{ id: 4 }, { id: 1 }, { id: 2 }, { id: 3 }],
+    },
+    {
+      clientId: 4,
+      expected: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+    },
+  ];
+
+  it.each(testCases)(
+    "it should put player at bottom and rotate the rest",
+    ({ clientId, expected }) => {
+      const result = sortPlayers(players, clientId);
+      expect(result).toEqual(expected);
+    }
+  );
 });
