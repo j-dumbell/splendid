@@ -30,7 +30,7 @@ const ChatHistory = () => {
         {chat.map((m, i) => (
           <Text key={`message-${i}`} color="white">
             <Timestamp>
-              {formatTimestamp(m.timestamp)} {playerNames[m.clientId]}{" "}
+              {formatTimestamp(m.timestamp)} [{playerNames[m.clientId]}]{" "}
             </Timestamp>
             {m.message}
           </Text>
