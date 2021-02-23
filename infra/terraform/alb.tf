@@ -1,12 +1,12 @@
-resource "aws_lb" "lb" {
+resource "aws_lb" "alb" {
   name               = "splendid-server"
   internal           = false
   load_balancer_type = "application"
-  # security_groups    = [aws_security_group.lb_sg.id]
+  security_groups    = [aws_security_group.alb-sg.id]
   subnets            = aws_subnet.public_subnet.id
 }
 
-resource "aws_security_group" "alb" {
+resource "aws_security_group" "alb-sg" {
   name   = "splendid-server"
   vpc_id = aws_vpc.vpc.id
 
@@ -25,8 +25,8 @@ resource "aws_security_group" "alb" {
   }
 }
 
-resource "aws_lb_listener" "internet-alb-https" {
-  load_balancer_arn = aws_lb.internet-alb.arn
+resource "aws_lb_listener" "alb-listener" {
+  load_balancer_arn = aws_lb.alb.arn
   port              = 80
   protocol          = "http"
 
@@ -37,10 +37,10 @@ resource "aws_lb_listener" "internet-alb-https" {
 }
 
 resource "aws_lb_target_group" "alb-tg" {
-  name        = "${var.microservice_name}-${var.environment}-tg"
-  port        = var.alb-port
+  name        = "splendid"
+  port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.ecs_vpc_id
+  vpc_id      = aws_vpc.vpc.id
   target_type = "ip"
 
   health_check {
