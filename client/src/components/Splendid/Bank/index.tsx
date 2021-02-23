@@ -6,7 +6,7 @@ import FlexContainer from "../../common/FlexContainer";
 import ResourceCount from "../ResourceList/ResourceCount";
 
 const BankContainer = styled(FlexContainer)`
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 const Bank = ({

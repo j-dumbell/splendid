@@ -11,13 +11,12 @@ export const PlayerResourceList = ({
 }: SplendidPlayer) => (
   <FlexContainer color="white">
     {splendidResource.map((resource, i) => (
-      <FlexContainer key={i}>
-        <ResourceCount
-          resource={resource}
-          count={playerBank[resource]}
-          offsetPerm={constructOffsetsPerm(resource, purchased)}
-        />
-      </FlexContainer>
+      <ResourceCount
+        key={i}
+        resource={resource}
+        count={playerBank[resource]}
+        offsetPerm={constructOffsetsPerm(resource, purchased)}
+      />
     ))}
   </FlexContainer>
 );

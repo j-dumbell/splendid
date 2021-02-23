@@ -12,7 +12,7 @@ func TestGame_AddPlayer(t *testing.T) {
 	g1.AddPlayer(2)
 	expected := []Player{
 		{ID: 1, Bank: createEmptyBank()},
-		{ID: 2, Bank: createEmptyBank(), ReservedVisible: Cards{}, ReservedHidden: Cards{}, Purchased: Cards{}},
+		{ID: 2, Bank: createEmptyBank(), ReservedVisible: Cards{}, ReservedHidden: Cards{}, Purchased: Cards{}, Elites: []elite{}},
 	}
 	if !reflect.DeepEqual(g1.Players, expected) {
 		t.Fatalf("unexpected players: \nExpected: %v \nReceived: %v", expected, g1.Players)

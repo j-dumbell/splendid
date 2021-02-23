@@ -26,6 +26,10 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
         message: "hello i am message",
         timestamp: new Date(),
       }),
+      playerNames: {
+        1: "Van",
+        2: "James",
+      },
       clientId: 1,
       game: (fixtures as unknown) as SplendidGame,
     }
