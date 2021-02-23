@@ -3,7 +3,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb-sg.id]
-  subnets            = aws_subnet.public_subnet.id
+  subnets            = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
 }
 
 resource "aws_security_group" "alb-sg" {
@@ -13,7 +13,7 @@ resource "aws_security_group" "alb-sg" {
   ingress {
     from_port   = 80
     to_port     = 80
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -28,7 +28,7 @@ resource "aws_security_group" "alb-sg" {
 resource "aws_lb_listener" "alb-listener" {
   load_balancer_arn = aws_lb.alb.arn
   port              = 80
-  protocol          = "http"
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"
@@ -44,12 +44,7 @@ resource "aws_lb_target_group" "alb-tg" {
   target_type = "ip"
 
   health_check {
-    protocol            = var.health-check-protocol
-    healthy_threshold   = var.health-check-healthy-threshold
-    interval            = var.health-check-interval
-    path                = var.health-check-path
-    timeout             = var.health-check-timeout
-    unhealthy_threshold = var.health-check-unhealthy-threshold
-    matcher             = var.health-check-matcher
+    path                = "/health"
+    matcher             = "200"
   }
 }
