@@ -119,3 +119,34 @@ func Test_validateTake(t *testing.T) {
 		}
 	}
 }
+
+func TestMoveElite(t *testing.T) {
+	game := Game{
+		Board: board{
+			Elites: []elite{
+				{ID: 1, Cost: map[resource]int{Blue: 1, Black: 1}},
+				{ID: 2, Cost: map[resource]int{Black: 2}},
+				{ID: 2, Cost: map[resource]int{Red: 1}},
+			},
+		},
+		Players:           []Player{{ID: 1, Purchased: Cards{{ID: 1, Income: Black}, {ID: 2, Income: Black}, {ID: 3, Income: Blue}}}},
+		ActivePlayerIndex: 0,
+	}
+	game.moveElite()
+	expected := Game{
+		Board: board{
+			Elites: []elite{{ID: 2, Cost: map[resource]int{Red: 1}}},
+		},
+		Players: []Player{
+			{
+				ID:        1,
+				Purchased: Cards{{ID: 1, Income: Black}, {ID: 2, Income: Black}, {ID: 3, Income: Blue}},
+				Elites:    []elite{{ID: 1, Cost: map[resource]int{Blue: 1, Black: 1}}, {ID: 2, Cost: map[resource]int{Black: 2}}},
+			},
+		},
+		ActivePlayerIndex: 0,
+	}
+	if !reflect.DeepEqual(game, expected) {
+		t.Fatalf("actual != expected. \nActual\n%v \nExpected\n%v", game, expected)
+	}
+}

@@ -99,6 +99,7 @@ func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 
 // EndTurn sets the next activeplayer and updates turn if necessary, also checking for a winner
 func (game *Game) endTurn() int {
+	game.moveElite()
 	newIndex := (game.ActivePlayerIndex + 1) % len(game.Players)
 	game.ActivePlayerIndex = newIndex
 	if newIndex != 0 {
@@ -166,4 +167,18 @@ func (game *Game) reserveVisible(cardID int) error {
 	game.Board.Bank = gameBank
 	game.Players[game.ActivePlayerIndex].Bank = playerBank
 	return nil
+}
+
+func (game *Game) moveElite() {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
+	cardCounts := countPurchased(activePlayer.Purchased)
+	newBoardElites := []elite{}
+	for _, e := range game.Board.Elites {
+		if _, _, err := moveResources(cardCounts, nil, e.Cost); err == nil {
+			activePlayer.Elites = append(activePlayer.Elites, e)
+		} else {
+			newBoardElites = append(newBoardElites, e)
+		}
+	}
+	game.Board.Elites = newBoardElites
 }
