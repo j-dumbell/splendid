@@ -1,7 +1,7 @@
 [
     {
-      "name": "splendid-server",
-      "image": "server",
+      "name": "${container_name}",
+      "image": "${docker_image}",
       "environment": [
       ],
       "portMappings": [
