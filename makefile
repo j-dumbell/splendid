@@ -7,6 +7,9 @@ buildserver:
 tfapply:
 	cd infra/terraform && terraform apply
 
+tfdestroy:
+	cd infra/terraform && terraform destroy
+
 servertest:
 	cd server && go test ./...
 
