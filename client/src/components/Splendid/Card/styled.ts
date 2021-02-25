@@ -9,9 +9,9 @@ type Props = {
 };
 
 const tierColours: Record<string, string> = {
-  1: "#A9DE4C",
-  2: "#F4D83B",
-  3: "#54BEFA",
+  1: "168, 222, 74",
+  2: "244, 216, 59",
+  3: "84, 190, 250",
 };
 
 export const CardContainer = styled(FlexContainer)`
@@ -20,6 +20,6 @@ export const CardContainer = styled(FlexContainer)`
   width: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};
   height: ${({ mini }: Props) => (mini ? "7.5rem" : "9rem")};
   border-radius: 5px;
-  background-color: ${({ tier }: Props) => tierColours[tier]};
-  opacity: ${({ reserved }: Props) => (reserved ? "0.3" : "1")};
+  background-color: ${({ tier, reserved }: Props) =>
+    `rgb(${tierColours[tier]}, ${reserved ? 0.5 : 1})`};
 `;
