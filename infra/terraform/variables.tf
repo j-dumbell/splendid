@@ -6,6 +6,10 @@ variable "region" {
   type = string
 }
 
+variable "private_subnet_cidr" {
+  type = string
+}
+
 variable "app_name" {
   type = string
 }

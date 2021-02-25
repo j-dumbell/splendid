@@ -3,7 +3,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb-sg.id]
-  subnets            = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
+  subnets            = [aws_subnet.public1.id, aws_subnet.public2.id]
 }
 
 resource "aws_security_group" "alb-sg" {
@@ -47,4 +47,6 @@ resource "aws_lb_target_group" "alb-tg" {
     path      = "/health"
     matcher   = "200"
   }
+
+  depends_on = ["aws_lb.alb"]
 }
