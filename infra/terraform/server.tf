@@ -27,7 +27,7 @@ resource "aws_ecs_service" "service" {
   # depends_on      = [aws_iam_role_policy.foo]
 
   network_configuration {
-    subnets         = [aws_subnet.private_subnet.id]
+    subnets         = [aws_subnet.private.id]
   }
 
 
@@ -45,6 +45,9 @@ data "template_file" "task_defn" {
   vars = {
     container_name        = var.app_name
     docker_image          = "${var.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.app_name}:latest"
+    aws_logs_group        = "/aws/fargate/${var.app_name}"
+    aws_log_stream_prefix = var.app_name
+    aws_region            = var.region
   }
 }
 
@@ -58,9 +61,7 @@ resource "aws_iam_role" "ecs_execution_role" {
       "Sid": "",
       "Effect": "Allow",
       "Principal": {
-        "Service": [
-          "ec2.amazonaws.com"
-        ]
+        "Service": "ecs-tasks.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
@@ -72,4 +73,9 @@ EOF
 resource "aws_iam_role_policy_attachment" "ecs-execution-role-policy-attachment" {
     role = aws_iam_role.ecs_execution_role.id
     policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_cloudwatch_log_group" "cw" {
+  name              = "/aws/fargate/${var.app_name}"
+  retention_in_days = 14
 }
