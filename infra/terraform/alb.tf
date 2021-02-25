@@ -46,6 +46,7 @@ resource "aws_lb_target_group" "alb-tg" {
   health_check {
     path      = "/health"
     matcher   = "200"
+    port      = var.server_port
   }
 
   depends_on = ["aws_lb.alb"]
