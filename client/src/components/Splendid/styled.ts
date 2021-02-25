@@ -7,8 +7,7 @@ export const SplendidContainer = styled(FlexContainer)`
   flex: 5;
 
   & > * {
-    margin-left: 30px;
-    border-left: solid 2px #494945;
+    border-left: solid 1px #494945;
   }
 `;
 
@@ -17,7 +16,6 @@ export const SplendidFormContainer = styled(Form)`
   flex: 5;
 
   & > * {
-    margin-left: 30px;
-    border-left: solid 2px #494945;
+    border-left: solid 1px #494945;
   }
 `;

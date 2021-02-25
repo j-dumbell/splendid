@@ -8,7 +8,7 @@ export const PlayersContainer = styled(FlexContainer)`
 type Props = { isActive: boolean };
 export const PlayerContainer = styled(FlexContainer)`
   padding: 10px;
-  border: ${({ isActive }: Props) => (isActive ? "solid 2px white" : "none")}
+  border: ${({ isActive }: Props) => (isActive ? "solid 2px #494945" : "none")}
 `;
 
 export const PlayerDeckContainer = styled(FlexChild)`

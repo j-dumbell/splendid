@@ -26,10 +26,7 @@ const Player = ({ player }: Props) => {
   const [isActivePlayer, activePlayerId] = useActivePlayer();
   return (
     <PlayerContainer isActive={activePlayerId === player.id} column>
-      <FlexContainer
-        justify="space-between"
-        color={clientId === player.id ? "white" : "inherit"}
-      >
+      <FlexContainer justify="space-between">
         <h2>{playerNames[player.id] || `Player #${player.id}`}</h2>
         <h2>Points: {getScore(player)}</h2>
       </FlexContainer>

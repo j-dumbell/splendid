@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { State } from "../../../state/domain";
 import { SplendidPlayer } from "../domain";
-import { LeftPaddedContainer } from "../../common/FlexContainer";
+import { PaddedContainer } from "../../common/FlexContainer";
 import Player from "./Player";
 import { sortPlayers } from "./helpers";
 
@@ -14,11 +14,11 @@ type Props = {
 const Players = ({ players }: Props) => {
   const clientId = useSelector(({ clientId }: State) => clientId);
   return (
-    <LeftPaddedContainer column justify="flex-end">
+    <PaddedContainer column justify="center">
       {sortPlayers(players, clientId).map((player, i) => (
         <Player key={`player-${i}`} player={player} />
       ))}
-    </LeftPaddedContainer>
+    </PaddedContainer>
   );
 };
 

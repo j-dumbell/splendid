@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { SplendidBoard } from "../domain";
-import FlexContainer, { LeftPaddedContainer } from "../../common/FlexContainer";
+import FlexContainer, { PaddedContainer } from "../../common/FlexContainer";
 import Bank from "../Bank";
 import Elites from "../Elites";
 import Decks from "../Decks";
@@ -16,13 +16,13 @@ const Board = ({
 }: {
   board: SplendidBoard;
 }) => (
-  <LeftPaddedContainer column>
+  <PaddedContainer column justify="center">
     <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
     <ElitesContainer justify="center">
       <Elites elites={elites} />
     </ElitesContainer>
     <Decks decks={decks} />
-  </LeftPaddedContainer>
+  </PaddedContainer>
 );
 
 export default Board;

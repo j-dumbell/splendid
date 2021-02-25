@@ -9,7 +9,7 @@ export const PlayerResourceList = ({
   bank: playerBank,
   purchased,
 }: SplendidPlayer) => (
-  <FlexContainer color="white">
+  <FlexContainer>
     {splendidResource.map((resource, i) => (
       <ResourceCount
         key={i}
