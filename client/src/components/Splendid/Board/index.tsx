@@ -11,18 +11,23 @@ const ElitesContainer = styled(FlexContainer)`
   margin-bottom: 20px;
 `;
 
+const BoardContainer = styled(PaddedContainer)`
+  flex: 2;
+  align: center;
+`;
+
 const Board = ({
   board: { bank, bankOffsetTemp, elites, decks },
 }: {
   board: SplendidBoard;
 }) => (
-  <PaddedContainer column justify="center">
+  <BoardContainer column justify="center">
     <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
     <ElitesContainer justify="center">
       <Elites elites={elites} />
     </ElitesContainer>
     <Decks decks={decks} />
-  </PaddedContainer>
+  </BoardContainer>
 );
 
 export default Board;

@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
-import FlexContainer, { FlexChild } from "../../common/FlexContainer";
+import FlexContainer, { FlexChild, PaddedContainer } from "../../common/FlexContainer";
 
-export const PlayersContainer = styled(FlexContainer)`
+export const PlayersContainer = styled(PaddedContainer)`
+  flex: 1;
+  background: #98927c26;
 `;
 
 type Props = { isActive: boolean };

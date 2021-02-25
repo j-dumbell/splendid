@@ -13,7 +13,7 @@ type Props = {
 const Decks = ({ decks }: Props) => (
   <>
     {getDeckKeys(decks).map((tier, i) => (
-      <FlexContainer key={`deck-${i}`}>
+      <FlexContainer key={`deck-${i}`} justify="center">
         <DeckStack>
           <StackCount>{constructDeck(tier, decks).length}</StackCount>
           <DeckCard tier={Number(tier)} />
