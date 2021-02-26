@@ -23,7 +23,7 @@ export const PlayerResourceForm = ({
     board: { bank, bankOffsetTemp },
   } = game!;
   return (
-    <PlayerResourceFormContainer color="white">
+    <PlayerResourceFormContainer>
       {splendidResource.map((resource, i) => (
         <FlexContainer key={i} column justify="space-between">
           <ResourceCount

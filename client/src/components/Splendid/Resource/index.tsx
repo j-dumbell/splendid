@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SplendidResource } from "../domain";
+import { ResourceSize, SplendidResource } from "../domain";
 import Image from "../../common/Image";
 import Ruby from "./ruby.svg";
 import Diamond from "./diamond.svg";
@@ -11,7 +11,7 @@ import Citrine from "./citrine.svg";
 
 type Props = {
   resourceType: SplendidResource;
-  mini?: boolean;
+  size?: ResourceSize;
 };
 
 const assetMap = {
@@ -23,11 +23,17 @@ const assetMap = {
   yellow: Citrine,
 };
 
-const Resource = ({ resourceType, mini }: Props) => (
+const sizeMap = {
+  default: "2.5rem",
+  mini: "1.25rem",
+  micro: "0.75rem",
+}
+
+const Resource = ({ resourceType, size }: Props) => (
   <Image
     src={assetMap[resourceType]}
     alt={`${resourceType} resource`}
-    width={mini ? "1.25rem" : "2.5rem"}
+    width={size ? sizeMap[size] : sizeMap.default}
   />
 );
 

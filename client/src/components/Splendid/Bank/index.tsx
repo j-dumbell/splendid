@@ -16,7 +16,7 @@ const Bank = ({
   bank: SplendidResourceList;
   bankOffsetTemp?: SplendidResourceList;
 }) => (
-  <BankContainer color="white" justify="center">
+  <BankContainer justify="center">
     {splendidResource.map((resource, i) => (
       <ResourceCount
         key={i}

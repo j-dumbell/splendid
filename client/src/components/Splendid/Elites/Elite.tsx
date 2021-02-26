@@ -18,7 +18,7 @@ const Elite = ({ points, cost, mini }: Props) => (
       <Image src={Crown} alt="crown" width="1.5rem" />
     </FlexContainer>
     <div>
-      <ResourceList resourceList={cost} hideEmpty mini column />
+      <ResourceList resourceList={cost} hideEmpty size="mini" column />
     </div>
   </EliteContainer>
 );
