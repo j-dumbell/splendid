@@ -6,6 +6,7 @@ type Props = {
   tier: number;
   mini?: boolean;
   reserved?: boolean;
+  shadowed?: boolean;
 };
 
 const tierColours: Record<string, string> = {
@@ -22,4 +23,8 @@ export const CardContainer = styled(FlexContainer)`
   border-radius: 5px;
   background-color: ${({ tier, reserved }: Props) =>
     `rgb(${tierColours[tier]}, ${reserved ? 0.5 : 1})`};
+  ${({ shadowed }: Props) =>
+    shadowed && `
+    box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.25);
+  `};
 `;

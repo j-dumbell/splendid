@@ -12,17 +12,20 @@ type Props = {
 
 const Decks = ({ decks }: Props) => (
   <>
-    {getDeckKeys(decks).map((tier, i) => (
-      <FlexContainer key={`deck-${i}`} justify="center">
-        <DeckStack>
-          <StackCount>{constructDeck(tier, decks).length}</StackCount>
-          <DeckCard tier={Number(tier)} />
-        </DeckStack>
-        {constructVisible(tier, decks).map((card, j) => (
-          <DeckCard key={`cards-${j}`} {...card} />
-        ))}
-      </FlexContainer>
-    ))}
+    {getDeckKeys(decks).map((tier, i) => {
+      const deckCount = constructDeck(tier, decks).length;
+      return (
+        <FlexContainer key={`deck-${i}`} justify="center">
+          <DeckStack shadowed={deckCount > 1}>
+            <StackCount>{deckCount}</StackCount>
+            <DeckCard tier={Number(tier)} shadowed={deckCount > 1} />
+          </DeckStack>
+          {constructVisible(tier, decks).map((card, j) => (
+            <DeckCard key={`cards-${j}`} {...card} />
+          ))}
+        </FlexContainer>
+      );
+    })}
   </>
 );
 

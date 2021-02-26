@@ -9,10 +9,11 @@ import { CardContainer } from "./styled";
 type Props = SplendidCard & {
   mini?: boolean;
   reserved?: boolean;
+  shadowed?: boolean;
 };
 
-const Card = ({ tier, points, income, cost, mini, reserved }: Props) => (
-  <CardContainer column justify="space-between" tier={tier} mini={mini} reserved={reserved} >
+const Card = ({ tier, points, income, cost, mini, shadowed, reserved }: Props) => (
+  <CardContainer column justify="space-between" tier={tier} mini={mini} shadowed={shadowed} reserved={reserved} >
     <FlexContainer justify="space-between">
       <div>{Boolean(points) && points}</div>{" "}
       {income && <Resource resourceType={income} size="mini" />}

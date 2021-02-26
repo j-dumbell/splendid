@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const DeckCardContainer = styled.label`
+export const PurchasableCardContainer = styled.label`
   display: block;
   position: relative;
 
@@ -27,11 +27,13 @@ export const PurchaseContainer = styled.div`
 
 export const DeckStack = styled.div`
   position: relative;
+  ${({ shadowed }: { shadowed?: boolean }) =>
+  shadowed && "transform: translate(-5px, -5px);"}
 `;
 
 export const StackCount = styled.div`
   position: absolute;
+  z-index: 1;
   top: 10px;
   right: 10px;
-  z-index: 1;
 `;
