@@ -16,8 +16,8 @@ export const PlayerContainer = styled(FlexContainer)`
   ${({ isActive }: Props) =>
     isActive &&
     `
-    box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.25);
-    transform: translate(-5px, -5px);
+    box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.15);
+    transform: translate(-3px, -3px);
   `}
   background: #98927c26;
   margin-bottom: 10px;
