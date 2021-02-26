@@ -1,6 +1,6 @@
 import React from "react";
 
-import { splendidResource } from "../domain";
+import { ResourceSize, splendidResource } from "../domain";
 import ResourceCount from "./ResourceCount";
 
 export type ResourceListProps = {
@@ -8,7 +8,7 @@ export type ResourceListProps = {
   offsetsTemp?: Record<string, number>;
   offsetsPerm?: Record<string, number>;
   hideEmpty?: boolean;
-  mini?: boolean;
+  size?: ResourceSize;
   column?: boolean;
 };
 
@@ -17,7 +17,7 @@ export const ResourceList = ({
   offsetsPerm,
   offsetsTemp,
   hideEmpty,
-  mini,
+  size,
   column,
 }: ResourceListProps) => (
   <>
@@ -33,7 +33,7 @@ export const ResourceList = ({
           key={`resource-${i}`}
           resource={resource}
           count={resourceList[resource]}
-          mini={mini}
+          size={size}
           column={column}
           offsetPerm={offsetPerm}
           offsetTemp={offsetTemp}

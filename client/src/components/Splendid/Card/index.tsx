@@ -15,10 +15,10 @@ const Card = ({ tier, points, income, cost, mini, reserved }: Props) => (
   <CardContainer column justify="space-between" tier={tier} mini={mini} reserved={reserved} >
     <FlexContainer justify="space-between">
       <div>{Boolean(points) && points}</div>{" "}
-      {income && <Resource resourceType={income} mini />}
+      {income && <Resource resourceType={income} size="mini" />}
     </FlexContainer>
     <div>
-      {cost && <ResourceList resourceList={cost} hideEmpty mini column />}
+      {cost && <ResourceList resourceList={cost} hideEmpty size="mini" column />}
     </div>
   </CardContainer>
 );
