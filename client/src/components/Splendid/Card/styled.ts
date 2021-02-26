@@ -11,9 +11,9 @@ type Props = {
 };
 
 const tierColours: Record<string, string> = {
-  1: "168, 222, 74",
-  2: "244, 216, 59",
-  3: "84, 190, 250",
+  1: "189, 234, 80",
+  2: "255, 167, 77",
+  3: "84, 235, 250",
 };
 
 const widthMap = {

@@ -7,7 +7,7 @@ type Props = {
 };
 
 const EliteContainer = styled(FlexContainer)`
-  background-color: #bc8eed;
+  background-color: #a3aaff;
   margin: 5px;
   padding: 5px;
   width: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};
