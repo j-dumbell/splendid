@@ -11,21 +11,21 @@ type Props = {
 };
 
 const tierColours: Record<string, string> = {
-  1: "189, 234, 80",
-  2: "255, 167, 77",
-  3: "84, 235, 250",
+  3: "142, 226, 191",
+  2: "255, 219, 100",
+  1: "249, 164, 147",
 };
 
 const widthMap = {
   mini: "5rem",
   micro: "4rem",
-  default: "6rem",
+  default: "6.5rem",
 };
 
 const heightMap = {
   mini: "7.5rem",
   micro: "6rem",
-  default: "9rem",
+  default: "9.75rem",
 };
 
 export const CardContainer = styled(FlexContainer)`
@@ -34,6 +34,7 @@ export const CardContainer = styled(FlexContainer)`
   width: ${({ size }: Props) => size ? widthMap[size] : widthMap.default};
   height: ${({ size }: Props) => size ? heightMap[size] : heightMap.default};
   border-radius: 5px;
+  border: solid 1px black;
   background-color: ${({ tier, reserved }: Props) =>
     `rgb(${tierColours[tier]}, ${reserved ? 0.5 : 1})`};
   ${({ shadowed }: Props) =>

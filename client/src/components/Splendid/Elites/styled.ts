@@ -7,11 +7,12 @@ type Props = {
 };
 
 const EliteContainer = styled(FlexContainer)`
+  border: solid 1px black;
   background-color: #a3aaff;
   margin: 5px;
   padding: 5px;
-  width: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};
-  height: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};
+  width: ${({ mini }: Props) => (mini ? "5rem" : "6.5rem")};
+  height: ${({ mini }: Props) => (mini ? "5rem" : "6.5rem")};
   border-radius: 5px;
 `;
 

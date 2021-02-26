@@ -7,3 +7,7 @@ export const UnstyledButton = styled.button`
   text-align: left;
   color: inherit;
 `;
+
+export const Button = styled(UnstyledButton)`
+  border: solid 2px #0023c4;
+`;
