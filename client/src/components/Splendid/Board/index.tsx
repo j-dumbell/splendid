@@ -12,8 +12,7 @@ const ElitesContainer = styled(FlexContainer)`
 `;
 
 const BoardContainer = styled(PaddedContainer)`
-  flex: 2;
-  align: center;
+  flex: 3;
 `;
 
 const Board = ({

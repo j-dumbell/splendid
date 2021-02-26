@@ -21,7 +21,7 @@ const ResourceCount = ({
   size,
   column,
 }: Props) => (
-  <ResourceContainer column={column}>
+  <ResourceContainer column={column} size={size}>
     <Resource resourceType={resource} size={size} />
     <p>
       {offsetTemp ? (

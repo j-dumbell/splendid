@@ -11,8 +11,8 @@ const EliteContainer = styled(FlexContainer)`
   background-color: #a3aaff;
   margin: 5px;
   padding: 5px;
-  width: ${({ mini }: Props) => (mini ? "5rem" : "6.5rem")};
-  height: ${({ mini }: Props) => (mini ? "5rem" : "6.5rem")};
+  width: ${({ mini }: Props) => (mini ? "5rem" : "7.5rem")};
+  height: ${({ mini }: Props) => (mini ? "5rem" : "7.5rem")};
   border-radius: 5px;
 `;
 

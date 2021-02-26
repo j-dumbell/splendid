@@ -10,7 +10,7 @@ type Props = SplendidElite & {
 
 const Elite = ({ points, cost, mini }: Props) => (
   <EliteContainer column mini={mini} justify="space-between">
-    {points}
+    <strong>{points}</strong>
     <div>
       <ResourceList resourceList={cost} hideEmpty size="mini" column />
     </div>

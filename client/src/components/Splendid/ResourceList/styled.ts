@@ -1,11 +1,13 @@
 import styled, { css } from "styled-components";
+import { ResourceSize } from "../domain";
 
 type Props = {
+  size?: ResourceSize;
   column?: boolean;
 };
 
 const ResourceContainer = styled.div`
-  margin: 0 15px 0 0;
+  margin: ${({ size }: Props) => (size === "mini" ? "0" : "0 5px")};
   &:last-child {
     margin: 0;
   }

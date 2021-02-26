@@ -1,6 +1,7 @@
 import { useFormikContext } from "formik";
 import React from "react";
 
+import { Button } from "../../common/Button";
 import { SplendidCard, SplendidForm } from "../domain";
 import { PurchaseContainer } from "./styled";
 
@@ -12,9 +13,9 @@ type PurchaseButtonProps = {
 const PurchaseButton = ({ gameAction, text }: PurchaseButtonProps) => {
   const { setFieldValue } = useFormikContext<SplendidForm>();
   return (
-    <button onClick={() => setFieldValue("gameAction", gameAction)}>
+    <Button onClick={() => setFieldValue("gameAction", gameAction)}>
       {text}
-    </button>
+    </Button>
   );
 };
 

@@ -15,7 +15,7 @@ type Props = SplendidCard & {
 const Card = ({ tier, points, income, cost, size, shadowed, reserved }: Props) => (
   <CardContainer column justify="space-between" tier={tier} size={size} shadowed={shadowed} reserved={reserved} >
     <FlexContainer justify="space-between">
-      <div>{Boolean(points) && points}</div>{" "}
+      <div><strong>{Boolean(points) && points}</strong></div>{" "}
       {income && <Resource resourceType={income} size="mini" />}
     </FlexContainer>
     <div>

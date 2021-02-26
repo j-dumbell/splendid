@@ -4,7 +4,7 @@ import { SplendidDeck } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import { getDeckKeys, constructVisible, constructDeck } from "./helpers";
 import DeckCard from "./DeckCard";
-import { DeckStack, StackCount } from "./styled";
+import { DeckStack } from "./styled";
 
 type Props = {
   decks: SplendidDeck;
@@ -17,7 +17,6 @@ const Decks = ({ decks }: Props) => (
       return (
         <FlexContainer key={`deck-${i}`} justify="center">
           <DeckStack shadowed={deckCount > 1}>
-            <StackCount>{deckCount}</StackCount>
             <DeckCard tier={Number(tier)} shadowed={deckCount > 1} />
           </DeckStack>
           {constructVisible(tier, decks).map((card, j) => (

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import Stripes from './stripe.svg';
 import FlexContainer from "../../common/FlexContainer";
 import { CardSize } from "../domain";
 
@@ -19,16 +20,17 @@ const tierColours: Record<string, string> = {
 const widthMap = {
   mini: "5rem",
   micro: "4rem",
-  default: "6.5rem",
+  default: "7.5rem",
 };
 
 const heightMap = {
   mini: "7.5rem",
   micro: "6rem",
-  default: "9.75rem",
+  default: "11.25rem",
 };
 
 export const CardContainer = styled(FlexContainer)`
+  flex-shrink: 0;
   margin: 5px;
   padding: 5px;
   width: ${({ size }: Props) => size ? widthMap[size] : widthMap.default};
@@ -37,9 +39,14 @@ export const CardContainer = styled(FlexContainer)`
   border: solid 1px black;
   background-color: ${({ tier, reserved }: Props) =>
     `rgb(${tierColours[tier]}, ${reserved ? 0.5 : 1})`};
+
   ${({ shadowed }: Props) =>
     shadowed &&
     `
-    box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.25);
+    background-image: url(${Stripes});
+    background-blend-mode: multiply;
+    background-repeat: repeat;
+    background-size: 10.5rem;
+    box-shadow: 5px 5px 0px 0px rgba(0,0,0,0.3);
   `};
 `;

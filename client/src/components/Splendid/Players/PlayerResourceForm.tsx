@@ -5,9 +5,10 @@ import { useGame } from "../../../hooks/useGame";
 import { SplendidPlayer, splendidResource } from "../domain";
 import { constructOffsetsPerm, validateMax } from "./helpers";
 import FlexContainer from "../../common/FlexContainer";
+import { Button } from "../../common/Button";
 import ResourceCount from "../ResourceList/ResourceCount";
 import PlayerResourceButton from "./PlayerResourceButton";
-import { PlayerResourceFormContainer } from './styled';
+import { PlayerResourceFormContainer } from "./styled";
 
 export const PlayerResourceForm = ({
   bank: playerBank,
@@ -23,47 +24,49 @@ export const PlayerResourceForm = ({
     board: { bank, bankOffsetTemp },
   } = game!;
   return (
-    <PlayerResourceFormContainer>
-      {splendidResource.map((resource, i) => (
-        <FlexContainer key={i} column justify="space-between">
-          <ResourceCount
-            resource={resource}
-            count={playerBank[resource]}
-            offsetTemp={resources[resource]}
-            offsetPerm={constructOffsetsPerm(resource, purchased)}
-          />
-          <div>
-            <PlayerResourceButton
+    <PlayerResourceFormContainer justify="space-between">
+      <FlexContainer>
+        {splendidResource.map((resource, i) => (
+          <FlexContainer key={i} column justify="space-between">
+            <ResourceCount
               resource={resource}
-              nextValueFn={(v) => v - 1}
-              disabled={resources[resource] + playerBank[resource] <= 0}
+              count={playerBank[resource]}
+              offsetTemp={resources[resource]}
+              offsetPerm={constructOffsetsPerm(resource, purchased)}
             />
-            <PlayerResourceButton
-              resource={resource}
-              nextValueFn={(v) => v + 1}
-              disabled={
-                (bankOffsetTemp ? bankOffsetTemp[resource] : 0) +
-                  bank[resource] <=
-                  0 ||
-                !validateMax({
-                  ...resources,
-                  [resource]: resources[resource] + 1,
-                }) ||
-                resource === "yellow"
-              }
-            />
-          </div>
-        </FlexContainer>
-      ))}
-      <button
+            <FlexContainer justify="center">
+              <PlayerResourceButton
+                resource={resource}
+                nextValueFn={(v) => v - 1}
+                disabled={resources[resource] + playerBank[resource] <= 0}
+              />
+              <PlayerResourceButton
+                resource={resource}
+                nextValueFn={(v) => v + 1}
+                disabled={
+                  (bankOffsetTemp ? bankOffsetTemp[resource] : 0) +
+                    bank[resource] <=
+                    0 ||
+                  !validateMax({
+                    ...resources,
+                    [resource]: resources[resource] + 1,
+                  }) ||
+                  resource === "yellow"
+                }
+              />
+            </FlexContainer>
+          </FlexContainer>
+        ))}
+      </FlexContainer>
+      <Button
         type="button"
         onClick={() => {
           setFieldValue("gameAction", "takeResources");
           submitForm();
         }}
       >
-        Take resources
-      </button>
+        Take Resources
+      </Button>
     </PlayerResourceFormContainer>
   );
 };

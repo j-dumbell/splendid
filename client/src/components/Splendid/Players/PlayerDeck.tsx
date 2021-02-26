@@ -4,7 +4,7 @@ import { SplendidPlayer } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import DeckCard from "../Decks/DeckCard";
 import Card from "../Card";
-import { PlayerDeckContainer } from './styled';
+import { PlayerDeckContainer } from "./styled";
 
 const PlayerDeck = ({
   purchased,
@@ -12,9 +12,11 @@ const PlayerDeck = ({
   reservedHidden,
 }: SplendidPlayer) => (
   <PlayerDeckContainer>
-    {purchased.map((card, j) => (
-      <Card key={`player-purchased-card-${j}`} size="mini" {...card} />
-    ))}
+    {purchased
+      .sort((a, b) => (a.income! > b.income! ? 1 : -1))
+      .map((card, j) => (
+        <Card key={`player-purchased-card-${j}`} size="mini" {...card} />
+      ))}
     <FlexContainer>
       {reservedVisible.map((card, k) => (
         <DeckCard

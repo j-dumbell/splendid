@@ -1,9 +1,9 @@
 export const splendidResource = [
   "black",
-  "white",
-  "red",
   "blue",
   "green",
+  "red",
+  "white",
   "yellow",
 ] as const;
 export type SplendidResource = typeof splendidResource[number];
