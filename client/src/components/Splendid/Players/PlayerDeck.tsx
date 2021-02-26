@@ -13,14 +13,14 @@ const PlayerDeck = ({
 }: SplendidPlayer) => (
   <PlayerDeckContainer>
     {purchased.map((card, j) => (
-      <Card key={`player-purchased-card-${j}`} mini {...card} />
+      <Card key={`player-purchased-card-${j}`} size="mini" {...card} />
     ))}
     <FlexContainer>
       {reservedVisible.map((card, k) => (
         <DeckCard
           key={`player-reserved-vis-card-${k}`}
           reserved
-          mini
+          size="mini"
           {...card}
         />
       ))}
@@ -28,7 +28,7 @@ const PlayerDeck = ({
         <DeckCard
           key={`player-reserved-hid-card-${l}`}
           reserved
-          mini
+          size="mini"
           {...card}
         />
       ))}

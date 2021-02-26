@@ -10,8 +10,9 @@ export type SplendidResource = typeof splendidResource[number];
 
 export type SplendidResourceList = Record<SplendidResource, number>;
 
-const resourceSize = ["default", "mini", "micro"] as const;
-export type ResourceSize = typeof resourceSize[number];
+const sizes = ["default", "mini", "micro"] as const;
+export type ResourceSize = typeof sizes[number];
+export type CardSize = typeof sizes[number];
 
 export type SplendidCard = {
   id?: number;

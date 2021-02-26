@@ -2,18 +2,18 @@ import React from "react";
 import { Field, useFormikContext } from "formik";
 
 import { useActivePlayer } from "../../../hooks/useActivePlayer";
-import { SplendidCard, SplendidForm } from "../domain";
+import { CardSize, SplendidCard, SplendidForm } from "../domain";
 import Card from "../Card";
 import PurchaseButtons from "./PurchaseButtons";
 import { PurchasableCardContainer } from "./styled";
 
 type Props = SplendidCard & {
-  mini?: boolean;
+  size?: CardSize;
   reserved?: boolean;
   shadowed?: boolean;
 };
 
-const PurchasableCard = ({ reserved, mini, shadowed, ...card }: Props) => {
+const PurchasableCard = ({ reserved, size, shadowed, ...card }: Props) => {
   const {
     values: { selectedCard },
   } = useFormikContext<SplendidForm>();
@@ -26,22 +26,22 @@ const PurchasableCard = ({ reserved, mini, shadowed, ...card }: Props) => {
         selected={selectedCard === cardRef}
         reserved={reserved}
       />
-      <Card {...card} mini={mini} shadowed={shadowed} reserved={reserved} />
+      <Card {...card} size={size} shadowed={shadowed} reserved={reserved} />
     </PurchasableCardContainer>
   );
 };
 
-const DeckCard = ({ reserved, mini, shadowed, ...card }: Props) => {
+const DeckCard = ({ reserved, size, shadowed, ...card }: Props) => {
   const [isActivePlayer] = useActivePlayer();
   return isActivePlayer ? (
     <PurchasableCard
       reserved={reserved}
-      mini={mini}
+      size={size}
       shadowed={shadowed}
       {...card}
     />
   ) : (
-    <Card reserved={reserved} mini={mini} shadowed={shadowed} {...card} />
+    <Card reserved={reserved} size={size} shadowed={shadowed} {...card} />
   );
 };
 
