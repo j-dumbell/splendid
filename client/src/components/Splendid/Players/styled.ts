@@ -4,13 +4,19 @@ import FlexContainer, { FlexChild, PaddedContainer } from "../../common/FlexCont
 
 export const PlayersContainer = styled(PaddedContainer)`
   flex: 1;
-  background: #98927c26;
 `;
 
 type Props = { isActive: boolean };
 export const PlayerContainer = styled(FlexContainer)`
   padding: 10px;
-  border: ${({ isActive }: Props) => (isActive ? "solid 2px #494945" : "none")}
+  border-radius: 5px;
+  border: ${({ isActive }: Props) => (isActive ? "solid 2px #9e9e9e" : "solid 1px #bdbfbf")};
+  background: #98927c26;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 export const PlayerDeckContainer = styled(FlexChild)`
