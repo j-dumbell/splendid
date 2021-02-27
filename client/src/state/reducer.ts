@@ -49,9 +49,6 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      if (state.clientId && state.lobbyId) {
-        return state;
-      }
       const {
         payload: {
           lobbyId: joinLobbyId,
@@ -59,11 +56,17 @@ function reducer(
           playerNames: joinPlayerNames,
         },
       } = action as JoinLobbyAction;
+      if (state.lobbyId && state.clientId) {
+        return {
+          ...state,
+          playerNames: joinPlayerNames,
+        };
+      }
       return {
         ...state,
+        playerNames: joinPlayerNames,
         lobbyId: joinLobbyId,
         clientId: joinClientId,
-        playerNames: joinPlayerNames,
       };
     case "EXIT_LOBBY":
       const {
