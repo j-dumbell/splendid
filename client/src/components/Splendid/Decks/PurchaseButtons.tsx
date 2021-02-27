@@ -20,12 +20,11 @@ const PurchaseButton = ({ gameAction, text }: PurchaseButtonProps) => {
 };
 
 type PurchaseButtonsProps = SplendidCard & {
-  selected: boolean;
   reserved?: boolean;
 };
 
 const PurchaseButtons = (props: PurchaseButtonsProps) => (
-  <PurchaseContainer selected={props.selected}>
+  <PurchaseContainer>
     {props.reserved ? (
       <PurchaseButton gameAction="buyCard" text="Buy" />
     ) : props.id ? (

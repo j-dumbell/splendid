@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ResourceSize, SplendidResource } from "../domain";
+import { SplendidSize, SplendidResource } from "../domain";
 import Image from "../../common/Image";
 
 import Apple from "./fruit/apple.svg";
@@ -21,13 +21,14 @@ const assetMap = {
 
 type Props = {
   resourceType: SplendidResource;
-  size?: ResourceSize;
+  size?: SplendidSize;
 };
 
 const sizeMap = {
-  default: "2.5rem",
-  mini: "1.25rem",
-  micro: "0.75rem",
+  micro: "1rem",
+  mini: "1.5rem",
+  big: "3rem",
+  default: "2rem",
 }
 
 const Resource = ({ resourceType, size }: Props) => (

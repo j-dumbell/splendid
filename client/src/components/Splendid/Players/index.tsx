@@ -14,9 +14,9 @@ type Props = {
 const Players = ({ players }: Props) => {
   const clientId = useSelector(({ clientId }: State) => clientId);
   return (
-    <PlayersContainer column justify="center">
+    <PlayersContainer column justify="flex-end">
       {sortPlayers(players, clientId).map((player, i) => (
-        <Player key={`player-${i}`} player={player} />
+        <Player key={`player-${i}`} player={player} index={i+1} />
       ))}
     </PlayersContainer>
   );

@@ -25,7 +25,8 @@ export const Button = styled(UnstyledButton)`
     border-color: red;
   }
 
-  &:hover {
+  &:hover, 
+  &:focus {
     box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.3);
     transform: translate(-2px, -2px);
   }

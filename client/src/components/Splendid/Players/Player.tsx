@@ -9,13 +9,14 @@ import { getScore } from "./helpers";
 import PlayerDeck from "./PlayerDeck";
 import PlayerResourceForm from "./PlayerResourceForm";
 import PlayerResourceList from "./PlayerResourceList";
-import { PlayerContainer, PlayerTitle } from "./styled";
+import { PlayerContainer, PlayerTitle, PlayerContents } from "./styled";
 
 type Props = {
   player: SplendidPlayer;
+  index: number;
 };
 
-const Player = ({ player }: Props) => {
+const Player = ({ player, index }: Props) => {
   const { playerNames, clientId } = useSelector(
     ({ playerNames, clientId }: State) => ({
       playerNames,
@@ -23,19 +24,27 @@ const Player = ({ player }: Props) => {
     })
   );
   const [isActivePlayer, activePlayerId] = useActivePlayer();
+  const isActiveClient = Boolean(clientId === player.id);
   return (
-    <PlayerContainer isActive={activePlayerId === player.id} column>
+    <PlayerContainer
+      isActivePlayer={activePlayerId === player.id}
+      isActiveClient={isActiveClient}
+      column
+      tabIndex={0}
+    >
       <PlayerTitle justify="space-between">
         <strong>{playerNames[player.id] || `Player #${player.id}`}</strong>
         <strong>Score: {getScore(player)}</strong>
       </PlayerTitle>
-      {isActivePlayer && clientId === player.id ? (
+      {isActiveClient && isActivePlayer ? (
         <PlayerResourceForm {...player} />
       ) : (
         <PlayerResourceList {...player} />
       )}
-      <Elites mini elites={player.elites} />
-      <PlayerDeck {...player} />
+      <PlayerContents column>
+        <Elites size="micro" elites={player.elites} />
+        <PlayerDeck {...player} />
+      </PlayerContents>
     </PlayerContainer>
   );
 };

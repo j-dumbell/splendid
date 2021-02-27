@@ -20,7 +20,7 @@ const Board = ({
 }: {
   board: SplendidBoard;
 }) => (
-  <BoardContainer column justify="center">
+  <BoardContainer column justify="flex-end">
     <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
     <ElitesContainer justify="center">
       <Elites elites={elites} />
