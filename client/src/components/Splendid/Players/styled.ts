@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 import FlexContainer, {
   FlexChild,
-  PaddedContainer,
 } from "../../common/FlexContainer";
 
-export const PlayersContainer = styled(PaddedContainer)`
+export const PlayersContainer = styled(FlexContainer)`
   flex: 1;
   max-width: 30rem;
+  padding-right: 30px;
 `;
 
 type Props = { isActive: boolean };
@@ -36,17 +36,13 @@ export const PlayerTitle = styled(FlexContainer)`
 `;
 
 export const PlayerDeckContainer = styled(FlexChild)`
-  padding-top: 10px;
   overflow-x: scroll;
-  ::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-  }
-  ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #a3aaff;
-    border: solid 1px black;
-  }
 `;
 
-export const PlayerResourceFormContainer = styled(FlexContainer)``;
+export const PlayerResourceFormContainer = styled(FlexContainer)`
+  padding: 10px 0;
+`;
+
+export const PlayerResourceListContainer = styled(FlexContainer)`
+  padding: 10px 0;
+`;

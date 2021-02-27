@@ -1,11 +1,22 @@
 import styled from "styled-components";
 
+type Props = { shadowed?: boolean };
 export const PurchasableCardContainer = styled.label`
   display: block;
   position: relative;
-
+  
   input[type="radio"] {
     display: none;
+  }
+
+  &:hover {
+    transform: translate(-5px, -5px);
+
+    & > div:last-child {
+      box-shadow: ${({ shadowed }: Props) =>
+          shadowed ? `10px 10px` : `5px 5px`}
+        0px 0px rgba(0, 0, 0, 0.3);
+    }
   }
 `;
 
@@ -28,7 +39,7 @@ export const PurchaseContainer = styled.div`
 export const DeckStack = styled.div`
   position: relative;
   ${({ shadowed }: { shadowed?: boolean }) =>
-  shadowed && "transform: translate(-5px, -5px);"}
+    shadowed && "transform: translate(-5px, -5px);"}
 `;
 
 export const StackCount = styled.div`

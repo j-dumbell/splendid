@@ -15,4 +15,18 @@ export const Button = styled(UnstyledButton)`
   padding: 1px 0.3rem;
   margin: 5px 1px 0;
   background: #f1f1f1;
+  outline: none;
+
+  &:disabled {
+    background: inherit;
+  }
+
+  &:active, &focus {
+    border-color: red;
+  }
+
+  &:hover {
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.3);
+    transform: translate(-2px, -2px);
+  }
 `;

@@ -31,10 +31,6 @@ export const FlexChild = styled(FlexContainer)`
   flex: 1;
 `;
 
-export const PaddedContainer = styled(FlexContainer)`
-  padding: 30px;
-`;
-
 export const FlexForm = styled(Form)`
   display: flex;
 `;

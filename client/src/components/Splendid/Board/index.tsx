@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { SplendidBoard } from "../domain";
-import FlexContainer, { PaddedContainer } from "../../common/FlexContainer";
+import FlexContainer from "../../common/FlexContainer";
 import Bank from "../Bank";
 import Elites from "../Elites";
 import Decks from "../Decks";
@@ -11,7 +11,7 @@ const ElitesContainer = styled(FlexContainer)`
   margin-bottom: 20px;
 `;
 
-const BoardContainer = styled(PaddedContainer)`
+const BoardContainer = styled(FlexContainer)`
   flex: 3;
 `;
 

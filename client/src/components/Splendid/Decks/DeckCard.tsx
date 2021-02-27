@@ -19,7 +19,7 @@ const PurchasableCard = ({ reserved, size, shadowed, ...card }: Props) => {
   } = useFormikContext<SplendidForm>();
   const cardRef = card.id ? `visible-${card.id}` : `hidden-${card.tier}`;
   return (
-    <PurchasableCardContainer>
+    <PurchasableCardContainer shadowed={shadowed}>
       <Field type="radio" name="selectedCard" value={cardRef} />
       <PurchaseButtons
         {...card}
