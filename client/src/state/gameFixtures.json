@@ -33,6 +33,13 @@
           "income": "white"
         }
       ],
+      "elites": [
+        {
+          "id": 1,
+          "points": 3,
+          "cost": { "black": 0, "blue": 0, "green": 4, "red": 4, "white": 0 }
+        }
+      ],
       "bank": {
         "black": 0,
         "blue": 1,
@@ -61,6 +68,7 @@
         }
       ],
       "reservedHidden": [],
+      "elites": [],
       "bank": {
         "black": 0,
         "blue": 2,
@@ -71,7 +79,7 @@
       }
     }
   ],
-  "activePlayerIndex": 1,
+  "activePlayerIndex": 0,
   "board": {
     "decks": {
       "1": [

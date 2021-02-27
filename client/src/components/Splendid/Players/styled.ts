@@ -1,14 +1,30 @@
 import styled from "styled-components";
 
-import FlexContainer, { FlexChild } from "../../common/FlexContainer";
+import FlexContainer, {
+  FlexChild,
+  PaddedContainer,
+} from "../../common/FlexContainer";
 
-export const PlayersContainer = styled(FlexContainer)`
+export const PlayersContainer = styled(PaddedContainer)`
+  flex: 1;
 `;
 
 type Props = { isActive: boolean };
 export const PlayerContainer = styled(FlexContainer)`
   padding: 10px;
-  border: ${({ isActive }: Props) => (isActive ? "solid 2px white" : "none")}
+  border-radius: 5px;
+  ${({ isActive }: Props) =>
+    isActive &&
+    `
+    box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.15);
+    transform: translate(-3px, -3px);
+  `}
+  background: #98927c26;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 export const PlayerDeckContainer = styled(FlexChild)`

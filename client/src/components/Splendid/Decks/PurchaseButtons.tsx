@@ -10,14 +10,9 @@ type PurchaseButtonProps = {
 };
 
 const PurchaseButton = ({ gameAction, text }: PurchaseButtonProps) => {
-  const { setFieldValue, submitForm } = useFormikContext<SplendidForm>();
+  const { setFieldValue } = useFormikContext<SplendidForm>();
   return (
-    <button
-      onClick={() => {
-        setFieldValue("gameAction", gameAction);
-        submitForm();
-      }}
-    >
+    <button onClick={() => setFieldValue("gameAction", gameAction)}>
       {text}
     </button>
   );

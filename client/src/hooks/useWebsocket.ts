@@ -68,7 +68,12 @@ export const useWebSocket = (path: string) => {
             break;
         }
       } else {
-        dispatch(addChatMessage(response?.details?.message));
+        dispatch(
+          addChatMessage(
+            response?.details?.clientId,
+            response?.details?.message
+          )
+        );
       }
     };
   }, [path, username, dispatch]);

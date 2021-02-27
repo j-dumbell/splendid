@@ -7,14 +7,16 @@ import Splendid from "./components/Splendid";
 import FlexContainer from "./components/common/FlexContainer";
 
 const AppContainer = styled.div`
-  padding: 0 30px;
+  height: 100%;
+  > ${FlexContainer} {
+    height: 100%;
+  }
 `;
 
 function App() {
   const [status, error] = useWebSocket("/");
   return (
     <AppContainer>
-      <h1>Splendid</h1>
       <FlexContainer>
         <Sidebar
           status={status as WsStatus}

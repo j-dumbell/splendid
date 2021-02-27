@@ -1,6 +1,7 @@
 import { SplendidGame, SplendidResourceList } from "../components/Splendid/domain";
 
 export type Message = {
+  clientId: number;
   message: string;
   timestamp: Date;
 };

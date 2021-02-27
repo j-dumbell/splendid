@@ -29,9 +29,13 @@ export const exitLobby = (
   payload: { clientId, playerNames },
 });
 
-export const addChatMessage = (message: string): MessageAction => ({
+export const addChatMessage = (
+  clientId: number,
+  message: string
+): MessageAction => ({
   type: "ADD_CHAT_MESSAGE",
   payload: {
+    clientId,
     message,
     timestamp: new Date(),
   },

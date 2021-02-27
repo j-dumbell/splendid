@@ -24,8 +24,13 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
       lobbyId: "abc123",
       chat: new Array(50).fill({
         message: "hello i am message",
+        clientId: 2,
         timestamp: new Date(),
       }),
+      playerNames: {
+        1: "Van",
+        2: "James",
+      },
       clientId: 1,
       game: (fixtures as unknown) as SplendidGame,
     }

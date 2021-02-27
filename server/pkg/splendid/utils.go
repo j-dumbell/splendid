@@ -2,9 +2,12 @@ package splendid
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 
 	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
+	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
 func copyBank(bank map[resource]int) map[resource]int {
@@ -44,4 +47,112 @@ func flattenVisibleCards(decks map[int]Cards) (allCards []Cards) {
 		}
 	}
 	return allCards
+}
+
+func countPurchased(cards Cards) map[resource]int {
+	counts := createEmptyBank()
+	for _, c := range cards {
+		counts[c.Income]++
+	}
+	return counts
+}
+
+func moveResources(fromBank, toBank, cost map[resource]int) (map[resource]int, map[resource]int, error) {
+	newFromBank := copyBank(fromBank)
+	newToBank := copyBank(toBank)
+	for res, amount := range cost {
+		newFromBank[res] -= amount
+		if newFromBank[res] < 0 {
+			return nil, nil, fmt.Errorf("can't afford %v: %v", res, amount)
+		}
+		newToBank[res] += amount
+	}
+	return newFromBank, newToBank, nil
+}
+
+func addResources(b1, b2 map[resource]int) map[resource]int {
+	total := createEmptyBank()
+	for res := range total {
+		total[res] = b1[res] + b2[res]
+	}
+	return total
+}
+
+func subtractResources(b1, b2 map[resource]int) map[resource]int {
+	total := createEmptyBank()
+	for res := range total {
+		total[res] = b1[res] - b2[res]
+	}
+	return total
+}
+
+func amountPayable(inputResources, cardResources, cardCost map[resource]int) (map[resource]int, error) {
+	deductable := createEmptyBank()
+	totalAssets := subtractResources(cardCost, addResources(inputResources, cardResources))
+	fmt.Println(totalAssets)
+	outstandingCount := 0
+	for res, amount := range totalAssets {
+		if amount <= 0 {
+			deductable[res] = util.MinInt(inputResources[res], cardCost[res])
+		} else {
+			outstandingCount += amount
+		}
+	}
+	if outstandingCount-inputResources[Yellow] > 0 {
+		return nil, errors.New("can't afford")
+	}
+	deductable[Yellow] = util.MinInt(outstandingCount, inputResources[Yellow])
+	return deductable, nil
+}
+
+func playerPoints(p Player) int {
+	points := 0
+	for _, c := range p.Purchased {
+		points += c.Points
+	}
+	for _, e := range p.Elites {
+		points += e.Points
+	}
+	return points
+}
+
+func winnerID(players []Player) int {
+	type playerMetric struct {
+		player         Player
+		points         int
+		purchasedCount int
+	}
+
+	playerMetrics := []playerMetric{}
+	maxPoints := 0
+	for _, p := range players {
+		points := playerPoints(p)
+		playerMetrics = append(playerMetrics, playerMetric{player: p, points: points, purchasedCount: len(p.Purchased)})
+		if points > maxPoints {
+			maxPoints = points
+		}
+	}
+	if maxPoints < 15 {
+		return 0
+	}
+	tiedPlayers := []playerMetric{}
+	for _, pm := range playerMetrics {
+		if pm.points == maxPoints {
+			tiedPlayers = append(tiedPlayers, pm)
+		}
+	}
+
+	if len(tiedPlayers) == 1 {
+		return tiedPlayers[0].player.ID
+	}
+
+	winningPlayer := tiedPlayers[0].player
+	minPurchased := tiedPlayers[0].purchasedCount
+	for _, pm := range tiedPlayers[1:] {
+		if pm.purchasedCount < minPurchased {
+			minPurchased = pm.purchasedCount
+			winningPlayer = pm.player
+		}
+	}
+	return winningPlayer.ID
 }

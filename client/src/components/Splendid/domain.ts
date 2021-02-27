@@ -10,6 +10,10 @@ export type SplendidResource = typeof splendidResource[number];
 
 export type SplendidResourceList = Record<SplendidResource, number>;
 
+const sizes = ["default", "mini", "micro"] as const;
+export type ResourceSize = typeof sizes[number];
+export type CardSize = typeof sizes[number];
+
 export type SplendidCard = {
   id?: number;
   tier: number;
@@ -39,6 +43,7 @@ export type SplendidPlayer = {
   purchased: SplendidCard[];
   reservedVisible: SplendidCard[];
   reservedHidden: SplendidCard[];
+  elites: SplendidElite[];
 };
 
 export type SplendidGame = {

@@ -2,12 +2,16 @@ import styled from "styled-components";
 
 import FlexContainer from "../../common/FlexContainer";
 
+type Props = {
+  mini?: boolean;
+};
+
 const EliteContainer = styled(FlexContainer)`
-  background-color: #bc8eed;
+  background-color: #a3aaff;
   margin: 5px;
   padding: 5px;
-  width: 8.5rem;
-  height: 8.5rem;
+  width: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};
+  height: ${({ mini }: Props) => (mini ? "5rem" : "6rem")};
   border-radius: 5px;
 `;
 

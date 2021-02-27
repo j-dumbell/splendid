@@ -7,16 +7,18 @@ import ResourceList from "../ResourceList";
 import EliteContainer from "./styled";
 import Crown from "./crown.svg";
 
-type Props = SplendidElite;
+type Props = SplendidElite & {
+  mini?: boolean;
+};
 
-const Elite = ({ points, cost }: Props) => (
-  <EliteContainer column justify="space-between">
+const Elite = ({ points, cost, mini }: Props) => (
+  <EliteContainer column mini={mini} justify="space-between">
     <FlexContainer justify="space-between">
       {points}
-      <Image src={Crown} alt="crown" width="2rem" />
+      <Image src={Crown} alt="crown" width="1.5rem" />
     </FlexContainer>
     <div>
-      <ResourceList resourceList={cost} hideEmpty mini column />
+      <ResourceList resourceList={cost} hideEmpty size="mini" column />
     </div>
   </EliteContainer>
 );
