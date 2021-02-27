@@ -103,6 +103,9 @@ function reducer(
       };
     case "UPDATE_BANK_RESOURCE":
       const splendidResourceAction = action as SplendidResourceAction;
+      if (!state.game) {
+        return state;
+      }
       return {
         ...state,
         game: {

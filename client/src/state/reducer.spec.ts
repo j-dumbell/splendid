@@ -4,9 +4,32 @@ import {
   JoinLobbyAction,
   MessageAction,
   SplendidAction,
+  SplendidResourceAction,
   State,
 } from "./domain";
 import reducer, { defaultState } from "./reducer";
+
+const game: SplendidGame = {
+  turn: 1,
+  activePlayerIndex: 0,
+  players: [],
+  board: {
+    elites: [],
+    decks: {
+      1: [],
+      2: [],
+      3: [],
+    },
+    bank: {
+      black: 0,
+      white: 0,
+      red: 0,
+      blue: 0,
+      green: 0,
+      yellow: 0,
+    },
+  },
+};
 
 describe("reducer()", () => {
   describe("action JOIN_LOBBY", () => {
@@ -50,7 +73,7 @@ describe("reducer()", () => {
         },
       };
       const newState = reducer(initialState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...initialState,
         playerNames: action.payload.playerNames,
       };
@@ -73,7 +96,7 @@ describe("reducer()", () => {
         },
       };
       const newState = reducer(initialState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...initialState,
         lobbyId: action.payload.lobbyId,
       };
@@ -101,7 +124,7 @@ describe("reducer()", () => {
         },
       };
       const newState = reducer(initialState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...initialState,
         playerNames: {},
         lobbyId: undefined,
@@ -128,7 +151,7 @@ describe("reducer()", () => {
         },
       };
       const newState = reducer(initialState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...initialState,
         playerNames: action.payload.playerNames,
       };
@@ -148,7 +171,7 @@ describe("reducer()", () => {
       };
       const newState = reducer(defaultState, action);
       const newerState = reducer(newState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...defaultState,
         chat: [action.payload, action.payload],
       };
@@ -159,28 +182,6 @@ describe("reducer()", () => {
   describe("action ADD_HISTORY_ACTION", () => {});
 
   describe("action UPDATE_GAME", () => {
-    const game: SplendidGame = {
-      turn: 1,
-      activePlayerIndex: 0,
-      players: [],
-      board: {
-        elites: [],
-        decks: {
-          1: [],
-          2: [],
-          3: [],
-        },
-        bank: {
-          black: 0,
-          white: 0,
-          red: 0,
-          blue: 0,
-          green: 0,
-          yellow: 0,
-        },
-      },
-    };
-
     it("it returns updated state on initial action", () => {
       const action: SplendidAction = {
         type: "UPDATE_GAME",
@@ -188,7 +189,7 @@ describe("reducer()", () => {
       };
       const newState = reducer(defaultState, action);
       const newerState = reducer(newState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...defaultState,
         game: action.payload,
       };
@@ -204,10 +205,10 @@ describe("reducer()", () => {
           activePlayerIndex: 1,
         },
       };
-      const stateWithGame = { ...defaultState, game };
-      const newState = reducer(stateWithGame, action);
+      const initialState: State = { ...defaultState, game };
+      const newState = reducer(initialState, action);
       const newerState = reducer(newState, action);
-      const expectedState = {
+      const expectedState: State = {
         ...defaultState,
         game: action.payload,
       };
@@ -216,5 +217,48 @@ describe("reducer()", () => {
     });
   });
 
-  describe("action UPDATE_BANK_RESOURCE", () => {});
+  describe("action UPDATE_BANK_RESOURCE", () => {
+    it("returns unchanged state if no game exists", () => {
+      const action: SplendidResourceAction = {
+        type: "UPDATE_BANK_RESOURCE",
+        payload: {},
+      };
+      const newState = reducer(defaultState, action);
+      expect(newState).toMatchObject(defaultState);
+    });
+
+    it("it inserts a blank offset bank", () => {
+      const initialState: State = { ...defaultState, game };
+      const action: SplendidResourceAction = {
+        type: "UPDATE_BANK_RESOURCE",
+        payload: {},
+      };
+      const newState = reducer(initialState, action);
+      expect(newState.game?.board.bankOffsetTemp).toMatchObject({
+        black: 0,
+        white: 0,
+        red: 0,
+        blue: 0,
+        green: 0,
+        yellow: 0,
+      });
+    });
+
+    it("it returns an updated offset bank", () => {
+      const initialState: State = { ...defaultState, game: { ...game } };
+      const action: SplendidResourceAction = {
+        type: "UPDATE_BANK_RESOURCE",
+        payload: { red: 1, green: 1 },
+      };
+      const newState = reducer(initialState, action);
+      expect(newState.game?.board.bankOffsetTemp).toMatchObject({
+        black: 0,
+        white: 0,
+        red: 1,
+        blue: 0,
+        green: 1,
+        yellow: 0,
+      });
+    });
+  });
 });
