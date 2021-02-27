@@ -1,7 +1,9 @@
+import { SplendidGame } from "../components/Splendid/domain";
 import {
   ExitLobbyAction,
   JoinLobbyAction,
   MessageAction,
+  SplendidAction,
   State,
 } from "./domain";
 import reducer, { defaultState } from "./reducer";
@@ -148,10 +150,7 @@ describe("reducer()", () => {
       const newerState = reducer(newState, action);
       const expectedState = {
         ...defaultState,
-        chat: [
-          action.payload,
-          action.payload,
-        ],
+        chat: [action.payload, action.payload],
       };
       expect(newerState).toMatchObject(expectedState);
     });
@@ -159,7 +158,63 @@ describe("reducer()", () => {
 
   describe("action ADD_HISTORY_ACTION", () => {});
 
-  describe("action UPDATE_GAME", () => {});
+  describe("action UPDATE_GAME", () => {
+    const game: SplendidGame = {
+      turn: 1,
+      activePlayerIndex: 0,
+      players: [],
+      board: {
+        elites: [],
+        decks: {
+          1: [],
+          2: [],
+          3: [],
+        },
+        bank: {
+          black: 0,
+          white: 0,
+          red: 0,
+          blue: 0,
+          green: 0,
+          yellow: 0,
+        },
+      },
+    };
+
+    it("it returns updated state on initial action", () => {
+      const action: SplendidAction = {
+        type: "UPDATE_GAME",
+        payload: game,
+      };
+      const newState = reducer(defaultState, action);
+      const newerState = reducer(newState, action);
+      const expectedState = {
+        ...defaultState,
+        game: action.payload,
+      };
+      expect(newerState).toMatchObject(expectedState);
+      expect(newerState.game?.activePlayerIndex).toBe(0);
+    });
+
+    it("it replaces updated game", () => {
+      const action: SplendidAction = {
+        type: "UPDATE_GAME",
+        payload: {
+          ...game,
+          activePlayerIndex: 1,
+        },
+      };
+      const stateWithGame = { ...defaultState, game };
+      const newState = reducer(stateWithGame, action);
+      const newerState = reducer(newState, action);
+      const expectedState = {
+        ...defaultState,
+        game: action.payload,
+      };
+      expect(newerState).toMatchObject(expectedState);
+      expect(newerState.game?.activePlayerIndex).toBe(1);
+    });
+  });
 
   describe("action UPDATE_BANK_RESOURCE", () => {});
 });
