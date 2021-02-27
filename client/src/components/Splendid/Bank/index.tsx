@@ -20,6 +20,7 @@ const Bank = ({
     {splendidResource.map((resource, i) => (
       <ResourceCount
         key={i}
+        size="big"
         resource={resource}
         count={bank[resource]}
         offsetTemp={bankOffsetTemp ? bankOffsetTemp[resource] : undefined}

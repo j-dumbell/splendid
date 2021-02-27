@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ResourceSize, splendidResource } from "../domain";
+import { SplendidSize, splendidResource } from "../domain";
 import ResourceCount from "./ResourceCount";
 
 export type ResourceListProps = {
@@ -8,7 +8,7 @@ export type ResourceListProps = {
   offsetsTemp?: Record<string, number>;
   offsetsPerm?: Record<string, number>;
   hideEmpty?: boolean;
-  size?: ResourceSize;
+  size?: SplendidSize;
   column?: boolean;
 };
 

@@ -1,32 +1,34 @@
 import React from "react";
 
-import { ResourceSize, SplendidResource } from "../domain";
+import { SplendidSize, SplendidResource } from "../domain";
 import Image from "../../common/Image";
-import Ruby from "./ruby.svg";
-import Diamond from "./diamond.svg";
-import Emerald from "./emerald.svg";
-import Onyx from "./onyx.svg";
-import Sapphire from "./sapphire.svg";
-import Citrine from "./citrine.svg";
+
+import Apple from "./fruit/apple.svg";
+import Strawberry from "./fruit/strawberry.svg";
+import Pear from "./fruit/pear.svg";
+import Peach from "./fruit/peach.svg";
+import Orange from "./fruit/orange.svg";
+import Pineapple from "./fruit/banana.svg";
+
+const assetMap = {
+  black: Peach,
+  white: Orange,
+  red: Strawberry,
+  blue: Pear,
+  green: Apple,
+  yellow: Pineapple,
+};
 
 type Props = {
   resourceType: SplendidResource;
-  size?: ResourceSize;
-};
-
-const assetMap = {
-  black: Onyx,
-  white: Diamond,
-  red: Ruby,
-  blue: Sapphire,
-  green: Emerald,
-  yellow: Citrine,
+  size?: SplendidSize;
 };
 
 const sizeMap = {
-  default: "2.5rem",
-  mini: "1.25rem",
-  micro: "0.75rem",
+  micro: "1rem",
+  mini: "1.5rem",
+  big: "3rem",
+  default: "2rem",
 }
 
 const Resource = ({ resourceType, size }: Props) => (

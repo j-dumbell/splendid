@@ -1,26 +1,53 @@
 import React from "react";
 
-import { CardSize, SplendidCard } from "../domain";
+import { SplendidSize, SplendidCard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import Resource from "../Resource";
-import ResourceList from "../ResourceList";
-import { CardContainer } from "./styled";
+import { CardContainer, CardVictoryPoints } from "./styled";
+import CardResourceList from "./CardResourceList";
 
 type Props = SplendidCard & {
-  size?: CardSize;
+  size?: SplendidSize;
   reserved?: boolean;
   shadowed?: boolean;
+  purchasable?: boolean;
+  index?: number;
 };
 
-const Card = ({ tier, points, income, cost, size, shadowed, reserved }: Props) => (
-  <CardContainer column justify="space-between" tier={tier} size={size} shadowed={shadowed} reserved={reserved} >
+const Card = ({
+  id,
+  tier,
+  points,
+  income,
+  cost,
+  size,
+  shadowed,
+  reserved,
+  purchasable,
+  index,
+}: Props) => (
+  <CardContainer
+    column
+    justify="space-between"
+    tier={tier}
+    size={size}
+    flipped={shadowed || !id}
+    reserved={reserved}
+    index={index}
+    tabIndex={!purchasable && reserved ? -1 : 0}
+  >
     <FlexContainer justify="space-between">
-      <div>{Boolean(points) && points}</div>{" "}
-      {income && <Resource resourceType={income} size="mini" />}
+      <CardVictoryPoints size={size}>
+        {Boolean(points) && points}
+      </CardVictoryPoints>
+      {income && (
+        <Resource
+          resourceType={income}
+          size={!size || size === "default" ? "default" : "micro"}
+        />
+      )}
     </FlexContainer>
-    <div>
-      {cost && <ResourceList resourceList={cost} hideEmpty size="mini" column />}
-    </div>
+    <CardResourceList cost={cost} size={size} reserved={reserved} />
   </CardContainer>
 );
 

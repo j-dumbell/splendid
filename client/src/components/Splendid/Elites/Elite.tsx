@@ -1,25 +1,20 @@
 import React from "react";
+import CardResourceList from "../Card/CardResourceList";
+import { CardVictoryPoints } from "../Card/styled";
 
-import { SplendidElite } from "../domain";
-import FlexContainer from "../../common/FlexContainer";
-import Image from "../../common/Image";
-import ResourceList from "../ResourceList";
+import { SplendidElite, SplendidSize } from "../domain";
 import EliteContainer from "./styled";
-import Crown from "./crown.svg";
 
 type Props = SplendidElite & {
-  mini?: boolean;
+  size?: SplendidSize;
 };
 
-const Elite = ({ points, cost, mini }: Props) => (
-  <EliteContainer column mini={mini} justify="space-between">
-    <FlexContainer justify="space-between">
-      {points}
-      <Image src={Crown} alt="crown" width="1.5rem" />
-    </FlexContainer>
-    <div>
-      <ResourceList resourceList={cost} hideEmpty size="mini" column />
-    </div>
+const Elite = ({ points, cost, size }: Props) => (
+  <EliteContainer column size={size} justify="space-between">
+    <CardVictoryPoints size={size}>
+      {Boolean(points) && points}
+    </CardVictoryPoints>
+    <CardResourceList cost={cost} size={size} />
   </EliteContainer>
 );
 

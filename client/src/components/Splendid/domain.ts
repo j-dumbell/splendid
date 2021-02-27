@@ -1,18 +1,17 @@
 export const splendidResource = [
   "black",
-  "white",
-  "red",
   "blue",
   "green",
+  "red",
+  "white",
   "yellow",
 ] as const;
 export type SplendidResource = typeof splendidResource[number];
 
 export type SplendidResourceList = Record<SplendidResource, number>;
 
-const sizes = ["default", "mini", "micro"] as const;
-export type ResourceSize = typeof sizes[number];
-export type CardSize = typeof sizes[number];
+const sizes = ["default", "mini", "micro", "big"] as const;
+export type SplendidSize = typeof sizes[number];
 
 export type SplendidCard = {
   id?: number;

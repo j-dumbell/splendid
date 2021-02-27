@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ResourceSize, SplendidResource } from "../domain";
+import { SplendidSize, SplendidResource } from "../domain";
 import Resource from "../Resource";
 import ResourceContainer from "./styled";
 
@@ -9,7 +9,7 @@ type Props = {
   offsetTemp?: number;
   offsetPerm?: number;
   count: number;
-  size?: ResourceSize;
+  size?: SplendidSize;
   column?: boolean;
 };
 
@@ -21,7 +21,7 @@ const ResourceCount = ({
   size,
   column,
 }: Props) => (
-  <ResourceContainer column={column}>
+  <ResourceContainer column={column} size={size}>
     <Resource resourceType={resource} size={size} />
     <p>
       {offsetTemp ? (

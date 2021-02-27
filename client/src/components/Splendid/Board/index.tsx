@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { SplendidBoard } from "../domain";
-import FlexContainer, { PaddedContainer } from "../../common/FlexContainer";
+import FlexContainer from "../../common/FlexContainer";
 import Bank from "../Bank";
 import Elites from "../Elites";
 import Decks from "../Decks";
@@ -11,9 +11,8 @@ const ElitesContainer = styled(FlexContainer)`
   margin-bottom: 20px;
 `;
 
-const BoardContainer = styled(PaddedContainer)`
-  flex: 2;
-  align: center;
+const BoardContainer = styled(FlexContainer)`
+  flex: 3;
 `;
 
 const Board = ({
@@ -21,7 +20,7 @@ const Board = ({
 }: {
   board: SplendidBoard;
 }) => (
-  <BoardContainer column justify="center">
+  <BoardContainer column justify="flex-end">
     <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
     <ElitesContainer justify="center">
       <Elites elites={elites} />
