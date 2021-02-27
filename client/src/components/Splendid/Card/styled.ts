@@ -58,5 +58,5 @@ export const CardContainer = styled(FlexContainer)`
 
 export const CardVictoryPoints = styled.div`
   font-size: ${({ size }: Pick<Props, "size">) =>
-    size !== "micro" ? "1.2rem" : "0.8rem"};
+    size !== "micro" ? "1.6rem" : "0.8rem"};
 `;

@@ -43,7 +43,7 @@ const Card = ({
       {income && (
         <Resource
           resourceType={income}
-          size={!size || size === "default" ? "mini" : "micro"}
+          size={!size || size === "default" ? "default" : "micro"}
         />
       )}
     </FlexContainer>
