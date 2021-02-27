@@ -56,7 +56,7 @@ function reducer(
           playerNames: joinPlayerNames,
         },
       } = action as JoinLobbyAction;
-      if (state.lobbyId && state.clientId) {
+      if (state.lobbyId === joinLobbyId && state.clientId) {
         return {
           ...state,
           playerNames: joinPlayerNames,
