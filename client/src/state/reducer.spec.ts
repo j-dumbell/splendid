@@ -1,4 +1,9 @@
-import { ExitLobbyAction, JoinLobbyAction, State } from "./domain";
+import {
+  ExitLobbyAction,
+  JoinLobbyAction,
+  MessageAction,
+  State,
+} from "./domain";
 import reducer, { defaultState } from "./reducer";
 
 describe("reducer()", () => {
@@ -80,9 +85,9 @@ describe("reducer()", () => {
         ...defaultState,
         clientId: 1,
         lobbyId: "123abc",
-        playerNames: { 
-          1: "Van", 
-          2: "James"
+        playerNames: {
+          1: "Van",
+          2: "James",
         },
       };
       const action: ExitLobbyAction = {
@@ -107,9 +112,9 @@ describe("reducer()", () => {
         ...defaultState,
         clientId: 1,
         lobbyId: "123abc",
-        playerNames: { 
-          1: "Van", 
-          2: "James"
+        playerNames: {
+          1: "Van",
+          2: "James",
         },
       };
       const action: ExitLobbyAction = {
@@ -128,9 +133,33 @@ describe("reducer()", () => {
       expect(newState).toMatchObject(expectedState);
     });
   });
-  
-  describe("action ADD_CHAT_MESSAGE", () => {});
+
+  describe("action ADD_CHAT_MESSAGE", () => {
+    it("it appends to chat state", () => {
+      const action: MessageAction = {
+        type: "ADD_CHAT_MESSAGE",
+        payload: {
+          clientId: 1,
+          timestamp: new Date(),
+          message: "hello",
+        },
+      };
+      const newState = reducer(defaultState, action);
+      const newerState = reducer(newState, action);
+      const expectedState = {
+        ...defaultState,
+        chat: [
+          action.payload,
+          action.payload,
+        ],
+      };
+      expect(newerState).toMatchObject(expectedState);
+    });
+  });
+
   describe("action ADD_HISTORY_ACTION", () => {});
+
   describe("action UPDATE_GAME", () => {});
+
   describe("action UPDATE_BANK_RESOURCE", () => {});
 });
