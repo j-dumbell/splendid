@@ -36,7 +36,7 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
     }
   : undefined;
 
-const defaultState: State = {
+export const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
