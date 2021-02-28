@@ -23,8 +23,6 @@ resource "aws_ecs_service" "service" {
   task_definition = aws_ecs_task_definition.task_defn.arn
   desired_count   = var.server_count
   launch_type     = "FARGATE"
-  # iam_role        = aws_iam_role.foo.arn #
-  # depends_on      = [aws_iam_role_policy.foo]
 
   network_configuration {
     subnets         = [aws_subnet.private.id]
