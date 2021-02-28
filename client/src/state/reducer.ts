@@ -10,9 +10,7 @@ import {
   BaseAction,
   ActionType,
   ExitLobbyAction,
-  SplendidResourceAction,
 } from "./domain";
-import { constructEmptyResourceList } from "../components/Splendid/util";
 
 /**
  * Create a `.env.development.local` file and set this env to
@@ -100,25 +98,6 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
-      };
-    case "UPDATE_BANK_RESOURCE":
-      const splendidResourceAction = action as SplendidResourceAction;
-      if (!state.game) {
-        return state;
-      }
-      return {
-        ...state,
-        game: {
-          ...state.game!,
-          board: {
-            ...state.game!.board,
-            bankOffsetTemp: {
-              ...constructEmptyResourceList(),
-              ...state.game!.board.bankOffsetTemp,
-              ...splendidResourceAction.payload,
-            },
-          },
-        },
       };
     default:
       return state;

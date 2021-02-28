@@ -33,7 +33,6 @@ export type SplendidBoard = {
   decks: SplendidDeck;
   elites: SplendidElite[];
   bank: SplendidResourceList;
-  bankOffsetTemp?: SplendidResourceList;
 };
 
 export type SplendidPlayer = {

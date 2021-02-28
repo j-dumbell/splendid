@@ -1,8 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
-import { useDispatch } from "react-redux";
 
-import { updateBankResources } from "../../state/actionCreator";
 import { sendJSON } from "../../hooks/useWebsocket";
 import { useGame } from "../../hooks/useGame";
 import { constructEmptyResourceList, constructPayload } from "./util";
@@ -17,7 +15,6 @@ const initialValues: SplendidForm = {
 };
 
 const Splendid = () => {
-  const dispatch = useDispatch();
   const [game] = useGame();
   if (!game) {
     return <SplendidContainer />;
@@ -27,7 +24,6 @@ const Splendid = () => {
       initialValues={initialValues}
       onSubmit={(values, { resetForm }) => {
         sendJSON(constructPayload(values));
-        dispatch(updateBankResources(initialValues.resources));
         resetForm();
       }}
     >

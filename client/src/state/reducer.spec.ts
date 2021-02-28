@@ -1,12 +1,8 @@
-import {
-  SplendidGame,
-  SplendidResourceList,
-} from "../components/Splendid/domain";
+import { SplendidGame } from "../components/Splendid/domain";
 import {
   addChatMessage,
   exitLobby,
   joinLobby,
-  updateBankResources,
   updateSplendidGame,
 } from "./actionCreator";
 import { State } from "./domain";
@@ -139,47 +135,6 @@ describe("reducer()", () => {
 
       expect(newerState.game).toEqual(action.payload);
       expect(newerState.game?.activePlayerIndex).toBe(1);
-    });
-  });
-
-  describe("action UPDATE_BANK_RESOURCE", () => {
-    it("returns unchanged state if no game exists", () => {
-      const action = updateBankResources({});
-      const newState = reducer(defaultState, action);
-
-      expect(newState).toEqual(defaultState);
-    });
-
-    it("it inserts a blank offset bank", () => {
-      const initialState: State = { ...defaultState, game };
-      const action = updateBankResources({});
-      const newState = reducer(initialState, action);
-      const expectedBank: SplendidResourceList = {
-        black: 0,
-        white: 0,
-        red: 0,
-        blue: 0,
-        green: 0,
-        yellow: 0,
-      };
-
-      expect(newState.game?.board.bankOffsetTemp).toEqual(expectedBank);
-    });
-
-    it("it returns an updated offset bank", () => {
-      const initialState: State = { ...defaultState, game };
-      const action = updateBankResources({ red: 1, green: 1 });
-      const newState = reducer(initialState, action);
-      const expectedBank: SplendidResourceList = {
-        black: 0,
-        white: 0,
-        red: 1,
-        blue: 0,
-        green: 1,
-        yellow: 0,
-      };
-
-      expect(newState.game?.board.bankOffsetTemp).toEqual(expectedBank);
     });
   });
 });

@@ -2,7 +2,7 @@ import React from "react";
 import { useFormikContext } from "formik";
 
 import { useGame } from "../../../hooks/useGame";
-import { SplendidPlayer, splendidResource } from "../domain";
+import { SplendidForm, SplendidPlayer, splendidResource } from "../domain";
 import { constructOffsetsPerm, validateMax } from "./util";
 import FlexContainer from "../../common/FlexContainer";
 import { Button } from "../../common/Button";
@@ -18,10 +18,10 @@ export const PlayerResourceForm = ({
     values: { resources },
     setFieldValue,
     submitForm,
-  } = useFormikContext<any>();
+  } = useFormikContext<SplendidForm>();
   const [game] = useGame();
   const {
-    board: { bank, bankOffsetTemp },
+    board: { bank },
   } = game!;
   return (
     <PlayerResourceFormContainer justify="space-between">
@@ -44,9 +44,7 @@ export const PlayerResourceForm = ({
                 resource={resource}
                 nextValueFn={(v) => v + 1}
                 disabled={
-                  (bankOffsetTemp ? bankOffsetTemp[resource] : 0) +
-                    bank[resource] <=
-                    0 ||
+                  (-resources[resource] || 0) + bank[resource] <= 0 ||
                   !validateMax({
                     ...resources,
                     [resource]: resources[resource] + 1,

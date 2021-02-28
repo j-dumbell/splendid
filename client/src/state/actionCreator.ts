@@ -1,7 +1,4 @@
-import {
-  SplendidGame,
-  SplendidResourceList,
-} from "../components/Splendid/domain";
+import { SplendidGame } from "../components/Splendid/domain";
 import {
   JoinLobbyAction,
   ExitLobbyAction,
@@ -9,7 +6,6 @@ import {
   HistoryActionType,
   MessageAction,
   SplendidAction,
-  SplendidResourceAction,
 } from "./domain";
 
 export const joinLobby = (
@@ -43,13 +39,6 @@ export const addChatMessage = (
 
 export const updateSplendidGame = (payload: SplendidGame): SplendidAction => ({
   type: "UPDATE_GAME",
-  payload,
-});
-
-export const updateBankResources = (
-  payload: Partial<SplendidResourceList>
-): SplendidResourceAction => ({
-  type: "UPDATE_BANK_RESOURCE",
   payload,
 });
 
