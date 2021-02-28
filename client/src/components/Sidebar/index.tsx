@@ -3,7 +3,7 @@ import React from "react";
 import { WsStatus } from "../../hooks/useWebsocket";
 import { FlexChild } from "../common/FlexContainer";
 import ActionsForm from "./ActionsForm";
-import LatestResponse from "./LatestResponse";
+import ActionHistory from "./ActionHistory";
 import Chat from "./Chat";
 import styled from "styled-components";
 
@@ -25,7 +25,7 @@ const Sidebar = ({ status, error }: ActionProps) => (
     {status === "open" && (
       <>
         <ActionsForm />
-        <LatestResponse />
+        <ActionHistory />
         <Chat />
       </>
     )}

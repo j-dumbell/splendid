@@ -11,7 +11,11 @@ export const NameForm = () => {
   return username ? (
     <>
       <h3>Welcome back {username}</h3>
-      {!lobbyId && <button onClick={removeUsername}>Clear Username</button>}
+      {lobbyId ? (
+        <h3>Lobby {lobbyId}</h3>
+      ) : (
+        <button onClick={removeUsername}>Clear Username</button>
+      )}
     </>
   ) : (
     <Formik
@@ -20,7 +24,12 @@ export const NameForm = () => {
     >
       {({ isSubmitting }) => (
         <FlexForm>
-          <FlexField type="text" name="username" placeholder="username" required />
+          <FlexField
+            type="text"
+            name="username"
+            placeholder="username"
+            required
+          />
           <button type="submit" disabled={isSubmitting}>
             Set Username
           </button>
