@@ -12,8 +12,6 @@ import { SplendidForm } from "./domain";
 import { SplendidContainer, SplendidFormContainer } from "./styled";
 
 const initialValues: SplendidForm = {
-  cardId: "",
-  gameAction: "",
   selectedCard: "",
   resources: constructEmptyResourceList(),
 };

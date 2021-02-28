@@ -5,6 +5,7 @@ import { SplendidSize, SplendidCard } from "../domain";
 import Card from "../Card";
 import PurchaseButtons from "./PurchaseButtons";
 import { PurchasableCardContainer } from "./styled";
+import { constructCardRef } from "../helpers";
 
 type Props = SplendidCard & {
   purchasable?: boolean;
@@ -13,21 +14,33 @@ type Props = SplendidCard & {
   shadowed?: boolean;
 };
 
-const PurchasableCard = ({ reserved, size, shadowed, purchasable, ...card }: Props) => {
-  const cardRef = card.id ? `visible-${card.id}` : `hidden-${card.tier}`;
-  return (
-    <PurchasableCardContainer shadowed={shadowed}>
-      <Field type="radio" name="selectedCard" value={cardRef} />
-      <PurchaseButtons
-        {...card}
-        reserved={reserved}
-      />
-      <Card {...card} size={size} shadowed={shadowed} reserved={reserved} purchasable={purchasable} />
-    </PurchasableCardContainer>
-  );
-};
+const PurchasableCard = ({
+  reserved,
+  size,
+  shadowed,
+  purchasable,
+  ...card
+}: Props) => (
+  <PurchasableCardContainer shadowed={shadowed}>
+    <Field type="radio" name="selectedCard" value={constructCardRef(card)} />
+    <PurchaseButtons {...card} reserved={reserved} />
+    <Card
+      {...card}
+      size={size}
+      shadowed={shadowed}
+      reserved={reserved}
+      purchasable={purchasable}
+    />
+  </PurchasableCardContainer>
+);
 
-const DeckCard = ({ reserved, size, shadowed, purchasable, ...card }: Props) => {
+const DeckCard = ({
+  reserved,
+  size,
+  shadowed,
+  purchasable,
+  ...card
+}: Props) => {
   return purchasable ? (
     <PurchasableCard
       reserved={reserved}
@@ -37,7 +50,13 @@ const DeckCard = ({ reserved, size, shadowed, purchasable, ...card }: Props) => 
       purchasable={purchasable}
     />
   ) : (
-    <Card reserved={reserved} size={size} shadowed={shadowed} purchasable={purchasable} {...card} />
+    <Card
+      reserved={reserved}
+      size={size}
+      shadowed={shadowed}
+      purchasable={purchasable}
+      {...card}
+    />
   );
 };
 
