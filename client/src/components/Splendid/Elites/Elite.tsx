@@ -5,16 +5,17 @@ import { CardVictoryPoints } from "../Card/styled";
 import { SplendidElite, SplendidSize } from "../domain";
 import EliteContainer from "./styled";
 
-type Props = SplendidElite & {
+type Props = {
+  elite: SplendidElite;
   size?: SplendidSize;
 };
 
-const Elite = ({ points, cost, size }: Props) => (
+const Elite = ({ elite, size }: Props) => (
   <EliteContainer column size={size} justify="space-between">
     <CardVictoryPoints size={size}>
-      {Boolean(points) && points}
+      {Boolean(elite.points) && elite.points}
     </CardVictoryPoints>
-    <CardResourceList cost={cost} size={size} />
+    <CardResourceList cost={elite.cost} size={size} />
   </EliteContainer>
 );
 

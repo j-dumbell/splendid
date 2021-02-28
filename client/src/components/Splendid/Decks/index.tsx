@@ -20,10 +20,18 @@ const Decks = ({ decks }: Props) => {
         return (
           <FlexContainer key={`deck-${i}`} justify="center">
             <DeckStack shadowed={deckCount > 1}>
-              <DeckCard tier={Number(tier)} shadowed={deckCount > 1} purchasable={isActivePlayer} />
+              <DeckCard
+                card={{ tier: Number(tier) }}
+                shadowed={deckCount > 1}
+                purchasable={isActivePlayer}
+              />
             </DeckStack>
             {constructVisible(tier, decks).map((card, j) => (
-              <DeckCard key={`cards-${j}`} {...card} purchasable={isActivePlayer} />
+              <DeckCard
+                key={`cards-${j}`}
+                card={card}
+                purchasable={isActivePlayer}
+              />
             ))}
           </FlexContainer>
         );

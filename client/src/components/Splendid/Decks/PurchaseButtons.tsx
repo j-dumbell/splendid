@@ -19,15 +19,16 @@ const PurchaseButton = ({ gameAction, text }: PurchaseButtonProps) => {
   );
 };
 
-type PurchaseButtonsProps = SplendidCard & {
+type PurchaseButtonsProps = {
+  card: SplendidCard;
   reserved?: boolean;
 };
 
-const PurchaseButtons = (props: PurchaseButtonsProps) => (
+const PurchaseButtons = ({ card, reserved }: PurchaseButtonsProps) => (
   <PurchaseContainer>
-    {props.reserved ? (
+    {reserved ? (
       <PurchaseButton gameAction="buyCard" text="Buy" />
-    ) : props.id ? (
+    ) : card.id ? (
       <>
         <PurchaseButton gameAction="buyCard" text="Buy" />
         <PurchaseButton gameAction="reserveVisible" text="Reserve" />
