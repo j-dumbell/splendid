@@ -1,6 +1,8 @@
 import React from "react";
-
 import { Formik } from "formik";
+
+import Button from "../../common/Button";
+import Text from "../../common/Text";
 import { useCookie } from "../../../hooks/useCookie";
 import { useLobbyId } from "../../../hooks/useLobbyId";
 import { FlexForm, FlexField } from "../../common/FlexContainer";
@@ -12,9 +14,11 @@ export const NameForm = () => {
     <>
       <h3>Welcome back {username}</h3>
       {lobbyId ? (
-        <h3>Lobby {lobbyId}</h3>
+        <h3>
+          Lobby <Text color="red">{lobbyId}</Text>
+        </h3>
       ) : (
-        <button onClick={removeUsername}>Clear Username</button>
+        <Button onClick={removeUsername}>Clear Username</Button>
       )}
     </>
   ) : (
@@ -30,9 +34,9 @@ export const NameForm = () => {
             placeholder="username"
             required
           />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Set Username
-          </button>
+          </Button>
         </FlexForm>
       )}
     </Formik>

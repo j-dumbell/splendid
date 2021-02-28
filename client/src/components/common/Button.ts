@@ -31,3 +31,5 @@ export const Button = styled(UnstyledButton)`
     transform: translate(-2px, -2px);
   }
 `;
+
+export default Button;

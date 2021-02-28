@@ -4,7 +4,7 @@ type Props = {
   color?: string;
 };
 
-const Text = styled.p`
+const Text = styled.span`
   ${(props: Props) =>
     props.color &&
     css`

@@ -1,5 +1,6 @@
 import React from "react";
 
+import Button from "../../common/Button";
 import { useLobbyId } from "../../../hooks/useLobbyId";
 import { sendJSON } from "../../../hooks/useWebsocket";
 
@@ -9,7 +10,7 @@ const ExitLobbyButton = () => {
     return null;
   }
   return (
-    <button onClick={() => sendJSON({ action: "exit" })}>Exit Lobby</button>
+    <Button onClick={() => sendJSON({ action: "exit" })}>Exit Lobby</Button>
   );
 };
 

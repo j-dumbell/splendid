@@ -1,5 +1,6 @@
 import React from "react";
 
+import Button from "../../common/Button";
 import { useGame } from "../../../hooks/useGame";
 import { useLobbyId } from "../../../hooks/useLobbyId";
 import { sendJSON } from "../../../hooks/useWebsocket";
@@ -11,13 +12,13 @@ const StartGameButton = () => {
     return null;
   }
   return (
-    <button
+    <Button
       onClick={() =>
         sendJSON({ action: "game", params: { gameAction: "startGame" } })
       }
     >
       Start Game
-    </button>
+    </Button>
   );
 };
 

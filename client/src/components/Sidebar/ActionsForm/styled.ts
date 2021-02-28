@@ -6,6 +6,7 @@ export const ActionsFormContainer = styled(FlexContainer)`
   & > button,
   form > button,
   form > input[type="text"] {
-    margin-bottom: 5px;
+    font-family: monospace;
+    margin: 0 0 5px;
   }
 `;
