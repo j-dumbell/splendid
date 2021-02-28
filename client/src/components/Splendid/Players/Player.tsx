@@ -5,7 +5,7 @@ import { useActivePlayer } from "../../../hooks/useActivePlayer";
 import { State } from "../../../state/domain";
 import { SplendidPlayer } from "../domain";
 import Elites from "../Elites";
-import { getScore } from "./helpers";
+import { getScore } from "./util";
 import PlayerDeck from "./PlayerDeck";
 import PlayerResourceForm from "./PlayerResourceForm";
 import PlayerResourceList from "./PlayerResourceList";

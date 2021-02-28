@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 
 import { useGame } from "../../../hooks/useGame";
 import { SplendidPlayer, splendidResource } from "../domain";
-import { constructOffsetsPerm, validateMax } from "./helpers";
+import { constructOffsetsPerm, validateMax } from "./util";
 import FlexContainer from "../../common/FlexContainer";
 import { Button } from "../../common/Button";
 import ResourceCount from "../ResourceList/ResourceCount";

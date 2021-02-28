@@ -1,7 +1,7 @@
 import React from "react";
 
 import { SplendidPlayer, splendidResource } from "../domain";
-import { constructOffsetsPerm } from "./helpers";
+import { constructOffsetsPerm } from "./util";
 import ResourceCount from "../ResourceList/ResourceCount";
 import { PlayerResourceListContainer } from "./styled";
 

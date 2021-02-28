@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { updateBankResources } from "../../state/actionCreator";
 import { sendJSON } from "../../hooks/useWebsocket";
 import { useGame } from "../../hooks/useGame";
-import { constructEmptyResourceList, constructPayload } from "./helpers";
+import { constructEmptyResourceList, constructPayload } from "./util";
 import Board from "./Board";
 import Players from "./Players";
 import { SplendidForm } from "./domain";

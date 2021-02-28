@@ -3,7 +3,7 @@ import { Field } from "formik";
 
 import Card, { Props as CardProps } from "../Card";
 import PurchaseButtons from "./PurchaseButtons";
-import { constructCardRef } from "../helpers";
+import { constructCardRef } from "../util";
 import { PurchasableCardContainer } from "./styled";
 
 type Props = Omit<CardProps, "index">;

@@ -2,7 +2,7 @@ import React from "react";
 
 import { SplendidDeck } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
-import { getDeckKeys, constructVisible, constructDeck } from "./helpers";
+import { getDeckKeys, constructVisible, constructDeck } from "./util";
 import DeckCard from "./DeckCard";
 import { DeckStack } from "./styled";
 import { useActivePlayer } from "../../../hooks/useActivePlayer";

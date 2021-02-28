@@ -1,5 +1,5 @@
 import { SplendidPlayer } from "../domain";
-import { sortPlayers, validateMax } from "./helpers";
+import { sortPlayers, validateMax } from "./util";
 
 describe("validateMax()", () => {
   it("should not error when only 1 colour selected", () => {

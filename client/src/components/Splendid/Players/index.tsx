@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../../state/domain";
 import { SplendidPlayer } from "../domain";
 import Player from "./Player";
-import { sortPlayers } from "./helpers";
+import { sortPlayers } from "./util";
 import { PlayersContainer } from "./styled";
 
 type Props = {

@@ -12,7 +12,7 @@ import {
   ExitLobbyAction,
   SplendidResourceAction,
 } from "./domain";
-import { constructEmptyResourceList } from "../components/Splendid/helpers";
+import { constructEmptyResourceList } from "../components/Splendid/util";
 
 /**
  * Create a `.env.development.local` file and set this env to
