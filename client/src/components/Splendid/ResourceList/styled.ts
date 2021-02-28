@@ -2,12 +2,12 @@ import styled, { css } from "styled-components";
 import { SplendidSize } from "../domain";
 
 type Props = {
-  size?: SplendidSize;
+  size: SplendidSize;
   column?: boolean;
 };
 
 const ResourceContainer = styled.div`
-  margin: ${({ size }: Props) => (!size || size === "default" ? "0 5px" : "0")};
+  margin: ${({ size }: Props) => (size === "default" ? "0 5px" : "0")};
   &:last-child {
     margin: 0;
   }

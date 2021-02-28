@@ -1,14 +1,18 @@
 import React from "react";
 
-import { SplendidSize, splendidResource } from "../domain";
+import {
+  SplendidSize,
+  splendidResource,
+  SplendidResourceList,
+} from "../domain";
 import ResourceCount from "./ResourceCount";
 
-export type ResourceListProps = {
-  resourceList: Record<string, number>;
-  offsetsTemp?: Record<string, number>;
-  offsetsPerm?: Record<string, number>;
+export type Props = {
+  resourceList: SplendidResourceList;
+  offsetsTemp?: SplendidResourceList;
+  offsetsPerm?: SplendidResourceList;
   hideEmpty?: boolean;
-  size?: SplendidSize;
+  size: SplendidSize;
   column?: boolean;
 };
 
@@ -19,7 +23,7 @@ export const ResourceList = ({
   hideEmpty,
   size,
   column,
-}: ResourceListProps) => (
+}: Props) => (
   <>
     {splendidResource.map((resource, i) => {
       const offsetPerm = offsetsPerm ? offsetsPerm[resource] : 0;

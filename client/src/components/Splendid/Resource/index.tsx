@@ -21,7 +21,7 @@ const assetMap = {
 
 type Props = {
   resourceType: SplendidResource;
-  size?: SplendidSize;
+  size: SplendidSize;
 };
 
 const sizeMap = {

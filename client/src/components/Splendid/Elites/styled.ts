@@ -5,7 +5,7 @@ import { widthMap } from '../Card/styled';
 import { SplendidSize } from "../domain";
 
 type Props = {
-  size?: SplendidSize;
+  size: SplendidSize;
 };
 
 const EliteContainer = styled(FlexContainer)`

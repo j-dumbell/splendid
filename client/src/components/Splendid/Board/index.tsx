@@ -15,17 +15,17 @@ const BoardContainer = styled(FlexContainer)`
   flex: 3;
 `;
 
-const Board = ({
-  board: { bank, bankOffsetTemp, elites, decks },
-}: {
+type Props = {
   board: SplendidBoard;
-}) => (
+};
+
+const Board = ({ board: { bank, elites, decks } }: Props) => (
   <BoardContainer column justify="flex-end">
-    <Bank bank={bank} bankOffsetTemp={bankOffsetTemp} />
+    <Bank bank={bank} />
     <ElitesContainer justify="center">
-      <Elites elites={elites} />
+      <Elites elites={elites} size="big" />
     </ElitesContainer>
-    <Decks decks={decks} />
+    <Decks decks={decks} size="big" />
   </BoardContainer>
 );
 

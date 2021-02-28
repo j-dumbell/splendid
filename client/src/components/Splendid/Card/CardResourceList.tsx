@@ -5,7 +5,7 @@ import ResourceList from "../ResourceList";
 
 type Props = {
   cost?: SplendidResourceList;
-  size?: SplendidSize;
+  size: SplendidSize;
   reserved?: boolean;
 };
 

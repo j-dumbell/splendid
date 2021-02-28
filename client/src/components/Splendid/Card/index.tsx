@@ -6,8 +6,9 @@ import Resource from "../Resource";
 import { CardContainer, CardVictoryPoints } from "./styled";
 import CardResourceList from "./CardResourceList";
 
-type Props = SplendidCard & {
-  size?: SplendidSize;
+export type Props = {
+  card: SplendidCard;
+  size: SplendidSize;
   reserved?: boolean;
   shadowed?: boolean;
   purchasable?: boolean;
@@ -15,11 +16,7 @@ type Props = SplendidCard & {
 };
 
 const Card = ({
-  id,
-  tier,
-  points,
-  income,
-  cost,
+  card,
   size,
   shadowed,
   reserved,
@@ -29,25 +26,29 @@ const Card = ({
   <CardContainer
     column
     justify="space-between"
-    tier={tier}
+    tier={card.tier}
     size={size}
-    flipped={shadowed || !id}
+    flipped={shadowed || !card.id}
     reserved={reserved}
     index={index}
     tabIndex={!purchasable && reserved ? -1 : 0}
   >
     <FlexContainer justify="space-between">
-      <CardVictoryPoints size={size}>
-        {Boolean(points) && points}
+      <CardVictoryPoints size={size === "mini" ? "micro" : size}>
+        {Boolean(card.points) && card.points}
       </CardVictoryPoints>
-      {income && (
+      {card.income && (
         <Resource
-          resourceType={income}
-          size={!size || size === "default" ? "default" : "micro"}
+          resourceType={card.income}
+          size={size === "default" ? "default" : "micro"}
         />
       )}
     </FlexContainer>
-    <CardResourceList cost={cost} size={size} reserved={reserved} />
+    <CardResourceList
+      cost={card.cost}
+      size={size === "mini" ? "micro" : size}
+      reserved={reserved}
+    />
   </CardContainer>
 );
 

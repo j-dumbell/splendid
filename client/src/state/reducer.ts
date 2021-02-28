@@ -10,9 +10,7 @@ import {
   BaseAction,
   ActionType,
   ExitLobbyAction,
-  SplendidResourceAction,
 } from "./domain";
-import { constructEmptyResourceList } from "../components/Splendid/helpers";
 
 /**
  * Create a `.env.development.local` file and set this env to
@@ -36,7 +34,7 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
     }
   : undefined;
 
-const defaultState: State = {
+export const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
@@ -49,9 +47,6 @@ function reducer(
 ): State {
   switch (action.type) {
     case "JOIN_LOBBY":
-      if (state.clientId && state.lobbyId) {
-        return state;
-      }
       const {
         payload: {
           lobbyId: joinLobbyId,
@@ -59,11 +54,17 @@ function reducer(
           playerNames: joinPlayerNames,
         },
       } = action as JoinLobbyAction;
+      if (state.lobbyId === joinLobbyId && state.clientId) {
+        return {
+          ...state,
+          playerNames: joinPlayerNames,
+        };
+      }
       return {
         ...state,
+        playerNames: joinPlayerNames,
         lobbyId: joinLobbyId,
         clientId: joinClientId,
-        playerNames: joinPlayerNames,
       };
     case "EXIT_LOBBY":
       const {
@@ -97,22 +98,6 @@ function reducer(
       return {
         ...state,
         game: splendidAction.payload,
-      };
-    case "UPDATE_BANK_RESOURCE":
-      const splendidResourceAction = action as SplendidResourceAction;
-      return {
-        ...state,
-        game: {
-          ...state.game!,
-          board: {
-            ...state.game!.board,
-            bankOffsetTemp: {
-              ...constructEmptyResourceList(),
-              ...state.game!.board.bankOffsetTemp,
-              ...splendidResourceAction.payload,
-            },
-          },
-        },
       };
     default:
       return state;

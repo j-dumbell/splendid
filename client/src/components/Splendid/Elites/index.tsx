@@ -6,7 +6,7 @@ import Elite from "./Elite";
 
 type Props = {
   elites: SplendidElite[];
-  size?: SplendidSize;
+  size: SplendidSize;
 };
 
 const Elites = ({ elites, size }: Props) => (
@@ -14,7 +14,7 @@ const Elites = ({ elites, size }: Props) => (
     {elites
       .filter((card) => card.id)
       .map((elite, i) => (
-        <Elite key={`elite-${i}`} size={size} {...elite} />
+        <Elite key={`elite-${i}`} elite={elite} size={size} />
       ))}
   </FlexContainer>
 );

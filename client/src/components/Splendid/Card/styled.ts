@@ -6,7 +6,7 @@ import { SplendidSize } from "../domain";
 
 type Props = {
   tier: number;
-  size?: SplendidSize;
+  size: SplendidSize;
   reserved?: boolean;
   flipped?: boolean;
   index?: number;
@@ -19,17 +19,17 @@ const tierColours: Record<string, string> = {
 };
 
 export const widthMap = {
-  micro: "4rem",
-  mini: "5rem",
+  micro: "2rem",
+  mini: "4rem",
   big: "7.5rem",
-  default: "7.5rem",
+  default: "5rem",
 };
 
 const heightMap = {
-  micro: "6rem",
-  mini: "7.5rem",
+  micro: "3rem",
+  mini: "6rem",
   big: "11.25rem",
-  default: "11.25rem",
+  default: "7.5rem",
 };
 
 export const CardContainer = styled(FlexContainer)`
