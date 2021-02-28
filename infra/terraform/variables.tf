@@ -10,6 +10,10 @@ variable "private_subnet_cidr" {
   type = string
 }
 
+variable "site_bucket" {
+  type = string
+}
+
 variable "app_name" {
   type = string
 }
