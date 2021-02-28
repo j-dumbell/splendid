@@ -16,7 +16,7 @@ const ChatHistory = () => {
     message,
   }));
 
-  return <History title="Chat History" history={mapped} />;
+  return <History history={mapped} />;
 };
 
 export default ChatHistory;

@@ -18,7 +18,7 @@ const ActionHistory = () => {
     message: `has ${action}ed`,
   }));
 
-  return <History title="Action History" history={mapped} />;
+  return <History history={mapped} />;
 };
 
 export default ActionHistory;

@@ -1,17 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
 
 import Scrollable from "../../common/Scrollable";
 import Text from "../../common/Text";
 
 const formatTimestamp = (t: Date) => `${t.getUTCHours()}:${t.getUTCMinutes()}`;
 
-const Timestamp = styled.span`
-  color: #ac81fe;
-`;
-
 type Props = {
-  title: string;
+  title?: string;
   history: {
     timestamp: Date;
     message: string;
@@ -31,16 +26,16 @@ const History = ({ title, history }: Props) => {
   }
   return (
     <>
-      <h3>{title}</h3>
+      {title && <h3>{title}</h3>}
       <Scrollable>
         {history.map(({ timestamp, message, name }) => (
-          <Text color="white">
-            <Timestamp>
+          <p>
+            <Text color="#ac81fe">
               {`${formatTimestamp(timestamp)}: `}
               {name && `${name} `}
-            </Timestamp>
-            {message}
-          </Text>
+            </Text>
+            <Text color="white">{message}</Text>
+          </p>
         ))}
         <AlwaysScrollToBottom />
       </Scrollable>

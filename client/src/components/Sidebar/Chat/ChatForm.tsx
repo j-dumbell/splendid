@@ -1,10 +1,11 @@
 import React from "react";
 import { Formik } from "formik";
+import { useSelector } from "react-redux";
 
 import { sendJSON } from "../../../hooks/useWebsocket";
 import { useLobbyId } from "../../../hooks/useLobbyId";
+import Button from "../../common/Button";
 import { FlexForm, FlexField } from "../../common/FlexContainer";
-import { useSelector } from "react-redux";
 import { State } from "../../../state/domain";
 
 const SendChatForm = () => {
@@ -31,9 +32,9 @@ const SendChatForm = () => {
             placeholder="Message"
             required
           />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Send
-          </button>
+          </Button>
         </FlexForm>
       )}
     </Formik>
