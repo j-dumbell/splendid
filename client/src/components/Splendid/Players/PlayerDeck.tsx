@@ -21,7 +21,7 @@ const PlayerDeck = ({
         {purchased.map((card, j) => (
           <Card
             key={`player-purchased-card-${j}`}
-            size="micro"
+            size="mini"
             index={j + 1}
             card={card}
           />
@@ -32,7 +32,7 @@ const PlayerDeck = ({
           <DeckCard
             key={`player-reserved-vis-card-${k}`}
             reserved
-            size="micro"
+            size="mini"
             purchasable={id === clientId}
             card={card}
           />
@@ -41,7 +41,7 @@ const PlayerDeck = ({
           <DeckCard
             key={`player-reserved-hid-card-${l}`}
             reserved
-            size="micro"
+            size="mini"
             purchasable={id === clientId}
             card={card}
           />

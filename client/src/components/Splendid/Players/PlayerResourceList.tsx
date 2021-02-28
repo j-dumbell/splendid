@@ -16,6 +16,7 @@ export const PlayerResourceList = ({
         resource={resource}
         count={playerBank[resource]}
         offsetPerm={constructOffsetsPerm(resource, purchased)}
+        size="default"
       />
     ))}
   </PlayerResourceListContainer>

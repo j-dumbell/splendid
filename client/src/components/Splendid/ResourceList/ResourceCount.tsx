@@ -9,7 +9,7 @@ type Props = {
   offsetTemp?: number;
   offsetPerm?: number;
   count: number;
-  size?: SplendidSize;
+  size: SplendidSize;
   column?: boolean;
 };
 

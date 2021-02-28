@@ -12,7 +12,7 @@ export type Props = {
   offsetsTemp?: SplendidResourceList;
   offsetsPerm?: SplendidResourceList;
   hideEmpty?: boolean;
-  size?: SplendidSize;
+  size: SplendidSize;
   column?: boolean;
 };
 

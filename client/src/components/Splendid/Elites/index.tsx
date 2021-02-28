@@ -6,7 +6,7 @@ import Elite from "./Elite";
 
 type Props = {
   elites: SplendidElite[];
-  size?: SplendidSize;
+  size: SplendidSize;
 };
 
 const Elites = ({ elites, size }: Props) => (

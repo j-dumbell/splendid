@@ -23,9 +23,9 @@ const Board = ({ board: { bank, elites, decks } }: Props) => (
   <BoardContainer column justify="flex-end">
     <Bank bank={bank} />
     <ElitesContainer justify="center">
-      <Elites elites={elites} />
+      <Elites elites={elites} size="big" />
     </ElitesContainer>
-    <Decks decks={decks} />
+    <Decks decks={decks} size="big" />
   </BoardContainer>
 );
 

@@ -7,7 +7,7 @@ import EliteContainer from "./styled";
 
 type Props = {
   elite: SplendidElite;
-  size?: SplendidSize;
+  size: SplendidSize;
 };
 
 const Elite = ({ elite, size }: Props) => (

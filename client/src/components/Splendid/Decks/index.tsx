@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SplendidDeck } from "../domain";
+import { SplendidDeck, SplendidSize } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
 import { getDeckKeys, constructVisible, constructDeck } from "./util";
 import DeckCard from "./DeckCard";
@@ -9,9 +9,10 @@ import { useActivePlayer } from "../../../hooks/useActivePlayer";
 
 type Props = {
   decks: SplendidDeck;
+  size: SplendidSize;
 };
 
-const Decks = ({ decks }: Props) => {
+const Decks = ({ decks, size }: Props) => {
   const [isActivePlayer] = useActivePlayer();
   return (
     <>
@@ -24,6 +25,7 @@ const Decks = ({ decks }: Props) => {
                 card={{ tier: Number(tier) }}
                 shadowed={deckCount > 1}
                 purchasable={isActivePlayer}
+                size={size}
               />
             </DeckStack>
             {constructVisible(tier, decks).map((card, j) => (
@@ -31,6 +33,7 @@ const Decks = ({ decks }: Props) => {
                 key={`cards-${j}`}
                 card={card}
                 purchasable={isActivePlayer}
+                size={size}
               />
             ))}
           </FlexContainer>

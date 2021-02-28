@@ -33,6 +33,7 @@ export const PlayerResourceForm = ({
               count={playerBank[resource]}
               offsetTemp={resources[resource]}
               offsetPerm={constructOffsetsPerm(resource, purchased)}
+              size="default"
             />
             <FlexContainer justify="center">
               <PlayerResourceButton

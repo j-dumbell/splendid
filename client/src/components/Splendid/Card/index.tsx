@@ -8,7 +8,7 @@ import CardResourceList from "./CardResourceList";
 
 export type Props = {
   card: SplendidCard;
-  size?: SplendidSize;
+  size: SplendidSize;
   reserved?: boolean;
   shadowed?: boolean;
   purchasable?: boolean;
@@ -34,17 +34,21 @@ const Card = ({
     tabIndex={!purchasable && reserved ? -1 : 0}
   >
     <FlexContainer justify="space-between">
-      <CardVictoryPoints size={size}>
+      <CardVictoryPoints size={size === "mini" ? "micro" : size}>
         {Boolean(card.points) && card.points}
       </CardVictoryPoints>
       {card.income && (
         <Resource
           resourceType={card.income}
-          size={!size || size === "default" ? "default" : "micro"}
+          size={size === "default" ? "default" : "micro"}
         />
       )}
     </FlexContainer>
-    <CardResourceList cost={card.cost} size={size} reserved={reserved} />
+    <CardResourceList
+      cost={card.cost}
+      size={size === "mini" ? "micro" : size}
+      reserved={reserved}
+    />
   </CardContainer>
 );
 
