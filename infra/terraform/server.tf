@@ -28,8 +28,8 @@ resource "aws_ecs_service" "service" {
 
   network_configuration {
     subnets         = [aws_subnet.private.id]
+    security_groups = [aws_security_group.server.id]
   }
-
 
   load_balancer {
     target_group_arn = aws_lb_target_group.alb-tg.arn
@@ -37,6 +37,24 @@ resource "aws_ecs_service" "service" {
     container_port   = var.server_port
   }
 
+}
+
+resource "aws_security_group" "server" {
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 10000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 data "template_file" "task_defn" {
