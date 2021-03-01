@@ -1,7 +1,7 @@
 import { useFormikContext } from "formik";
 import React from "react";
 
-import { Button } from "../../common/Button";
+import Button from "../../common/Button";
 import { SplendidCard, SplendidForm } from "../domain";
 import { PurchaseContainer } from "./styled";
 

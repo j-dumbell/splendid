@@ -48,32 +48,32 @@ export const useWebSocket = (path: string) => {
     socket.onclose = () => setStatus(withFixtureEnv ? "open" : "closed");
     socket.onmessage = ({ data }) => {
       const response = JSON.parse(data) as WsResponse;
-      if (response?.details?.game) {
-        dispatch(updateSplendidGame(response.details.game));
-      }
-      if (response.action !== "chat") {
-        dispatch(addHistoryAction(response.action, response.details));
-        switch (response.action) {
-          case "join":
-            dispatch(
-              joinLobby(
-                username,
-                response.details.clientId,
-                response.details.playerNames
-              )
-            );
-            break;
-          case "exit":
-            dispatch(exitLobby(username, response.details.playerNames));
-            break;
-        }
-      } else {
-        dispatch(
-          addChatMessage(
-            response?.details?.clientId,
-            response?.details?.message
-          )
-        );
+      switch (response.action) {
+        case "chat":
+          dispatch(
+            addChatMessage(
+              response?.details?.clientId,
+              response?.details?.message
+            )
+          );
+          break;
+        case "join":
+          dispatch(
+            joinLobby(
+              response.details.lobbyId,
+              response.details.clientId,
+              response.details.playerNames
+            )
+          );
+          dispatch(addHistoryAction(response.action, response.details));
+          break;
+        case "exit":
+          dispatch(exitLobby(username, response.details.playerNames));
+          dispatch(addHistoryAction(response.action, response.details));
+          break;
+        case "game":
+          dispatch(updateSplendidGame(response.details.game));
+          break;
       }
     };
   }, [path, username, dispatch]);

@@ -1,6 +1,7 @@
 import React from "react";
-
 import { Formik } from "formik";
+
+import Button from "../../common/Button";
 import { sendJSON } from "../../../hooks/useWebsocket";
 import { useCookie } from "../../../hooks/useCookie";
 import { useLobbyId } from "../../../hooks/useLobbyId";
@@ -24,9 +25,9 @@ export const JoinLobbyForm = () => {
       {({ isSubmitting }) => (
         <FlexForm>
           <FlexField type="text" name="id" placeholder="id" required />
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Join Lobby
-          </button>
+          </Button>
         </FlexForm>
       )}
     </Formik>

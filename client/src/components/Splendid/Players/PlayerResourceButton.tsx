@@ -2,7 +2,7 @@ import React from "react";
 import { useFormikContext } from "formik";
 
 import { SplendidForm, SplendidResource } from "../domain";
-import { Button } from "../../common/Button";
+import Button from "../../common/Button";
 
 type Props = {
   disabled: boolean;

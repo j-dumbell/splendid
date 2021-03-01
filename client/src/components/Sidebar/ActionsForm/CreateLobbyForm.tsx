@@ -1,5 +1,6 @@
 import React from "react";
 
+import Button from "../../common/Button";
 import { sendJSON } from "../../../hooks/useWebsocket";
 import { useCookie } from "../../../hooks/useCookie";
 import { useLobbyId } from "../../../hooks/useLobbyId";
@@ -11,11 +12,11 @@ export const CreateLobbyForm = () => {
     return null;
   }
   return (
-    <button
+    <Button
       onClick={() => sendJSON({ action: "create", params: { name: username } })}
     >
       Create Lobby
-    </button>
+    </Button>
   );
 };
 

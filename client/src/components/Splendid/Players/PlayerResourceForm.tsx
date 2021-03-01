@@ -5,7 +5,7 @@ import { useGame } from "../../../hooks/useGame";
 import { SplendidForm, SplendidPlayer, splendidResource } from "../domain";
 import { constructOffsetsPerm, validateMax } from "./util";
 import FlexContainer from "../../common/FlexContainer";
-import { Button } from "../../common/Button";
+import Button from "../../common/Button";
 import ResourceCount from "../ResourceList/ResourceCount";
 import PlayerResourceButton from "./PlayerResourceButton";
 import { PlayerResourceFormContainer } from "./styled";

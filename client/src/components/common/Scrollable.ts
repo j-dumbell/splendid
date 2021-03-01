@@ -6,7 +6,7 @@ type Props = {
 
 const Scrollable = styled.div`
   max-height: ${(props: Props) =>
-    props.maxHeight ? props.maxHeight : "150px"};
+    props.maxHeight ? props.maxHeight : "500px"};
   overflow-x: scroll;
   padding: 5px;
   background-color: #494945;
