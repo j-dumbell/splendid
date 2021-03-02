@@ -74,6 +74,12 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
+resource "aws_route_table_association" "public2" {
+  depends_on = [aws_vpc.vpc, aws_subnet.public1, aws_subnet.public2, aws_route_table.public]
+  subnet_id      = aws_subnet.public2.id
+  route_table_id = aws_route_table.public.id
+}
+
 resource "aws_route_table" "nat" {
   depends_on = [aws_nat_gateway.nat]
   vpc_id = aws_vpc.vpc.id

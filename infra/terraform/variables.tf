@@ -37,3 +37,7 @@ variable "server_mem" {
 variable "server_count" {
   type = number
 }
+
+variable "server_timeout" {
+  type = number
+}
