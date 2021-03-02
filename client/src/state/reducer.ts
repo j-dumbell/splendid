@@ -16,7 +16,7 @@ import {
  * Create a `.env.development.local` file and set this env to
  * enable game fixtures when rendering the initial state.
  */
-export const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
+const withFixtureEnv = process.env.REACT_APP_WITH_FIXTURES === "1";
 const withFixtures: Partial<State> | undefined = withFixtureEnv
   ? {
       lobbyId: "abc123",
@@ -29,6 +29,11 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
         1: "Van",
         2: "James",
       },
+      connection: {
+        loading: false,
+        open: true,
+        error: undefined,
+      },
       clientId: 1,
       game: (fixtures as unknown) as SplendidGame,
     }
@@ -38,6 +43,11 @@ export const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
+  connection: {
+    loading: false,
+    open: false,
+    error: undefined,
+  },
   ...withFixtures,
 };
 

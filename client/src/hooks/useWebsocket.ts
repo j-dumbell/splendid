@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import config from "../config";
@@ -11,10 +11,8 @@ import {
   updateConnection,
 } from "../state/actionCreator";
 import { HistoryActionType } from "../state/domain";
-import { withFixtureEnv } from "../state/reducer";
 import { useCookie } from "./useCookie";
 
-export type WsStatus = "open" | "closed" | "loading";
 export type WsResponse = {
   action: HistoryActionType;
   ok: boolean;
@@ -27,64 +25,73 @@ let socket: WebSocket;
 
 export const useWebSocket = (path: string) => {
   const [username] = useCookie("username");
-  const [error, setError] = useState<string>();
-  const [status, setStatus] = useState<WsStatus>();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!config.apiUrl) {
-      const errorMessage = "apiUrl not set";
-      setError(errorMessage);
+      dispatch(
+        updateConnection({
+          loading: false,
+          open: false,
+          error: "apiUrl not set",
+        })
+      );
       return;
     }
 
     if (!socket) {
-      setStatus("loading");
-      dispatch(updateConnection({ loading: true, open: false }));
+      dispatch(
+        updateConnection({
+          loading: true,
+          open: false,
+          error: undefined,
+        })
+      );
       const url = new URL(`ws://${config.apiUrl}${path}`);
       socket = new WebSocket(url.toString());
       (window as any).ws = socket;
     }
 
     socket.onopen = () => {
-      setStatus("open");
-      dispatch(updateConnection({ loading: false, open: true }));
+      dispatch(
+        updateConnection({
+          loading: false,
+          open: true,
+          error: undefined,
+        })
+      );
     };
     socket.onclose = () => {
-      setStatus(withFixtureEnv ? "open" : "closed");
-      dispatch(updateConnection({ loading: false, open: false }));
+      dispatch(
+        updateConnection({
+          loading: false,
+          open: false,
+          error: undefined,
+        })
+      );
     };
     socket.onmessage = ({ data }) => {
-      const response = JSON.parse(data) as WsResponse;
-      switch (response.action) {
+      const { action, details } = JSON.parse(data) as WsResponse;
+      switch (action) {
         case "chat":
-          dispatch(
-            addChatMessage(
-              response?.details?.clientId,
-              response?.details?.message
-            )
-          );
+          dispatch(addChatMessage(details?.clientId, details?.message));
           break;
         case "join":
           dispatch(
-            joinLobby(
-              response.details.lobbyId,
-              response.details.clientId,
-              response.details.playerNames
-            )
+            joinLobby(details.lobbyId, details.clientId, details.playerNames)
           );
-          dispatch(addHistoryAction(response.action, response.details));
+          dispatch(addHistoryAction(action, details));
           break;
         case "exit":
-          dispatch(exitLobby(username, response.details.playerNames));
-          dispatch(addHistoryAction(response.action, response.details));
+          dispatch(exitLobby(username, details.playerNames));
+          dispatch(addHistoryAction(action, details));
           break;
         case "game":
-          dispatch(updateSplendidGame(response.details.game));
+          dispatch(updateSplendidGame(details.game));
           break;
       }
     };
   }, [path, username, dispatch]);
 
-  return [status, error];
+  return [];
 };

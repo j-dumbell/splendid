@@ -23,6 +23,7 @@ export type Lobby = {
 export type WSConnection = {
   loading: boolean;
   open: boolean;
+  error: string | undefined;
 };
 
 export type State = {
