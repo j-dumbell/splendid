@@ -12,22 +12,23 @@ export const Button = styled(UnstyledButton)`
   display: block;
   border: solid 1px black;
   border-radius: 3px;
-  padding: 1px 0.3rem;
   margin: 5px 1px 0;
   background: #f1f1f1;
   outline: none;
+  padding: ${({ big }: { big?: boolean }) => (big ? `5px` : `1px 5px`)};
 
   &:disabled {
     background: inherit;
   }
 
-  &:active, &focus {
+  &:active,
+  &focus {
     border-color: red;
   }
 
-  &:hover, 
+  &:hover,
   &:focus {
-    box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
     transform: translate(-2px, -2px);
   }
 `;

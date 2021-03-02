@@ -10,7 +10,9 @@ const ExitLobbyButton = () => {
     return null;
   }
   return (
-    <Button onClick={() => sendJSON({ action: "exit" })}>Exit Lobby</Button>
+    <Button big onClick={() => sendJSON({ action: "exit" })}>
+      Exit Lobby
+    </Button>
   );
 };
 

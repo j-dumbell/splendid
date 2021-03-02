@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useWebSocket, WsStatus } from "./hooks/useWebsocket";
+import { useWebSocket } from "./hooks/useWebsocket";
 import Sidebar from "./components/Sidebar";
 import Splendid from "./components/Splendid";
 import FlexContainer from "./components/common/FlexContainer";
@@ -14,14 +14,11 @@ const AppContainer = styled.div`
 `;
 
 function App() {
-  const [status, error] = useWebSocket("/");
+  useWebSocket("/");
   return (
     <AppContainer>
       <FlexContainer>
-        <Sidebar
-          status={status as WsStatus}
-          error={error as string}
-        />
+        <Sidebar />
         <Splendid />
       </FlexContainer>
     </AppContainer>

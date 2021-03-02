@@ -25,7 +25,7 @@ export const JoinLobbyForm = () => {
       {({ isSubmitting }) => (
         <FlexForm>
           <FlexField type="text" name="id" placeholder="id" required />
-          <Button type="submit" disabled={isSubmitting}>
+          <Button big type="submit" disabled={isSubmitting}>
             Join Lobby
           </Button>
         </FlexForm>

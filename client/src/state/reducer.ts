@@ -10,6 +10,7 @@ import {
   BaseAction,
   ActionType,
   ExitLobbyAction,
+  WSConnectionAction,
 } from "./domain";
 
 /**
@@ -29,6 +30,11 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
         1: "Van",
         2: "James",
       },
+      connection: {
+        loading: false,
+        open: true,
+        error: undefined,
+      },
       clientId: 1,
       game: (fixtures as unknown) as SplendidGame,
     }
@@ -38,6 +44,11 @@ export const defaultState: State = {
   chat: [],
   history: [],
   playerNames: {},
+  connection: {
+    loading: false,
+    open: false,
+    error: undefined,
+  },
   ...withFixtures,
 };
 
@@ -46,6 +57,12 @@ function reducer(
   action: BaseAction<ActionType, unknown>
 ): State {
   switch (action.type) {
+    case "UPDATE_CONNECTION":
+      const { payload: connection } = action as WSConnectionAction;
+      return {
+        ...state,
+        connection,
+      };
     case "JOIN_LOBBY":
       const {
         payload: {
@@ -80,6 +97,9 @@ function reducer(
         ...state,
         playerNames: {},
         lobbyId: undefined,
+        history: [],
+        chat: [],
+        game: undefined,
       };
     case "ADD_CHAT_MESSAGE":
       const messageAction = action as MessageAction;
@@ -92,6 +112,17 @@ function reducer(
       return {
         ...state,
         history: state.history.concat(historyAction.payload),
+      };
+    case "ADD_LATEST_ACTION":
+      const latestAction = action as HistoryAction;
+      return {
+        ...state,
+        latestAction: latestAction.payload,
+      };
+    case "REMOVE_LATEST_ACTION":
+      return {
+        ...state,
+        latestAction: undefined,
       };
     case "UPDATE_GAME":
       const splendidAction = action as SplendidAction;

@@ -6,6 +6,10 @@ import {
   HistoryActionType,
   MessageAction,
   SplendidAction,
+  WSConnectionAction,
+  WSConnection,
+  AddLatestAction,
+  RemoveLatestAction,
 } from "./domain";
 
 export const joinLobby = (
@@ -52,4 +56,28 @@ export const addHistoryAction = (
     action: actionType,
     timestamp: new Date(),
   },
+});
+
+export const addLatestAction = (
+  actionType: HistoryActionType,
+  details: any
+): AddLatestAction => ({
+  type: "ADD_LATEST_ACTION",
+  payload: {
+    details,
+    action: actionType,
+    timestamp: new Date(),
+  },
+});
+
+export const removeLatestAction = (): RemoveLatestAction => ({
+  type: "REMOVE_LATEST_ACTION",
+  payload: undefined,
+});
+
+export const updateConnection = (
+  payload: WSConnection
+): WSConnectionAction => ({
+  type: "UPDATE_CONNECTION",
+  payload,
 });

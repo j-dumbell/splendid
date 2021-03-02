@@ -5,9 +5,9 @@ type Props = { shadowed?: boolean };
 export const PurchaseContainer = styled.div`
   position: absolute;
   z-index: 1;
-  top: 30%;
+  top: 10%;
   left: 50%;
-  transform: translate(-50%, -30%);
+  transform: translate(-50%, -10%);
   width: 80%;
   visibility: hidden;
 
