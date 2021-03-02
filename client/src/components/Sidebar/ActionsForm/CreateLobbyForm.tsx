@@ -13,6 +13,7 @@ export const CreateLobbyForm = () => {
   }
   return (
     <Button
+      big
       onClick={() => sendJSON({ action: "create", params: { name: username } })}
     >
       Create Lobby

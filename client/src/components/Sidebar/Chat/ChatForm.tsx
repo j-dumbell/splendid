@@ -32,7 +32,7 @@ const SendChatForm = () => {
             placeholder="Message"
             required
           />
-          <Button type="submit" disabled={isSubmitting}>
+          <Button big type="submit" disabled={isSubmitting}>
             Send
           </Button>
         </FlexForm>

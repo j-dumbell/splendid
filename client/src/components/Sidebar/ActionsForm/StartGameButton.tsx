@@ -14,6 +14,7 @@ const StartGameButton = () => {
   }
   return (
     <Button
+      big
       onClick={() =>
         sendJSON({ action: "game", params: { gameAction: "startGame" } })
       }

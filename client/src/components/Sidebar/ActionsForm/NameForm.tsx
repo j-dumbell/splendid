@@ -12,7 +12,7 @@ export const NameForm = () => {
   if (lobbyId) {
     return null;
   }
-  return (!username) ? (
+  return !username ? (
     <Formik
       initialValues={{ username: username || "" }}
       onSubmit={({ username }) => setUsername(username)}
@@ -25,13 +25,17 @@ export const NameForm = () => {
             placeholder="username"
             required
           />
-          <Button type="submit" disabled={isSubmitting}>
+          <Button big type="submit" disabled={isSubmitting}>
             Set Username
           </Button>
         </FlexForm>
       )}
     </Formik>
-  ) : <Button onClick={removeUsername}>Clear Username</Button>;
+  ) : (
+    <Button big onClick={removeUsername}>
+      Clear Username
+    </Button>
+  );
 };
 
 export default NameForm;
