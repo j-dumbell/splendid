@@ -5,6 +5,7 @@ import { FlexChild } from "../common/FlexContainer";
 import Text from "../common/Text";
 import ActionsForm from "./ActionsForm";
 import ActionHistory from "./ActionHistory";
+import LatestAction from "./ActionHistory/LatestAction";
 import Chat from "./Chat";
 import { useConnection } from "../../hooks/useConnection";
 
@@ -39,6 +40,7 @@ const Sidebar = () => {
       {open && (
         <>
           <ActionsForm />
+          <LatestAction />
           <ActionHistory />
           <Chat />
         </>

@@ -10,6 +10,9 @@ const Scrollable = styled.div`
   overflow-x: scroll;
   padding: 5px;
   background-color: #494945;
+  pre {
+    white-space: pre-wrap;
+  }
 `;
 
 export default Scrollable;

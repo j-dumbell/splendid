@@ -110,6 +110,17 @@ function reducer(
         ...state,
         history: state.history.concat(historyAction.payload),
       };
+    case "ADD_LATEST_ACTION":
+      const latestAction = action as HistoryAction;
+      return {
+        ...state,
+        latestAction: latestAction.payload,
+      };
+    case "REMOVE_LATEST_ACTION":
+      return {
+        ...state,
+        latestAction: undefined,
+      };
     case "UPDATE_GAME":
       const splendidAction = action as SplendidAction;
       return {

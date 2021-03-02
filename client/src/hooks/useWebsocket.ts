@@ -9,6 +9,8 @@ import {
   addHistoryAction,
   updateSplendidGame,
   updateConnection,
+  addLatestAction,
+  removeLatestAction,
 } from "../state/actionCreator";
 import { HistoryActionType } from "../state/domain";
 import { useCookie } from "./useCookie";
@@ -71,7 +73,9 @@ export const useWebSocket = (path: string) => {
       );
     };
     socket.onmessage = ({ data }) => {
+      dispatch(removeLatestAction());
       const { action, details } = JSON.parse(data) as WsResponse;
+
       switch (action) {
         case "chat":
           dispatch(addChatMessage(details?.clientId, details?.message));
@@ -87,8 +91,14 @@ export const useWebSocket = (path: string) => {
           dispatch(addHistoryAction(action, details));
           break;
         case "game":
-          dispatch(updateSplendidGame(details.game));
+          if (details.game) {
+            dispatch(updateSplendidGame(details.game));
+          } else {
+            dispatch(addLatestAction(action, details));
+          }
           break;
+        default:
+          dispatch(addLatestAction(action, details));
       }
     };
   }, [path, username, dispatch]);
