@@ -21,9 +21,8 @@ export type WsResponse = {
   details: Record<string, any>;
 };
 
-export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));
-
 let socket: WebSocket;
+export const sendJSON = (payload: any) => socket?.send(JSON.stringify(payload));
 
 export const useWebSocket = (path: string) => {
   const [username] = useCookie("username");
@@ -54,7 +53,7 @@ export const useWebSocket = (path: string) => {
       (window as any).ws = socket;
     }
 
-    socket.onopen = () => {
+    socket.onopen = () =>
       dispatch(
         updateConnection({
           loading: false,
@@ -62,8 +61,8 @@ export const useWebSocket = (path: string) => {
           error: undefined,
         })
       );
-    };
-    socket.onclose = () => {
+
+    socket.onclose = () =>
       dispatch(
         updateConnection({
           loading: false,
@@ -71,7 +70,7 @@ export const useWebSocket = (path: string) => {
           error: undefined,
         })
       );
-    };
+
     socket.onmessage = ({ data }) => {
       dispatch(removeLatestAction());
       const { action, details } = JSON.parse(data) as WsResponse;
@@ -81,14 +80,14 @@ export const useWebSocket = (path: string) => {
           dispatch(addChatMessage(details?.clientId, details?.message));
           break;
         case "join":
+          dispatch(addHistoryAction(action, details));
           dispatch(
             joinLobby(details.lobbyId, details.clientId, details.playerNames)
           );
-          dispatch(addHistoryAction(action, details));
           break;
         case "exit":
-          dispatch(exitLobby(username, details.playerNames));
           dispatch(addHistoryAction(action, details));
+          dispatch(exitLobby(username, details.playerNames));
           break;
         case "game":
           if (details.game) {

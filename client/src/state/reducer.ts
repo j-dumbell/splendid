@@ -97,6 +97,9 @@ function reducer(
         ...state,
         playerNames: {},
         lobbyId: undefined,
+        history: [],
+        chat: [],
+        game: undefined,
       };
     case "ADD_CHAT_MESSAGE":
       const messageAction = action as MessageAction;

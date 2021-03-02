@@ -8,6 +8,8 @@ import ActionHistory from "./ActionHistory";
 import LatestAction from "./ActionHistory/LatestAction";
 import Chat from "./Chat";
 import { useConnection } from "../../hooks/useConnection";
+import { useCookie } from "../../hooks/useCookie";
+import { useLobbyId } from "../../hooks/useLobbyId";
 
 const SidebarContainer = styled(FlexChild)`
   padding: 0 20px;
@@ -22,12 +24,26 @@ const SidebarContainer = styled(FlexChild)`
   }
 `;
 
+const Lobby = ({ lobbyId }: { lobbyId?: string }) => {
+  if (!lobbyId) {
+    return null;
+  }
+  return (
+    <>
+      {` | Lobby `}
+      <Text color="#FF917B">{lobbyId}</Text>
+    </>
+  );
+};
+
 const Sidebar = () => {
   const [loading, open, error] = useConnection();
+  const [lobbyId] = useLobbyId();
+  const [username] = useCookie("username");
   return (
     <SidebarContainer column>
       <h1>Splendid</h1>
-      <h2>
+      <h3>
         Server{" "}
         {error ? (
           <Text color="red">errored: {error}</Text>
@@ -36,7 +52,16 @@ const Sidebar = () => {
             {loading && "loading"} {open ? "open" : "closed"}
           </Text>
         )}
-      </h2>
+        {open && <Lobby lobbyId={lobbyId} />}
+      </h3>
+      <h3>
+        {open && username && (
+          <>
+            Welcome back <Text color="#ac81fe">{username}</Text>
+            <br />
+          </>
+        )}
+      </h3>
       {open && (
         <>
           <ActionsForm />
