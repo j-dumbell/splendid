@@ -1,17 +1,15 @@
 import React from "react";
 import { Formik } from "formik";
-import { useSelector } from "react-redux";
 
 import { sendJSON } from "../../../hooks/useWebsocket";
 import { useLobbyId } from "../../../hooks/useLobbyId";
 import Button from "../../common/Button";
 import { FlexForm, FlexField } from "../../common/FlexContainer";
-import { State } from "../../../state/domain";
+import { useClient } from "../../../hooks/useClient";
 
 const SendChatForm = () => {
   const [lobbyId] = useLobbyId();
-  const clientId = useSelector(({ clientId }: State) => clientId);
-
+  const [, clientId] = useClient();
   if (!lobbyId) {
     return null;
   }
