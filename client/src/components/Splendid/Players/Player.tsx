@@ -1,8 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import { useActivePlayer } from "../../../hooks/useActivePlayer";
-import { State } from "../../../state/domain";
 import { SplendidPlayer } from "../domain";
 import Elites from "../Elites";
 import { getScore } from "./util";
@@ -10,19 +8,14 @@ import PlayerDeck from "./PlayerDeck";
 import PlayerResourceForm from "./PlayerResourceForm";
 import PlayerResourceList from "./PlayerResourceList";
 import { PlayerContainer, PlayerTitle, PlayerContents } from "./styled";
+import { useClient } from "../../../hooks/useClient";
 
 type Props = {
   player: SplendidPlayer;
-  index: number;
 };
 
-const Player = ({ player, index }: Props) => {
-  const { playerNames, clientId } = useSelector(
-    ({ playerNames, clientId }: State) => ({
-      playerNames,
-      clientId,
-    })
-  );
+const Player = ({ player }: Props) => {
+  const [playerNames, clientId] = useClient();
   const [isActivePlayer, activePlayerId] = useActivePlayer();
   const isActiveClient = Boolean(clientId === player.id);
   return (

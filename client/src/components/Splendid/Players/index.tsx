@@ -1,7 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { State } from "../../../state/domain";
+import { useClient } from "../../../hooks/useClient";
 import { SplendidPlayer } from "../domain";
 import Player from "./Player";
 import { sortPlayers } from "./util";
@@ -12,11 +11,11 @@ type Props = {
 };
 
 const Players = ({ players }: Props) => {
-  const clientId = useSelector(({ clientId }: State) => clientId);
+  const [, clientId] = useClient();
   return (
     <PlayersContainer column justify="flex-end">
       {sortPlayers(players, clientId).map((player, i) => (
-        <Player key={`player-${i}`} player={player} index={i+1} />
+        <Player key={`player-${i}`} player={player} />
       ))}
     </PlayersContainer>
   );

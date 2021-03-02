@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { SplendidBoard } from "../domain";
 import FlexContainer from "../../common/FlexContainer";
-import Bank from "../Bank";
+import Bank from "./Bank";
 import Elites from "../Elites";
 import Decks from "../Decks";
 
