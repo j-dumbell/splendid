@@ -10,6 +10,7 @@ import {
   BaseAction,
   ActionType,
   ExitLobbyAction,
+  WSConnectionAction,
 } from "./domain";
 
 /**
@@ -56,6 +57,12 @@ function reducer(
   action: BaseAction<ActionType, unknown>
 ): State {
   switch (action.type) {
+    case "UPDATE_CONNECTION":
+      const { payload: connection } = action as WSConnectionAction;
+      return {
+        ...state,
+        connection,
+      };
     case "JOIN_LOBBY":
       const {
         payload: {
