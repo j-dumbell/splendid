@@ -6,6 +6,8 @@ import {
   HistoryActionType,
   MessageAction,
   SplendidAction,
+  WSConnectionAction,
+  WSConnection,
 } from "./domain";
 
 export const joinLobby = (
@@ -52,4 +54,11 @@ export const addHistoryAction = (
     action: actionType,
     timestamp: new Date(),
   },
+});
+
+export const updateConnection = (
+  payload: WSConnection
+): WSConnectionAction => ({
+  type: "UPDATE_CONNECTION",
+  payload,
 });

@@ -20,6 +20,11 @@ export type Lobby = {
   playerNames: Record<number, string>;
 };
 
+export type WSConnection = {
+  loading: boolean;
+  open: boolean;
+};
+
 export type State = {
   lobbyId?: string;
   clientId?: number;
@@ -27,6 +32,7 @@ export type State = {
   history: History[];
   game?: SplendidGame;
   playerNames: Record<number, string>;
+  connection: WSConnection;
 };
 
 export const actionTypes = [
@@ -35,6 +41,7 @@ export const actionTypes = [
   "ADD_CHAT_MESSAGE",
   "ADD_HISTORY_ACTION",
   "UPDATE_GAME",
+  "UPDATE_CONNECTION",
 ] as const;
 export type ActionType = typeof actionTypes[number];
 
@@ -48,3 +55,4 @@ export type ExitLobbyAction = BaseAction<typeof actionTypes[1], Lobby>;
 export type MessageAction = BaseAction<typeof actionTypes[2], Message>;
 export type HistoryAction = BaseAction<typeof actionTypes[3], History>;
 export type SplendidAction = BaseAction<typeof actionTypes[4], SplendidGame>;
+export type WSConnectionAction = BaseAction<typeof actionTypes[5], WSConnection>;

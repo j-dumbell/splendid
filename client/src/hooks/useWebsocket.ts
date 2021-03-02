@@ -8,6 +8,7 @@ import {
   addChatMessage,
   addHistoryAction,
   updateSplendidGame,
+  updateConnection,
 } from "../state/actionCreator";
 import { HistoryActionType } from "../state/domain";
 import { withFixtureEnv } from "../state/reducer";
@@ -39,13 +40,20 @@ export const useWebSocket = (path: string) => {
 
     if (!socket) {
       setStatus("loading");
+      dispatch(updateConnection({ loading: true, open: false }));
       const url = new URL(`ws://${config.apiUrl}${path}`);
       socket = new WebSocket(url.toString());
       (window as any).ws = socket;
     }
 
-    socket.onopen = () => setStatus("open");
-    socket.onclose = () => setStatus(withFixtureEnv ? "open" : "closed");
+    socket.onopen = () => {
+      setStatus("open");
+      dispatch(updateConnection({ loading: false, open: true }));
+    };
+    socket.onclose = () => {
+      setStatus(withFixtureEnv ? "open" : "closed");
+      dispatch(updateConnection({ loading: false, open: false }));
+    };
     socket.onmessage = ({ data }) => {
       const response = JSON.parse(data) as WsResponse;
       switch (response.action) {
