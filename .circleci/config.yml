@@ -59,12 +59,12 @@ workflows:
   version: 2.1
   build_and_test:
     jobs:
-      - build-and-test-server:
+      - build-test-server:
           filters:
             branches:
               ignore: master
 
-      - build-and-test-client:
+      - build-test-client:
           filters:
             branches:
               ignore: master
