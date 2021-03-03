@@ -10,6 +10,10 @@ variable "private_subnet_cidr" {
   type = string
 }
 
+variable "site_bucket" {
+  type = string
+}
+
 variable "app_name" {
   type = string
 }
@@ -31,5 +35,9 @@ variable "server_mem" {
 }
 
 variable "server_count" {
+  type = number
+}
+
+variable "server_timeout" {
   type = number
 }

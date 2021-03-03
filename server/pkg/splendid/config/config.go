@@ -1,7 +1,7 @@
 package config
 
-var CardsCSVPath string = "pkg/splendid/config/cards.csv"
-var ElitesCSVPath string = "pkg/splendid/config/elites.csv"
+var CardsCSVPath string = "cards.csv"
+var ElitesCSVPath string = "elites.csv"
 
 var YellowDefault int = 5
 

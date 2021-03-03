@@ -56,7 +56,7 @@ resource "aws_security_group" "server" {
 }
 
 data "template_file" "task_defn" {
-  template = "${file("container_defn.json.tpl")}"
+  template = file("container_defn.json.tpl")
 
   vars = {
     container_name        = var.app_name

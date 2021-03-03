@@ -4,6 +4,7 @@ resource "aws_lb" "alb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb-sg.id]
   subnets            = [aws_subnet.public1.id, aws_subnet.public2.id]
+  idle_timeout       = var.server_timeout
 }
 
 resource "aws_security_group" "alb-sg" {
@@ -49,5 +50,5 @@ resource "aws_lb_target_group" "alb-tg" {
     port      = var.server_port
   }
 
-  depends_on = ["aws_lb.alb"]
+  depends_on = [aws_lb.alb]
 }
