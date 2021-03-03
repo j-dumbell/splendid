@@ -45,15 +45,15 @@ jobs:
           command: |
             cd client && yarn build
 
-    tf-plan:
-      docker:
-        - image: hashicorp/terraform:light
-      working_directory: ~/repo
-      steps:
-        - checkout
-      - run:
-          name: Terraform plan
-          command: cd infra/terraform && terraform init && terraform plan
+  tf-plan:
+    docker:
+      - image: hashicorp/terraform:light
+    working_directory: ~/repo
+    steps:
+      - checkout
+    - run:
+        name: Terraform plan
+        command: cd infra/terraform && terraform init && terraform plan
 
 workflows:
   version: 2.1
