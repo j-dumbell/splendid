@@ -3,6 +3,7 @@ package splendid
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
@@ -110,28 +111,28 @@ func (game *Game) endTurn() int {
 }
 
 func (game *Game) reserveHidden(tier int) error {
-	if _, exists := game.Board.Decks[tier]; !exists {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
+	deck, exists := game.Board.Decks[tier]
+
+	if !exists {
 		return errors.New("tier does not exist")
 	}
-	if len(game.Board.Decks[tier]) <= config.DeckCapacity {
+	if len(deck) <= config.DeckCapacity {
 		return errors.New("deck is empty")
 	}
 	if game.Board.Bank[Yellow] <= 0 {
 		return errors.New("no tokens in bank to reserve with")
 	}
-	if len(game.Players[game.ActivePlayerIndex].ReservedHidden)+len(game.Players[game.ActivePlayerIndex].ReservedVisible) >= 3 {
+	if len(activePlayer.ReservedHidden)+len(activePlayer.ReservedVisible) >= config.ReservedCapacity {
 		return errors.New("maximum cards already reserved")
 	}
-	newGameBank, newPlayerBank, _ := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, map[resource]int{Yellow: 1})
-	game.Players[game.ActivePlayerIndex].Bank = newPlayerBank
-	game.Board.Bank = newGameBank
-	newTier, newReserved, _ := moveCard(
-		game.Board.Decks[tier][4],
-		game.Board.Decks[tier],
-		game.Players[game.ActivePlayerIndex].ReservedHidden,
-	)
-	game.Players[game.ActivePlayerIndex].ReservedHidden = newReserved
-	game.Board.Decks[tier] = newTier
+
+	activePlayer.Bank[Yellow] += 1
+	game.Board.Bank[Yellow] -= 1
+
+	card := game.Board.Decks[tier][4]
+	activePlayer.ReservedHidden = append(activePlayer.ReservedHidden, card)
+	deck = deck.filter(func(c Card) bool { return !reflect.DeepEqual(c, card) })
 	return nil
 }
 
