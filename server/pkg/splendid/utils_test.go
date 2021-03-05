@@ -152,3 +152,51 @@ func TestWinner(t *testing.T) {
 		}
 	}
 }
+
+func TestVisibleCards(t *testing.T) {
+	type testConfig struct {
+		input    Cards
+		expected Cards
+	}
+
+	testConfigs := []testConfig{
+		{
+			input:    Cards{{ID: 1}, {ID: 2}, {ID: 3}, {ID: 4}, {ID: 5}, {ID: 6}},
+			expected: Cards{{ID: 1}, {ID: 2}, {ID: 3}, {ID: 4}},
+		},
+		{
+			input:    Cards{{ID: 1}, {ID: 2}, {ID: 3}},
+			expected: Cards{{ID: 1}, {ID: 2}, {ID: 3}},
+		},
+	}
+	for _, tc := range testConfigs {
+		if actual := visibleCards(tc.input); !reflect.DeepEqual(actual, tc.expected) {
+			t.Fatalf("actual != expected. \nActual: \n%v \nExpected: \n%v", actual, tc.expected)
+		}
+	}
+}
+
+func TestCanAfford(t *testing.T) {
+	type testConfig struct {
+		buyer    map[resource]int
+		cost     map[resource]int
+		expected bool
+	}
+	testConfigs := []testConfig{
+		{
+			buyer:    createEmptyBank(),
+			cost:     map[resource]int{Red: 2},
+			expected: false,
+		},
+		{
+			buyer:    map[resource]int{Red: 3, Blue: 2, Green: 4},
+			cost:     map[resource]int{Red: 2, Blue: 1},
+			expected: true,
+		},
+	}
+	for _, tc := range testConfigs {
+		if actual := canAfford(tc.buyer, tc.cost); actual != tc.expected {
+			t.Fail()
+		}
+	}
+}
