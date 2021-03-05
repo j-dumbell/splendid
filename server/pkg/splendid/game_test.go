@@ -150,3 +150,26 @@ func TestMoveElite(t *testing.T) {
 		t.Fatalf("actual != expected. \nActual\n%v \nExpected\n%v", game, expected)
 	}
 }
+
+func TestReserveVisible(t *testing.T) {
+	game := Game{
+		Players: []Player{{ID: 1, Bank: map[resource]int{Yellow: 1}}},
+		Board: board{
+			Decks: map[int]Cards{1: Cards{{ID: 1}, {ID: 2, Tier: 1}}},
+			Bank:  map[resource]int{Yellow: 2},
+		},
+		ActivePlayerIndex: 0,
+	}
+	expected := Game{
+		Players: []Player{{ID: 1, ReservedVisible: Cards{{ID: 2, Tier: 1}}, Bank: map[resource]int{Yellow: 2}}},
+		Board: board{
+			Decks: map[int]Cards{1: Cards{{ID: 1}}},
+			Bank:  map[resource]int{Yellow: 1},
+		},
+		ActivePlayerIndex: 0,
+	}
+	game.reserveVisible(2)
+	if !reflect.DeepEqual(game, expected) {
+		t.Fatalf("actual != expected \nActual: \n%+v \nExpected: \n%+v", game, expected)
+	}
+}
