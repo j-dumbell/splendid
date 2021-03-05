@@ -171,10 +171,13 @@ func (game *Game) takeResources(toTake map[resource]int) error {
 
 func (game *Game) reserveVisible(cardID int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
-	allCards := flattenVisibleCards(game.Board.Decks)
-	c, err := getCard(allCards, cardID)
-	if err != nil {
-		return err
+	allCards := Cards{}
+	for _, cards := range game.Board.Decks {
+		allCards = append(allCards, visibleCards(cards)...)
+	}
+	card, exists := allCards.find(func(c Card) bool { return c.ID == cardID })
+	if !exists {
+		return errors.New("invalid cardID")
 	}
 	if game.Board.Bank[Yellow] <= 0 {
 		return errors.New("no tokens in bank to reserve with")
@@ -182,9 +185,9 @@ func (game *Game) reserveVisible(cardID int) error {
 	if len(activePlayer.ReservedHidden)+len(activePlayer.ReservedVisible) >= config.ReservedCapacity {
 		return errors.New("maximum cards already reserved")
 	}
-	deck := game.Board.Decks[c.Tier]
-	activePlayer.ReservedVisible = append(activePlayer.ReservedVisible, c)
-	game.Board.Decks[c.Tier] = deck.filter(func(card Card) bool { return !reflect.DeepEqual(c, card) })
+	deck := game.Board.Decks[card.Tier]
+	activePlayer.ReservedVisible = append(activePlayer.ReservedVisible, card)
+	game.Board.Decks[card.Tier] = deck.filter(func(c Card) bool { return !reflect.DeepEqual(c, card) })
 
 	activePlayer.Bank[Yellow] += 1
 	game.Board.Bank[Yellow] -= 1

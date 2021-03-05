@@ -38,17 +38,6 @@ func paramsToBank(params resourceParams) map[resource]int {
 	return bank
 }
 
-func flattenVisibleCards(decks map[int]Cards) (allCards []Cards) {
-	for _, cards := range decks {
-		if len(cards) > config.DeckCapacity {
-			allCards = append(allCards, cards[:config.DeckCapacity])
-		} else {
-			allCards = append(allCards, cards)
-		}
-	}
-	return allCards
-}
-
 func countPurchased(cards Cards) map[resource]int {
 	counts := createEmptyBank()
 	for _, c := range cards {
