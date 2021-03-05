@@ -150,6 +150,7 @@ func (game *Game) takeResources(toTake map[resource]int) error {
 }
 
 func (game *Game) reserveVisible(cardID int) error {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
 	allCards := flattenVisibleCards(game.Board.Decks)
 	c, err := getCard(allCards, cardID)
 	if err != nil {
@@ -158,15 +159,15 @@ func (game *Game) reserveVisible(cardID int) error {
 	if game.Board.Bank[Yellow] <= 0 {
 		return errors.New("no tokens in bank to reserve with")
 	}
-	if len(game.Players[game.ActivePlayerIndex].ReservedHidden)+len(game.Players[game.ActivePlayerIndex].ReservedVisible) >= 3 {
+	if len(activePlayer.ReservedHidden)+len(activePlayer.ReservedVisible) >= config.ReservedCapacity {
 		return errors.New("maximum cards already reserved")
 	}
-	deck, hand, _ := moveCard(c, game.Board.Decks[c.Tier], game.Players[game.ActivePlayerIndex].ReservedVisible)
-	gameBank, playerBank, _ := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, map[resource]int{Yellow: 1})
-	game.Board.Decks[c.Tier] = deck
-	game.Players[game.ActivePlayerIndex].ReservedVisible = hand
-	game.Board.Bank = gameBank
-	game.Players[game.ActivePlayerIndex].Bank = playerBank
+	deck := game.Board.Decks[c.Tier]
+	activePlayer.ReservedVisible = append(activePlayer.ReservedVisible, c)
+	game.Board.Decks[c.Tier] = deck.filter(func(card Card) bool { return !reflect.DeepEqual(c, card) })
+
+	activePlayer.Bank[Yellow] += 1
+	game.Board.Bank[Yellow] -= 1
 	return nil
 }
 
