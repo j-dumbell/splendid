@@ -14,19 +14,13 @@ type board struct {
 	Bank   map[resource]int `json:"bank"`
 }
 
-func filterFn(tier int) func(c Card) bool {
-	return func(c Card) bool {
-		return c.Tier == tier
-	}
-}
-
 func createDecks(cardsPath string, elitesPath string) (map[int]Cards, []elite) {
 	cardRows, _ := util.ReadCSV(cardsPath)
 	cards := createCards(cardRows)
 
 	decks := make(map[int]Cards)
 	for i := 1; i <= 3; i++ {
-		decks[i] = cards.filter(filterFn(i))
+		decks[i] = cards.filter(func(c Card) bool { return c.Tier == i })
 	}
 
 	eliteRows, _ := util.ReadCSV(elitesPath)

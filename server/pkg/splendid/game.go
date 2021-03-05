@@ -3,6 +3,7 @@ package splendid
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
@@ -110,28 +111,28 @@ func (game *Game) endTurn() int {
 }
 
 func (game *Game) reserveHidden(tier int) error {
-	if _, exists := game.Board.Decks[tier]; !exists {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
+	deck, exists := game.Board.Decks[tier]
+
+	if !exists {
 		return errors.New("tier does not exist")
 	}
-	if len(game.Board.Decks[tier]) <= config.DeckCapacity {
+	if len(deck) <= config.DeckCapacity {
 		return errors.New("deck is empty")
 	}
 	if game.Board.Bank[Yellow] <= 0 {
 		return errors.New("no tokens in bank to reserve with")
 	}
-	if len(game.Players[game.ActivePlayerIndex].ReservedHidden)+len(game.Players[game.ActivePlayerIndex].ReservedVisible) >= 3 {
+	if len(activePlayer.ReservedHidden)+len(activePlayer.ReservedVisible) >= config.ReservedCapacity {
 		return errors.New("maximum cards already reserved")
 	}
-	newGameBank, newPlayerBank, _ := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, map[resource]int{Yellow: 1})
-	game.Players[game.ActivePlayerIndex].Bank = newPlayerBank
-	game.Board.Bank = newGameBank
-	newTier, newReserved, _ := moveCard(
-		game.Board.Decks[tier][4],
-		game.Board.Decks[tier],
-		game.Players[game.ActivePlayerIndex].ReservedHidden,
-	)
-	game.Players[game.ActivePlayerIndex].ReservedHidden = newReserved
-	game.Board.Decks[tier] = newTier
+
+	activePlayer.Bank[Yellow] += 1
+	game.Board.Bank[Yellow] -= 1
+
+	card := deck[4]
+	activePlayer.ReservedHidden = append(activePlayer.ReservedHidden, card)
+	game.Board.Decks[tier] = deck.filter(func(c Card) bool { return !reflect.DeepEqual(c, card) })
 	return nil
 }
 
@@ -149,6 +150,7 @@ func (game *Game) takeResources(toTake map[resource]int) error {
 }
 
 func (game *Game) reserveVisible(cardID int) error {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
 	allCards := flattenVisibleCards(game.Board.Decks)
 	c, err := getCard(allCards, cardID)
 	if err != nil {
@@ -157,15 +159,15 @@ func (game *Game) reserveVisible(cardID int) error {
 	if game.Board.Bank[Yellow] <= 0 {
 		return errors.New("no tokens in bank to reserve with")
 	}
-	if len(game.Players[game.ActivePlayerIndex].ReservedHidden)+len(game.Players[game.ActivePlayerIndex].ReservedVisible) >= 3 {
+	if len(activePlayer.ReservedHidden)+len(activePlayer.ReservedVisible) >= config.ReservedCapacity {
 		return errors.New("maximum cards already reserved")
 	}
-	deck, hand, _ := moveCard(c, game.Board.Decks[c.Tier], game.Players[game.ActivePlayerIndex].ReservedVisible)
-	gameBank, playerBank, _ := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, map[resource]int{Yellow: 1})
-	game.Board.Decks[c.Tier] = deck
-	game.Players[game.ActivePlayerIndex].ReservedVisible = hand
-	game.Board.Bank = gameBank
-	game.Players[game.ActivePlayerIndex].Bank = playerBank
+	deck := game.Board.Decks[c.Tier]
+	activePlayer.ReservedVisible = append(activePlayer.ReservedVisible, c)
+	game.Board.Decks[c.Tier] = deck.filter(func(card Card) bool { return !reflect.DeepEqual(c, card) })
+
+	activePlayer.Bank[Yellow] += 1
+	game.Board.Bank[Yellow] -= 1
 	return nil
 }
 

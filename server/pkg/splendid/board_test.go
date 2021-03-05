@@ -7,20 +7,6 @@ import (
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
 )
 
-func TestFilterFn(t *testing.T) {
-	i := 1
-	card := Card{
-		ID:     1,
-		Tier:   1,
-		Points: 1,
-		Cost:   map[resource]int{Black: 1},
-	}
-	filter1 := filterFn(i)
-	if !filter1(card) {
-		t.Fail()
-	}
-}
-
 func TestNewBoard(t *testing.T) {
 	deck1 := Cards{{ID: 1}}
 	elites := []elite{{ID: 1}, {ID: 2}}

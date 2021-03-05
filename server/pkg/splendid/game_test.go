@@ -70,7 +70,7 @@ func TestGame_ReserveHidden(t *testing.T) {
 		Decks: map[int]Cards{1: {{ID: 1}, {ID: 2}, {ID: 3}, {ID: 4}, {ID: 5}}},
 	}
 	g := Game{
-		Players:           []Player{{ID: 1}, {ID: 2}},
+		Players:           []Player{{ID: 1, Bank: createEmptyBank()}, {ID: 2}},
 		ActivePlayerIndex: 0,
 		Board:             b,
 	}
@@ -81,7 +81,7 @@ func TestGame_ReserveHidden(t *testing.T) {
 	}
 	expG := Game{
 		Players: []Player{
-			{ID: 1, ReservedHidden: Cards{{ID: 5}}, Bank: map[resource]int{Yellow: 1}},
+			{ID: 1, ReservedHidden: Cards{{ID: 5}}, Bank: map[resource]int{Blue: 0, Red: 0, Black: 0, Green: 0, White: 0, Yellow: 1}},
 			{ID: 2},
 		},
 		ActivePlayerIndex: 0,
@@ -89,10 +89,10 @@ func TestGame_ReserveHidden(t *testing.T) {
 	}
 	err := g.reserveHidden(1)
 	if err != nil {
-		t.Fatalf("unexpected error: \"%v\"", err.Error())
+		t.Fatalf("unexpected error: \"%+v\"", err.Error())
 	}
 	if !reflect.DeepEqual(g, expG) {
-		t.Fatalf("unexpected game:\nActual:\n%v \nExpected:\n%v", g, expG)
+		t.Fatalf("unexpected game:\nActual:\n%+v \nExpected:\n%+v", g, expG)
 	}
 }
 
@@ -148,5 +148,28 @@ func TestMoveElite(t *testing.T) {
 	}
 	if !reflect.DeepEqual(game, expected) {
 		t.Fatalf("actual != expected. \nActual\n%v \nExpected\n%v", game, expected)
+	}
+}
+
+func TestReserveVisible(t *testing.T) {
+	game := Game{
+		Players: []Player{{ID: 1, Bank: map[resource]int{Yellow: 1}}},
+		Board: board{
+			Decks: map[int]Cards{1: Cards{{ID: 1}, {ID: 2, Tier: 1}}},
+			Bank:  map[resource]int{Yellow: 2},
+		},
+		ActivePlayerIndex: 0,
+	}
+	expected := Game{
+		Players: []Player{{ID: 1, ReservedVisible: Cards{{ID: 2, Tier: 1}}, Bank: map[resource]int{Yellow: 2}}},
+		Board: board{
+			Decks: map[int]Cards{1: Cards{{ID: 1}}},
+			Bank:  map[resource]int{Yellow: 1},
+		},
+		ActivePlayerIndex: 0,
+	}
+	game.reserveVisible(2)
+	if !reflect.DeepEqual(game, expected) {
+		t.Fatalf("actual != expected \nActual: \n%+v \nExpected: \n%+v", game, expected)
 	}
 }
