@@ -130,9 +130,9 @@ func (game *Game) reserveHidden(tier int) error {
 	activePlayer.Bank[Yellow] += 1
 	game.Board.Bank[Yellow] -= 1
 
-	card := game.Board.Decks[tier][4]
+	card := deck[4]
 	activePlayer.ReservedHidden = append(activePlayer.ReservedHidden, card)
-	deck = deck.filter(func(c Card) bool { return !reflect.DeepEqual(c, card) })
+	game.Board.Decks[tier] = deck.filter(func(c Card) bool { return !reflect.DeepEqual(c, card) })
 	return nil
 }
 
