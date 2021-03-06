@@ -1,7 +1,6 @@
 package splendid
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
@@ -17,22 +16,5 @@ func TestNewBoard(t *testing.T) {
 	}
 	if result.Bank[Black] != gc.ResourceCount {
 		t.Fatalf("unexpected resource count \nExpected: %v \nActual %v", gc.ResourceCount, result.Bank[Black])
-	}
-}
-
-func TestGetCard(t *testing.T) {
-	deck1 := Cards{{ID: 0}, {ID: 1}, {ID: 2}, {ID: 3}}
-	deck2 := Cards{{ID: 4}, {ID: 5}, {ID: 6}}
-	deck3 := Cards{{ID: 7}}
-	decks := []Cards{deck1, deck2, deck3}
-
-	rec, _ := getCard(decks, 6)
-	if !reflect.DeepEqual(Card{ID: 6}, rec) {
-		t.Fail()
-	}
-
-	_, err := getCard(decks, 10)
-	if err == nil {
-		t.Fail()
 	}
 }

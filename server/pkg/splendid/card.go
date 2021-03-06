@@ -1,9 +1,6 @@
 package splendid
 
 import (
-	"errors"
-	"reflect"
-
 	"github.com/j-dumbell/splendid/server/pkg/util"
 )
 
@@ -53,17 +50,11 @@ func (cards *Cards) apply(f func(Card) Card) Cards {
 	return mapped
 }
 
-// MoveCard removes <card> from <fromDeck> and appends to <toDeck>
-func moveCard(c Card, fromDeck, toDeck Cards) (Cards, Cards, error) {
-	var newFromDeck Cards
-	for _, deckCard := range fromDeck {
-		if !reflect.DeepEqual(c, deckCard) {
-			newFromDeck = append(newFromDeck, deckCard)
+func (cards *Cards) find(f func(Card) bool) (Card, bool) {
+	for _, c := range *cards {
+		if f(c) {
+			return c, true
 		}
 	}
-	if len(newFromDeck) == len(fromDeck) {
-		return Cards{}, Cards{}, errors.New("card does not exist in fromDeck")
-	}
-	newToDeck := append(toDeck, c)
-	return newFromDeck, newToDeck, nil
+	return Card{}, false
 }

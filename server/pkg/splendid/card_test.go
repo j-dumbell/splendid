@@ -65,17 +65,34 @@ func TestCreateCards(t *testing.T) {
 	}
 }
 
-func TestMoveCard(t *testing.T) {
-	fromDeck := Cards{{ID: 1}, {ID: 2}, {ID: 3}}
-	toDeck := Cards{{ID: 4}, {ID: 5}, {ID: 6}}
-	expFromDeck := Cards{{ID: 2}, {ID: 3}}
-	expToDeck := Cards{{ID: 4}, {ID: 5}, {ID: 6}, {ID: 1}}
-	recFromDeck, recToDeck, _ := moveCard(Card{ID: 1}, fromDeck, toDeck)
-	if !(reflect.DeepEqual(recFromDeck, expFromDeck) && reflect.DeepEqual(expToDeck, recToDeck)) {
-		t.Fail()
+func TestFind(t *testing.T) {
+	type testConfig struct {
+		inputCards   Cards
+		f            func(Card) bool
+		expectedCard Card
+		expectedBool bool
 	}
-	_, _, err := moveCard(Card{ID: 10}, fromDeck, toDeck)
-	if err == nil {
-		t.Fail()
+	testConfigs := []testConfig{
+		{
+			inputCards:   Cards{{ID: 1}, {ID: 2}, {ID: 3}},
+			f:            func(c Card) bool { return c.ID == 2 },
+			expectedCard: Card{ID: 2},
+			expectedBool: true,
+		},
+		{
+			inputCards:   Cards{{ID: 1, Tier: 1}, {ID: 2, Tier: 1}, {ID: 3}},
+			f:            func(c Card) bool { return c.Tier == 1 },
+			expectedCard: Card{ID: 1, Tier: 1},
+			expectedBool: true,
+		},
+	}
+	for _, tc := range testConfigs {
+		actual, exists := tc.inputCards.find(tc.f)
+		if !reflect.DeepEqual(actual, tc.expectedCard) {
+			t.Fatalf("actual != expected. \nActual \n%+v \nExpected \n%+v", actual, tc.expectedCard)
+		}
+		if exists != tc.expectedBool {
+			t.Fail()
+		}
 	}
 }

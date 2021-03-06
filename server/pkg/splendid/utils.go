@@ -38,36 +38,12 @@ func paramsToBank(params resourceParams) map[resource]int {
 	return bank
 }
 
-func flattenVisibleCards(decks map[int]Cards) (allCards []Cards) {
-	for _, cards := range decks {
-		if len(cards) > config.DeckCapacity {
-			allCards = append(allCards, cards[:config.DeckCapacity])
-		} else {
-			allCards = append(allCards, cards)
-		}
-	}
-	return allCards
-}
-
 func countPurchased(cards Cards) map[resource]int {
 	counts := createEmptyBank()
 	for _, c := range cards {
 		counts[c.Income]++
 	}
 	return counts
-}
-
-func moveResources(fromBank, toBank, cost map[resource]int) (map[resource]int, map[resource]int, error) {
-	newFromBank := copyBank(fromBank)
-	newToBank := copyBank(toBank)
-	for res, amount := range cost {
-		newFromBank[res] -= amount
-		if newFromBank[res] < 0 {
-			return nil, nil, fmt.Errorf("can't afford %v: %v", res, amount)
-		}
-		newToBank[res] += amount
-	}
-	return newFromBank, newToBank, nil
 }
 
 func addResources(b1, b2 map[resource]int) map[resource]int {
@@ -155,4 +131,22 @@ func winnerID(players []Player) int {
 		}
 	}
 	return winningPlayer.ID
+}
+
+func visibleCards(cards Cards) Cards {
+	visible := make(Cards, len(cards))
+	copy(visible, cards)
+	if len(cards) >= config.DeckCapacity {
+		return visible[:config.DeckCapacity]
+	}
+	return visible
+}
+
+func canAfford(buyer, cost map[resource]int) bool {
+	for res, amount := range cost {
+		if buyer[res]-amount < 0 {
+			return false
+		}
+	}
+	return true
 }

@@ -68,37 +68,55 @@ func (game *Game) RemovePlayer(id int) error {
 	return nil
 }
 
-// BuyCard checks to see whether the player can legally buy <cardID>, then performs the transaction
 func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
 
-	flatDecks := flattenVisibleCards(game.Board.Decks)
-	allCards := append(flatDecks, activePlayer.ReservedVisible, activePlayer.ReservedHidden)
-	card, cardErr := getCard(allCards, cardID)
-	tier := card.Tier
-	if cardErr != nil {
-		return cardErr
+	locationToCards := map[string]Cards{
+		"1":       visibleCards(game.Board.Decks[1]),
+		"2":       visibleCards(game.Board.Decks[2]),
+		"3":       visibleCards(game.Board.Decks[3]),
+		"hidden":  activePlayer.ReservedHidden,
+		"visible": activePlayer.ReservedVisible,
+	}
+
+	var location string
+	card := Card{}
+	for loc, cards := range locationToCards {
+		if c, exists := cards.find(func(card Card) bool { return card.ID == cardID }); exists == true {
+			card = c
+			location = loc
+			break
+		}
+	}
+	fmt.Println(card)
+	if reflect.DeepEqual(card, Card{}) {
+		return errors.New("invalid card ID")
 	}
 
 	cardResources := countPurchased(activePlayer.Purchased)
 	payable, err := amountPayable(resources, cardResources, card.Cost)
+	fmt.Println(payable)
 	if err != nil {
 		return err
 	}
-	newPBank, newGBank, err := moveResources(activePlayer.Bank, game.Board.Bank, payable)
-	if err != nil {
-		return err
-	}
-	activePlayer.Bank = newPBank
-	game.Board.Bank = newGBank
+	activePlayer.Bank = subtractResources(activePlayer.Bank, payable)
+	game.Board.Bank = addResources(game.Board.Bank, payable)
 
-	newDeck, newHand, _ := moveCard(card, game.Board.Decks[tier], activePlayer.Purchased)
-	game.Board.Decks[tier] = newDeck
-	activePlayer.Purchased = newHand
+	activePlayer.Purchased = append(activePlayer.Purchased, card)
+	f := func(c Card) bool { return !reflect.DeepEqual(c, card) }
+	switch location {
+	case "1", "2", "3":
+		tier := util.StringToInt(location)
+		deck := game.Board.Decks[tier]
+		game.Board.Decks[tier] = deck.filter(f)
+	case "hidden":
+		activePlayer.ReservedHidden = activePlayer.ReservedHidden.filter(f)
+	case "visible":
+		activePlayer.ReservedVisible = activePlayer.ReservedVisible.filter(f)
+	}
 	return nil
 }
 
-// EndTurn sets the next activeplayer and updates turn if necessary, also checking for a winner
 func (game *Game) endTurn() int {
 	game.moveElite()
 	newIndex := (game.ActivePlayerIndex + 1) % len(game.Players)
@@ -137,24 +155,27 @@ func (game *Game) reserveHidden(tier int) error {
 }
 
 func (game *Game) takeResources(toTake map[resource]int) error {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
 	if err := validateTake(toTake); err != nil {
 		return err
 	}
-	gameBank, playerBank, err := moveResources(game.Board.Bank, game.Players[game.ActivePlayerIndex].Bank, toTake)
-	if err != nil {
-		return err
+	if !canAfford(game.Board.Bank, toTake) {
+		return errors.New("not enough resources in bank")
 	}
-	game.Players[game.ActivePlayerIndex].Bank = playerBank
-	game.Board.Bank = gameBank
+	game.Board.Bank = subtractResources(game.Board.Bank, toTake)
+	activePlayer.Bank = addResources(activePlayer.Bank, toTake)
 	return nil
 }
 
 func (game *Game) reserveVisible(cardID int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
-	allCards := flattenVisibleCards(game.Board.Decks)
-	c, err := getCard(allCards, cardID)
-	if err != nil {
-		return err
+	allCards := Cards{}
+	for _, cards := range game.Board.Decks {
+		allCards = append(allCards, visibleCards(cards)...)
+	}
+	card, exists := allCards.find(func(c Card) bool { return c.ID == cardID })
+	if !exists {
+		return errors.New("invalid cardID")
 	}
 	if game.Board.Bank[Yellow] <= 0 {
 		return errors.New("no tokens in bank to reserve with")
@@ -162,9 +183,9 @@ func (game *Game) reserveVisible(cardID int) error {
 	if len(activePlayer.ReservedHidden)+len(activePlayer.ReservedVisible) >= config.ReservedCapacity {
 		return errors.New("maximum cards already reserved")
 	}
-	deck := game.Board.Decks[c.Tier]
-	activePlayer.ReservedVisible = append(activePlayer.ReservedVisible, c)
-	game.Board.Decks[c.Tier] = deck.filter(func(card Card) bool { return !reflect.DeepEqual(c, card) })
+	deck := game.Board.Decks[card.Tier]
+	activePlayer.ReservedVisible = append(activePlayer.ReservedVisible, card)
+	game.Board.Decks[card.Tier] = deck.filter(func(c Card) bool { return !reflect.DeepEqual(c, card) })
 
 	activePlayer.Bank[Yellow] += 1
 	game.Board.Bank[Yellow] -= 1
@@ -176,7 +197,7 @@ func (game *Game) moveElite() {
 	cardCounts := countPurchased(activePlayer.Purchased)
 	newBoardElites := []elite{}
 	for _, e := range game.Board.Elites {
-		if _, _, err := moveResources(cardCounts, nil, e.Cost); err == nil {
+		if canAfford(cardCounts, e.Cost) {
 			activePlayer.Elites = append(activePlayer.Elites, e)
 		} else {
 			newBoardElites = append(newBoardElites, e)

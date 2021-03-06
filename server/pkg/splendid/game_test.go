@@ -37,7 +37,9 @@ func TestGame_BuyCard(t *testing.T) {
 	g := Game{Players: []Player{p1, p2}, ActivePlayerIndex: 0, Board: board}
 	g2 := g
 
-	g2.buyCard(6, map[resource]int{Blue: 2, Red: 1})
+	if err := g2.buyCard(6, map[resource]int{Blue: 2, Red: 1}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	expGBank := map[resource]int{Blue: 7, Red: 6, Black: 5, Green: 5, White: 5, Yellow: 0}
 	expPBank := map[resource]int{Blue: 1, Red: 2, Black: 3, Green: 3, White: 3, Yellow: 0}
 	if !(reflect.DeepEqual(g2.Board.Bank, expGBank)) {
