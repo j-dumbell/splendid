@@ -104,17 +104,15 @@ func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 
 	activePlayer.Purchased = append(activePlayer.Purchased, card)
 	f := func(c Card) bool { return !reflect.DeepEqual(c, card) }
-	if location == "1" || location == "2" || location == "3" {
+	switch location {
+	case "1", "2", "3":
 		tier := util.StringToInt(location)
 		deck := game.Board.Decks[tier]
 		game.Board.Decks[tier] = deck.filter(f)
-	} else {
-		switch location {
-		case "hidden":
-			activePlayer.ReservedHidden = activePlayer.ReservedHidden.filter(f)
-		case "visible":
-			activePlayer.ReservedVisible = activePlayer.ReservedVisible.filter(f)
-		}
+	case "hidden":
+		activePlayer.ReservedHidden = activePlayer.ReservedHidden.filter(f)
+	case "visible":
+		activePlayer.ReservedVisible = activePlayer.ReservedVisible.filter(f)
 	}
 	return nil
 }
