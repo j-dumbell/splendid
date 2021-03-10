@@ -17,7 +17,8 @@ jobs:
       - run:
           name: build
           command: |
-            cd go/cmd/server && go build .
+            ls
+            # cd go/cmd/server && go build .
 
   build-test-client:
     docker:
