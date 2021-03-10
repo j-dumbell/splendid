@@ -3,8 +3,8 @@ package splendid
 import (
 	"encoding/json"
 
-	m "github.com/j-dumbell/splendid/server/api/messages"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
+	m "github.com/j-dumbell/splendid/server/pkg/ws/messages"
 )
 
 func maskCards(cards Cards) Cards {

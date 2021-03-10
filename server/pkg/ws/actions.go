@@ -1,10 +1,10 @@
-package api
+package ws
 
 import (
 	"encoding/json"
 	"fmt"
 
-	m "github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/pkg/ws/messages"
 )
 
 func create(newGame func() Game, client *client, params json.RawMessage, allLobbies map[string]*Lobby) {

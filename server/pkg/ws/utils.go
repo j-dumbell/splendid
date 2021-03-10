@@ -1,9 +1,9 @@
-package api
+package ws
 
 import (
 	"encoding/json"
 
-	m "github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/pkg/ws/messages"
 )
 
 // Game is the interface for any game

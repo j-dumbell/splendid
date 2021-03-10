@@ -1,9 +1,9 @@
-package api
+package ws
 
 import (
 	"fmt"
 
-	m "github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/pkg/ws/messages"
 	"golang.org/x/net/websocket"
 )
 

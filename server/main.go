@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/j-dumbell/splendid/server/api"
 	globals "github.com/j-dumbell/splendid/server/config"
 	"github.com/j-dumbell/splendid/server/pkg/splendid"
 	"github.com/j-dumbell/splendid/server/pkg/splendid/config"
+	"github.com/j-dumbell/splendid/server/pkg/ws"
 	"golang.org/x/net/websocket"
 )
 
@@ -16,8 +16,8 @@ type gameName string
 
 var SplendidGame gameName = "splendid"
 
-var nameToGame = map[gameName]func() api.Game{
-	SplendidGame: func() api.Game { return &splendid.Game{} },
+var nameToGame = map[gameName]func() ws.Game{
+	SplendidGame: func() ws.Game { return &splendid.Game{} },
 }
 
 func health(w http.ResponseWriter, r *http.Request) {
@@ -25,9 +25,9 @@ func health(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	allLobbies := make(map[string]*api.Lobby)
+	allLobbies := make(map[string]*ws.Lobby)
 	fmt.Println("Starting on port " + strconv.Itoa(globals.Port))
-	wsHandler := api.MkWsHandler(nameToGame[SplendidGame], allLobbies, config.MaxPlayersDefault)
+	wsHandler := ws.MkWsHandler(nameToGame[SplendidGame], allLobbies, config.MaxPlayersDefault)
 	http.Handle("/", websocket.Handler(wsHandler))
 	http.HandleFunc("/health", health)
 	http.ListenAndServe(":"+strconv.Itoa(globals.Port), nil)

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"reflect"
 
-	m "github.com/j-dumbell/splendid/server/api/messages"
+	m "github.com/j-dumbell/splendid/server/pkg/ws/messages"
 )
 
 type payload struct {
