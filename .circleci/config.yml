@@ -18,7 +18,8 @@ jobs:
           name: build
           command: |
             ls
-            # cd go/cmd/server && go build .
+            cd go/cmd && ls
+            #cd go/cmd/server && go build .
 
   build-test-client:
     docker:
