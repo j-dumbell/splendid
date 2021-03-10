@@ -1,3 +1,3 @@
-cd infra/terraform &&
+cd tf &&
 terraform init &&
 terraform destroy
