@@ -13,11 +13,11 @@ jobs:
       - run:
           name: test
           command: |
-            cd server && go test ./...
+            cd go && go test ./...
       - run:
           name: build
           command: |
-            cd server && go build main.go
+            cd go && go build cmd/server/main.go
 
   build-test-client:
     docker:
@@ -53,7 +53,7 @@ jobs:
       - checkout
       - run:
           name: Terraform plan
-          command: cd infra/terraform && terraform init && terraform plan
+          command: sh bin/tfplan.sh
 
 workflows:
   version: 2.1
