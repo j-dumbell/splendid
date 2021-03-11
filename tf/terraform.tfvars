@@ -1,0 +1,11 @@
+account_id = "507783707923"
+region = "eu-west-2"
+private_subnet_cidr = "10.0.1.0/24"
+site_bucket = "splendid-site"
+app_name = "splendid"
+server_port = "8080"
+lb_listener_port = "80"
+server_cpu = "2048"
+server_mem = "4096"
+server_count = 1
+server_timeout = 600
