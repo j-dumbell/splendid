@@ -11,6 +11,8 @@ var DeckCapacity int = 4
 
 var ReservedCapacity int = 3
 
+var MaxPlayerResources int = 10
+
 type GameConfig struct {
 	ElitesCount   int
 	ResourceCount int

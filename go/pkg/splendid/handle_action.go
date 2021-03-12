@@ -18,7 +18,7 @@ type buyCardParams struct {
 	Resources resourceParams `json:"resources"`
 }
 
-type takeResourceParams struct {
+type moveResourceParams struct {
 	Resources resourceParams `json:"resources"`
 }
 
@@ -87,7 +87,6 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 	}
 
 	switch action {
-
 	case startGame:
 		fmt.Println("starting game")
 		if err := game.StartGame(decks, elites); err != nil {
@@ -108,7 +107,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 
 	case takeResources:
 		fmt.Println("taking resources")
-		var p takeResourceParams
+		var p moveResourceParams
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
@@ -119,7 +118,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 
 	case returnResources:
 		fmt.Println("returning resources")
-		var p takeResourceParams
+		var p moveResourceParams
 		if err := json.Unmarshal(params, &p); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}

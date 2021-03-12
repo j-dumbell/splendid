@@ -217,7 +217,7 @@ func (game *Game) returnResources(toReturn map[resource]int) error {
 	if !canAfford(activePlayer.Bank, toReturn) {
 		return errors.New("can't afford return")
 	}
-	if countResources(activePlayer.Bank)-countResources(toReturn) != 10 {
+	if countResources(activePlayer.Bank)-countResources(toReturn) != config.MaxPlayerResources {
 		return errors.New("returned too many resources")
 	}
 	game.Board.Bank = addResources(game.Board.Bank, toReturn)
