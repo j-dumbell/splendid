@@ -41,12 +41,12 @@ export const useWebSocket = (path: string) => {
       return;
     }
     
-    if (!config.apiUrl) {
+    if (!config.apiHost) {
       dispatch(
         updateConnection({
           loading: false,
           open: false,
-          error: "apiUrl not set",
+          error: "apiHost not set",
         })
       );
       return;
@@ -60,7 +60,7 @@ export const useWebSocket = (path: string) => {
           error: undefined,
         })
       );
-      const url = new URL(`ws://${config.apiUrl}${path}`);
+      const url = new URL(`ws://${config.apiHost}${path}`);
       socket = new WebSocket(url.toString());
       (window as any).ws = socket;
     }
