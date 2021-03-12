@@ -152,7 +152,6 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		return mkErrorDetails(id, "unrecognized action")
 	}
 
-	// add >10 res check to endTurn
 	if winnerID := game.endTurn(); winnerID != 0 {
 		winnerRes := map[int]m.DetailsGame{}
 		details, _ := json.Marshal(GameOver{Action: "gameOver", playerID: winnerID})
