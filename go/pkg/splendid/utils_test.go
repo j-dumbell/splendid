@@ -200,3 +200,19 @@ func TestCanAfford(t *testing.T) {
 		}
 	}
 }
+
+func TestCountResources(t *testing.T) {
+	type testConfig struct {
+		input    map[resource]int
+		expected int
+	}
+	testConfigs := []testConfig{
+		{input: map[resource]int{Red: 3, Blue: 2, Green: 4}, expected: 9},
+		{input: map[resource]int{Yellow: 8, Blue: 5}, expected: 13},
+	}
+	for _, tc := range testConfigs {
+		if actual := countResources(tc.input); actual != tc.expected {
+			t.Fatalf("actual != expected \nActual: %v \nExpected: %v", actual, tc.expected)
+		}
+	}
+}

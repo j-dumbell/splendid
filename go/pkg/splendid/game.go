@@ -18,6 +18,7 @@ type Game struct {
 	ActivePlayerIndex int      `json:"activePlayerIndex"`
 	Board             board    `json:"board"`
 	Turn              int      `json:"turn"`
+	expectedAction    action   `json:"expectedAction"`
 }
 
 // StartGame starts the game
@@ -118,6 +119,11 @@ func (game *Game) buyCard(cardID int, resources map[resource]int) error {
 }
 
 func (game *Game) endTurn() int {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
+	if countResources(activePlayer.Bank) > 10 {
+		game.expectedAction = returnResources
+	}
+	//ToDo - moveElite doesn't need to be a method on game
 	game.moveElite()
 	newIndex := (game.ActivePlayerIndex + 1) % len(game.Players)
 	game.ActivePlayerIndex = newIndex
@@ -204,4 +210,17 @@ func (game *Game) moveElite() {
 		}
 	}
 	game.Board.Elites = newBoardElites
+}
+
+func (game *Game) returnResources(toReturn map[resource]int) error {
+	activePlayer := &game.Players[game.ActivePlayerIndex]
+	if !canAfford(activePlayer.Bank, toReturn) {
+		return errors.New("can't afford return")
+	}
+	if countResources(activePlayer.Bank)-countResources(toReturn) != 10 {
+		return errors.New("returned too many resources")
+	}
+	game.Board.Bank = addResources(game.Board.Bank, toReturn)
+	activePlayer.Bank = subtractResources(activePlayer.Bank, toReturn)
+	return nil
 }

@@ -150,3 +150,11 @@ func canAfford(buyer, cost map[resource]int) bool {
 	}
 	return true
 }
+
+func countResources(bank map[resource]int) int {
+	count := 0
+	for _, amount := range bank {
+		count += amount
+	}
+	return count
+}

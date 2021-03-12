@@ -10,7 +10,7 @@ import (
 )
 
 type payload struct {
-	GameAction string `json:"gameAction"`
+	GameAction action `json:"gameAction"`
 }
 
 type buyCardParams struct {
@@ -44,6 +44,16 @@ type GameOver struct {
 	playerID int    `json:"playerId"`
 }
 
+type action string
+
+var any action = "any"
+var startGame action = "startGame"
+var buyCard action = "buyCard"
+var takeResources action = "takeResources"
+var returnResources action = "returnResources"
+var reserveHidden action = "reserveHidden"
+var reserveVisible action = "reserveVisible"
+
 func validateTake(toTake map[resource]int) error {
 	if count, exists := toTake[Yellow]; exists && count >= 1 {
 		return errors.New("cannot take yellow resources")
@@ -71,13 +81,20 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		}
 		return mkErrorDetails(id, "not active player")
 	}
-	switch payload.GameAction {
-	case "startGame":
+	action := payload.GameAction
+	if game.expectedAction != any && game.expectedAction != action {
+		return mkErrorDetails(id, "unexpected action")
+	}
+
+	switch action {
+
+	case startGame:
 		fmt.Println("starting game")
 		if err := game.StartGame(decks, elites); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-	case "buyCard":
+
+	case buyCard:
 		fmt.Println("buying card")
 		var p buyCardParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -88,7 +105,8 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if buyErr != nil {
 			return mkErrorDetails(id, buyErr.Error())
 		}
-	case "takeResources":
+
+	case takeResources:
 		fmt.Println("taking resources")
 		var p takeResourceParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -98,7 +116,19 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.takeResources(toTake); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-	case "reserveHidden":
+
+	case returnResources:
+		fmt.Println("returning resources")
+		var p takeResourceParams
+		if err := json.Unmarshal(params, &p); err != nil {
+			return mkErrorDetails(id, err.Error())
+		}
+		toReturn := paramsToBank(p.Resources)
+		if err := game.returnResources(toReturn); err != nil {
+			return mkErrorDetails(id, err.Error())
+		}
+
+	case reserveHidden:
 		fmt.Println("reserving hidden card")
 		var p reserveHiddenParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -107,7 +137,8 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.reserveHidden(p.Tier); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
-	case "reserveVisible":
+
+	case reserveVisible:
 		fmt.Println("reserving visible card")
 		var p reserveVisibleParams
 		if err := json.Unmarshal(params, &p); err != nil {
@@ -116,10 +147,12 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		if err := game.reserveVisible(p.CardID); err != nil {
 			return mkErrorDetails(id, err.Error())
 		}
+
 	default:
 		return mkErrorDetails(id, "unrecognized action")
 	}
 
+	// add >10 res check to endTurn
 	if winnerID := game.endTurn(); winnerID != 0 {
 		winnerRes := map[int]m.DetailsGame{}
 		details, _ := json.Marshal(GameOver{Action: "gameOver", playerID: winnerID})
