@@ -101,10 +101,12 @@ func TestGame_ReserveHidden(t *testing.T) {
 func Test_validateTake(t *testing.T) {
 	inputOk := []map[resource]int{
 		{Red: 1, Blue: 1, Green: 1, White: 0, Black: 0, Yellow: 0},
-		{White: 2, Red: 0, Blue: 0, Green: 0, Black: 0, Yellow: 0},
+		{White: 0, Red: 0, Blue: 0, Green: 2, Black: 0, Yellow: 0},
 	}
+	bank := map[resource]int{Yellow: 3, Red: 3, Green: 3, White: 2, Black: 3, Blue: 3}
+
 	for _, toTake := range inputOk {
-		if err := validateTake(toTake); err != nil {
+		if err := validateTake(toTake, bank, 3); err != nil {
 			t.Fatalf("input: %v \nunexpected error: \"%v\"", toTake, err)
 		}
 	}
@@ -114,9 +116,10 @@ func Test_validateTake(t *testing.T) {
 		{Yellow: 2, Red: 0, Green: 0, White: 0, Black: 0, Blue: 0},
 		{Red: 1, Green: 1, White: 1, Black: 1, Blue: 0, Yellow: 0},
 		{Red: 3, Green: 2, White: 1, Black: 1, Blue: 0, Yellow: 0},
+		{White: 2, Red: 0, Blue: 0, Green: 0, Black: 0, Yellow: 0},
 	}
 	for _, toTake := range inputBad {
-		if err := validateTake(toTake); err == nil {
+		if err := validateTake(toTake, bank, 3); err == nil {
 			t.Fatalf("input: %v \nerror not thrown", toTake)
 		}
 	}

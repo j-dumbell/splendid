@@ -122,6 +122,7 @@ func (game *Game) endTurn() int {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
 	if countResources(activePlayer.Bank) > 10 {
 		game.expectedAction = returnResources
+		return 0
 	}
 	//ToDo - moveElite doesn't need to be a method on game
 	game.moveElite()
@@ -162,7 +163,8 @@ func (game *Game) reserveHidden(tier int) error {
 
 func (game *Game) takeResources(toTake map[resource]int) error {
 	activePlayer := &game.Players[game.ActivePlayerIndex]
-	if err := validateTake(toTake); err != nil {
+	maxResCount := config.GameConfigs[len(game.Players)].ResourceCount
+	if err := validateTake(toTake, game.Board.Bank, maxResCount); err != nil {
 		return err
 	}
 	if !canAfford(game.Board.Bank, toTake) {

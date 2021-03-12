@@ -54,12 +54,15 @@ var returnResources action = "returnResources"
 var reserveHidden action = "reserveHidden"
 var reserveVisible action = "reserveVisible"
 
-func validateTake(toTake map[resource]int) error {
+func validateTake(toTake, bank map[resource]int, maxRes int) error {
 	if count, exists := toTake[Yellow]; exists && count >= 1 {
 		return errors.New("cannot take yellow resources")
 	}
 	countFreq := map[int]int{}
-	for _, num := range toTake {
+	for res, num := range toTake {
+		if bank[res] < maxRes && num == 2{
+			return errors.New("cannot take 2 resources when stack not full")
+		}
 		countFreq[num]++
 	}
 	if !(reflect.DeepEqual(countFreq, map[int]int{0: 5, 2: 1}) || reflect.DeepEqual(countFreq, map[int]int{0: 3, 1: 3})) {
@@ -82,7 +85,7 @@ func (game *Game) HandleAction(id int, params json.RawMessage) map[int]m.Details
 		return mkErrorDetails(id, "not active player")
 	}
 	action := payload.GameAction
-	if game.expectedAction != any && game.expectedAction != action {
+	if game.expectedAction != "" && game.expectedAction != action {
 		return mkErrorDetails(id, "unexpected action")
 	}
 
