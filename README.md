@@ -4,14 +4,14 @@ A bootleg version of the board game Splendor
 
 ### Client
 ```bash
-cd client
+cd ts
 yarn install
 yarn start
 ```
 
 ### Server
 ```bash
-cd server
+docker-compose up server
 go run .
 ```
 

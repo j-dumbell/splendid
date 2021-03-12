@@ -9,7 +9,7 @@ services:
 
   client:
     build:
-      context: client/
+      context: ts/
       dockerfile: Dockerfile
     ports:
       - 80:80

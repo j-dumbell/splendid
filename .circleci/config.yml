@@ -27,23 +27,23 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - client_deps-{{ checksum "client/package.json" }}
+            - client_deps-{{ checksum "ts/package.json" }}
       - run:
           name: install
           command: |
-            cd client && yarn install
+            cd ts && yarn install
       - save_cache:
-          key: client_deps-{{ checksum "client/package.json" }}
+          key: client_deps-{{ checksum "ts/package.json" }}
           paths:
-            - /client/node_modules
+            - /ts/node_modules
       - run:
           name: test
           command: |
-            cd client && yarn test
+            cd ts && yarn test
       - run:
           name: build
           command: |
-            cd client && yarn build
+            cd ts && yarn build
 
   tf-plan:
     docker:
