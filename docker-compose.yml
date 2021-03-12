@@ -9,12 +9,12 @@ services:
 
   client:
     build:
-      context: client/
+      context: ts/
       dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_HOST=localhost:8080
     ports:
       - 80:80
     links:
       - server
-    environment:
-      - REACT_APP_API_HOST=localhost:8080
     stdin_open: true
