@@ -18,3 +18,8 @@ services:
     environment:
       - REACT_APP_API_HOST=localhost:8080
     stdin_open: true
+
+  db:
+    image: amazon/dynamodb-local
+    ports:
+      - 8000:8000
