@@ -13,7 +13,7 @@ type User struct {
 	password    string
 }
 
-func createUser(client *dynamodb.Client, u User) error {
+func CreateUser(client *dynamodb.Client, u User) error {
 
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: expr,
@@ -33,5 +33,5 @@ func main() {
 		password:    "xmpadsad",
 	}
 
-	createUser(client, u)
+	CreateUser(client, u)
 }
