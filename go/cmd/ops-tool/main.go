@@ -21,6 +21,11 @@ func main() {
 	flag.NewFlagSet(remoteState, flag.ExitOnError)
 	flag.NewFlagSet(accountTable, flag.ExitOnError)
 
+	if len(os.Args) < 2 {
+		fmt.Println("must be at least 1 positional argument")
+		os.Exit(1)
+	}
+
 	operation := os.Args[1]
 	switch operation {
 	case remoteState:
