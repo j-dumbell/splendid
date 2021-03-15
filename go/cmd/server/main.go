@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"strconv"
 
-	globals "github.com/j-dumbell/splendid/go/config"
 	"github.com/j-dumbell/splendid/go/pkg/splendid"
 	"github.com/j-dumbell/splendid/go/pkg/splendid/config"
 	"github.com/j-dumbell/splendid/go/pkg/ws"
 	"golang.org/x/net/websocket"
 )
+
+var port int = 8080
 
 type gameName string
 
@@ -26,9 +27,9 @@ func health(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	allLobbies := make(map[string]*ws.Lobby)
-	fmt.Println("Starting on port " + strconv.Itoa(globals.Port))
+	fmt.Println("Starting on port " + strconv.Itoa(port))
 	wsHandler := ws.MkWsHandler(nameToGame[SplendidGame], allLobbies, config.MaxPlayersDefault)
 	http.Handle("/", websocket.Handler(wsHandler))
 	http.HandleFunc("/health", health)
-	http.ListenAndServe(":"+strconv.Itoa(globals.Port), nil)
+	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }

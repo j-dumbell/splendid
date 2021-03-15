@@ -18,3 +18,8 @@ services:
     links:
       - server
     stdin_open: true
+
+  db:
+    image: amazon/dynamodb-local
+    ports:
+      - 8000:8000
