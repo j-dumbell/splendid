@@ -3,6 +3,7 @@ package account
 import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/j-dumbell/splendid/go/pkg/util/awsutils"
 )
 
@@ -19,7 +20,7 @@ func CreateUser(client *dynamodb.Client, u User) error {
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: expr,
 		TableName:                 aws.String(usersTable),
-		Key:                       key,
+		Key:                       map[string]types.AttributeValue{"email": u.email},
 		ReturnValues:              aws.String("UPDATED_NEW"),
 		UpdateExpression:          aws.String("set info.rating = :r"),
 	}
