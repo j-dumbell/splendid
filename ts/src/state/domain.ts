@@ -27,13 +27,13 @@ export type WSConnection = {
 };
 
 export type State = {
+  lobbyId?: string;
+  clientId?: number;
   chat: Message[];
   history: History[];
   latestAction?: History;
-  connection: WSConnection;
-  lobbyId?: string;
-  clientId?: number;
   playerNames: Record<number, string>;
+  connection: WSConnection;
   game: {
     form: SplendidForm,
     response?: SplendidGame,

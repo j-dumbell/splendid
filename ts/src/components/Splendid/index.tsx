@@ -3,18 +3,19 @@ import React from "react";
 import { useGame } from "../../hooks/useGame";
 import Board from "./Board";
 import Players from "./Players";
-import { SplendidContainer, SplendidFormContainer } from "./styled";
+import { SplendidContainer } from "./styled";
 
 const Splendid = () => {
   const [, game] = useGame();
-  if (!game) {
-    return <SplendidContainer />;
-  }
   return (
-    <SplendidFormContainer>
-      <Board board={game.board} />
-      <Players players={game.players} />
-    </SplendidFormContainer>
+    <SplendidContainer>
+      {game && (
+        <>
+          <Board board={game.board} />
+          <Players players={game.players} />
+        </>
+      )}
+    </SplendidContainer>
   );
 };
 

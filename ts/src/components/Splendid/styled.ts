@@ -7,10 +7,3 @@ export const SplendidContainer = styled(FlexContainer)`
   color: black;
   padding-bottom: 50px;
 `;
-
-export const SplendidFormContainer = styled.form`
-  display: flex;
-  flex: 4;
-  color: black;
-  padding-bottom: 50px;
-`;

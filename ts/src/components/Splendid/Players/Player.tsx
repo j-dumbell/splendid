@@ -5,7 +5,6 @@ import { SplendidPlayer } from "../domain";
 import Elites from "../Elites";
 import { getScore } from "./util";
 import PlayerDeck from "./PlayerDeck";
-import PlayerResourceForm from "./PlayerResourceForm";
 import PlayerResourceList from "./PlayerResourceList";
 import { PlayerContainer, PlayerTitle, PlayerContents } from "./styled";
 import { useClientId } from "../../../hooks/useClientId";
@@ -18,7 +17,7 @@ type Props = {
 const Player = ({ player }: Props) => {
   const [clientId] = useClientId();
   const [playerNames] = usePlayerNames();
-  const [isActivePlayer, activePlayerId] = useActivePlayer();
+  const [, activePlayerId] = useActivePlayer();
   const isActiveClient = Boolean(clientId === player.id);
   return (
     <PlayerContainer
@@ -31,11 +30,7 @@ const Player = ({ player }: Props) => {
         <strong>{playerNames[player.id] || `Player #${player.id}`}</strong>
         <strong>Score: {getScore(player)}</strong>
       </PlayerTitle>
-      {isActiveClient && isActivePlayer ? (
-        <PlayerResourceForm {...player} />
-      ) : (
-        <PlayerResourceList {...player} />
-      )}
+      <PlayerResourceList {...player} />
       <PlayerContents column>
         <Elites size="micro" elites={player.elites} />
         <PlayerDeck {...player} />

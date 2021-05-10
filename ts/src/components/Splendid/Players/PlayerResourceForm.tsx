@@ -9,6 +9,10 @@ import ResourceCount from "../ResourceList/ResourceCount";
 import PlayerResourceButton from "./PlayerResourceButton";
 import { PlayerResourceFormContainer } from "./styled";
 
+/**
+ * @deprecated 
+ * to be replaced with a new actions form 
+ */
 export const PlayerResourceForm = ({
   bank: playerBank,
   purchased,

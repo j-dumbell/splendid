@@ -72,6 +72,10 @@ export const PurchasedCardStack = styled(FlexContainer)`
   margin-right: 55px;
 `;
 
+/**
+ * @deprecated 
+ * to be replaced with a new actions form 
+ */
 export const PlayerResourceFormContainer = styled(FlexContainer)`
   padding: 5px 0;
 `;
