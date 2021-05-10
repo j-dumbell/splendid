@@ -1,5 +1,4 @@
 import React from "react";
-import { Field } from "formik";
 
 import Card, { Props as CardProps } from "../Card";
 import PurchaseButtons from "./PurchaseButtons";
@@ -10,7 +9,7 @@ type Props = Omit<CardProps, "index">;
 
 const PurchasableCard = (props: Props) => (
   <PurchasableCardContainer shadowed={props.shadowed}>
-    <Field
+    <input
       type="radio"
       name="selectedCard"
       value={constructCardRef(props.card)}

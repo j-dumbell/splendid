@@ -1,8 +1,7 @@
 import React from "react";
-import { useFormikContext } from "formik";
 
 import { useGame } from "../../../hooks/useGame";
-import { SplendidForm, SplendidPlayer, splendidResource } from "../domain";
+import { SplendidPlayer, splendidResource } from "../domain";
 import { constructOffsetsPerm, validateMax } from "./util";
 import FlexContainer from "../../common/FlexContainer";
 import Button from "../../common/Button";
@@ -14,12 +13,7 @@ export const PlayerResourceForm = ({
   bank: playerBank,
   purchased,
 }: SplendidPlayer) => {
-  const {
-    values: { resources },
-    setFieldValue,
-    submitForm,
-  } = useFormikContext<SplendidForm>();
-  const [,game] = useGame();
+  const [form, game] = useGame();
   const {
     board: { bank },
   } = game!;
@@ -31,7 +25,7 @@ export const PlayerResourceForm = ({
             <ResourceCount
               resource={resource}
               count={playerBank[resource]}
-              offsetTemp={resources[resource]}
+              offsetTemp={form.resources[resource]}
               offsetPerm={constructOffsetsPerm(resource, purchased)}
               size="default"
             />
@@ -39,16 +33,16 @@ export const PlayerResourceForm = ({
               <PlayerResourceButton
                 resource={resource}
                 nextValueFn={(v) => v - 1}
-                disabled={resources[resource] + playerBank[resource] <= 0}
+                disabled={form.resources[resource] + playerBank[resource] <= 0}
               />
               <PlayerResourceButton
                 resource={resource}
                 nextValueFn={(v) => v + 1}
                 disabled={
-                  (-resources[resource] || 0) + bank[resource] <= 0 ||
+                  (-form.resources[resource] || 0) + bank[resource] <= 0 ||
                   !validateMax({
-                    ...resources,
-                    [resource]: resources[resource] + 1,
+                    ...form.resources,
+                    [resource]: form.resources[resource] + 1,
                   }) ||
                   resource === "yellow"
                 }
@@ -59,10 +53,7 @@ export const PlayerResourceForm = ({
       </FlexContainer>
       <Button
         type="button"
-        onClick={() => {
-          setFieldValue("gameAction", "takeResources");
-          submitForm();
-        }}
+        onClick={() => console.log({ gameAction: "takeResources" })}
       >
         Take Resources
       </Button>

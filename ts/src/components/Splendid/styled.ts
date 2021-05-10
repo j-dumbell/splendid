@@ -1,4 +1,3 @@
-import { Form } from "formik";
 import styled from "styled-components";
 
 import FlexContainer from "../common/FlexContainer";
@@ -9,7 +8,7 @@ export const SplendidContainer = styled(FlexContainer)`
   padding-bottom: 50px;
 `;
 
-export const SplendidFormContainer = styled(Form)`
+export const SplendidFormContainer = styled.form`
   display: flex;
   flex: 4;
   color: black;

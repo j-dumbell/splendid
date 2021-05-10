@@ -1,8 +1,8 @@
 import React from "react";
-import { useFormikContext } from "formik";
 
-import { SplendidForm, SplendidResource } from "../domain";
+import { SplendidResource } from "../domain";
 import Button from "../../common/Button";
+import { useGame } from "../../../hooks/useGame";
 
 type Props = {
   disabled: boolean;
@@ -11,22 +11,17 @@ type Props = {
 };
 
 const PlayerResourceButton = ({ disabled, resource, nextValueFn }: Props) => {
-  const {
-    values: { resources },
-    setFieldValue,
-  } = useFormikContext<SplendidForm>();
-  const currentValue = resources[resource];
+  const [form] = useGame();
+  const currentValue = form.resources[resource];
   const nextValue = nextValueFn(currentValue);
   return (
     <Button
       disabled={disabled}
       type="button"
-      onClick={() => {
-        setFieldValue("resources", {
-          ...resources,
-          [resource]: nextValue,
-        });
-      }}
+      onClick={() => console.log({
+        ...form.resources,
+        [resource]: nextValue,
+      })}
     >
       {nextValue < currentValue ? "-" : "+"}
     </Button>

@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { Field, Form } from "formik";
 
 type Props = {
   column?: boolean;
@@ -31,11 +30,11 @@ export const FlexChild = styled(FlexContainer)`
   flex: 1;
 `;
 
-export const FlexForm = styled(Form)`
+export const FlexForm = styled.form`
   display: flex;
 `;
 
-export const FlexField = styled(Field)`
+export const FlexField = styled.input`
   flex: 1;
 `;
 

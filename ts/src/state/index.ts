@@ -1,6 +1,7 @@
 import fixtures from "./gameFixtures.json";
-import { SplendidForm, SplendidGame } from "../components/Splendid/domain";
+import { SplendidGame } from "../components/Splendid/domain";
 import { State } from "./domain";
+import { constructEmptyResourceList } from "../components/Splendid/util";
 
 /**
  * Create a `.env.development.local` file and set this env to
@@ -26,7 +27,10 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
         2: "James",
       },
       game: {
-        form: {} as SplendidForm,
+        form: {
+          selectedCard: "",
+          resources: constructEmptyResourceList(),
+        },
         response: (fixtures as unknown) as SplendidGame,
       },
     }
@@ -42,7 +46,10 @@ export const defaultState: State = {
   },
   playerNames: {},
   game: {
-    form: {} as SplendidForm,
+    form: {
+      selectedCard: "",
+      resources: constructEmptyResourceList(),
+    },
   },
   ...withFixtures,
 };
