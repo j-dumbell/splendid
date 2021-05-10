@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import config from "../config";
+import { withFixtureEnv } from "../state";
 import {
   joinLobby,
   exitLobby,
@@ -13,7 +14,6 @@ import {
   removeLatestAction,
 } from "../state/actionCreator";
 import { HistoryActionType } from "../state/domain";
-import { withFixtureEnv } from "../state/reducer";
 import { useCookie } from "./useCookie";
 
 export type WsResponse = {

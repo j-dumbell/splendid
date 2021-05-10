@@ -6,7 +6,8 @@ import {
   updateSplendidGame,
 } from "../actionCreator";
 import { State } from "../domain";
-import reducer, { defaultState } from ".";
+import reducer from ".";
+import { defaultState } from "..";
 
 const game: SplendidGame = {
   turn: 1,

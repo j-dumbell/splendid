@@ -8,14 +8,16 @@ import PlayerDeck from "./PlayerDeck";
 import PlayerResourceForm from "./PlayerResourceForm";
 import PlayerResourceList from "./PlayerResourceList";
 import { PlayerContainer, PlayerTitle, PlayerContents } from "./styled";
-import { useClient } from "../../../hooks/useClient";
+import { useClientId } from "../../../hooks/useClientId";
+import { usePlayerNames } from "../../../hooks/usePlayerNames";
 
 type Props = {
   player: SplendidPlayer;
 };
 
 const Player = ({ player }: Props) => {
-  const [playerNames, clientId] = useClient();
+  const [clientId] = useClientId();
+  const [playerNames] = usePlayerNames();
   const [isActivePlayer, activePlayerId] = useActivePlayer();
   const isActiveClient = Boolean(clientId === player.id);
   return (
