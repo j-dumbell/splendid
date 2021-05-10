@@ -1,4 +1,4 @@
-import { SplendidGame } from "../components/Splendid/domain";
+import { SplendidForm, SplendidGame } from "../components/Splendid/domain";
 
 export type Message = {
   clientId: number;
@@ -32,7 +32,10 @@ export type State = {
   chat: Message[];
   history: History[];
   latestAction?: History;
-  game?: SplendidGame;
+  game: {
+    form: SplendidForm,
+    response?: SplendidGame,
+  };
   playerNames: Record<number, string>;
   connection: WSConnection;
 };

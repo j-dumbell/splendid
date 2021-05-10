@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
 
 import { State } from "../state/domain";
+import { useGame } from "./useGame";
 
 export const useActivePlayer = (): [boolean?, number?, number?] => {
-  const { game, clientId } = useSelector(({ game, clientId }: State) => ({
+  const [, game] = useGame();
+  const { clientId } = useSelector(({ game, clientId }: State) => ({
     game,
     clientId,
   }));

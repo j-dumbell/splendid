@@ -15,7 +15,7 @@ const initialValues: SplendidForm = {
 };
 
 const Splendid = () => {
-  const [game] = useGame();
+  const [,game] = useGame();
   if (!game) {
     return <SplendidContainer />;
   }

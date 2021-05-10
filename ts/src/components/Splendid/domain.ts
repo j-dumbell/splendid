@@ -53,6 +53,6 @@ export type SplendidGame = {
 
 export type SplendidForm = {
   gameAction?: "takeResources" | "buyCard" | "reserveVisible" | "reserveHidden";
-  resources: SplendidResourceList;
-  selectedCard: string;
+  resources?: SplendidResourceList;
+  selectedCard?: string;
 };

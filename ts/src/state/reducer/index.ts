@@ -1,6 +1,6 @@
-import fixtures from "./gameFixtures.json";
+import fixtures from "../gameFixtures.json";
 
-import { SplendidGame } from "../components/Splendid/domain";
+import { SplendidGame } from "../../components/Splendid/domain";
 import {
   State,
   JoinLobbyAction,
@@ -11,7 +11,7 @@ import {
   ActionType,
   ExitLobbyAction,
   WSConnectionAction,
-} from "./domain";
+} from "../domain";
 
 /**
  * Create a `.env.development.local` file and set this env to
@@ -36,7 +36,9 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
         error: undefined,
       },
       clientId: 1,
-      game: (fixtures as unknown) as SplendidGame,
+      game: {
+        response: (fixtures as unknown) as SplendidGame,
+      },
     }
   : undefined;
 
@@ -48,6 +50,9 @@ export const defaultState: State = {
     loading: false,
     open: false,
     error: undefined,
+  },
+  game: {
+    form: {},
   },
   ...withFixtures,
 };
@@ -99,7 +104,10 @@ function reducer(
         lobbyId: undefined,
         history: [],
         chat: [],
-        game: undefined,
+        game: {
+          form: {},
+          response: undefined,
+        },
       };
     case "ADD_CHAT_MESSAGE":
       const messageAction = action as MessageAction;
@@ -128,7 +136,10 @@ function reducer(
       const splendidAction = action as SplendidAction;
       return {
         ...state,
-        game: splendidAction.payload,
+        game: {
+          ...state.game,
+          response: splendidAction.payload,
+        },
       };
     default:
       return state;

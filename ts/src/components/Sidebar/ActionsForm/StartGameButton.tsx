@@ -7,7 +7,7 @@ import { sendJSON } from "../../../hooks/useWebsocket";
 
 const StartGameButton = () => {
   const [lobbyId] = useLobbyId();
-  const [game] = useGame();
+  const [,game] = useGame();
 
   if (!lobbyId || game) {
     return null;

@@ -1,12 +1,12 @@
-import { SplendidGame } from "../components/Splendid/domain";
+import { SplendidGame } from "../../components/Splendid/domain";
 import {
   addChatMessage,
   exitLobby,
   joinLobby,
   updateSplendidGame,
-} from "./actionCreator";
-import { State } from "./domain";
-import reducer, { defaultState } from "./reducer";
+} from "../actionCreator";
+import { State } from "../domain";
+import reducer, { defaultState } from ".";
 
 const game: SplendidGame = {
   turn: 1,

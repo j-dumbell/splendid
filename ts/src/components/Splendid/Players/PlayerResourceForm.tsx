@@ -19,7 +19,7 @@ export const PlayerResourceForm = ({
     setFieldValue,
     submitForm,
   } = useFormikContext<SplendidForm>();
-  const [game] = useGame();
+  const [,game] = useGame();
   const {
     board: { bank },
   } = game!;
