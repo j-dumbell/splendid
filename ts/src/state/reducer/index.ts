@@ -1,51 +1,40 @@
 import { defaultState } from "..";
-import {
-  State,
-  JoinLobbyAction,
-  MessageAction,
-  HistoryAction,
-  BaseAction,
-  ActionType,
-  WSConnectionAction,
-} from "../domain";
+import { State, ReducerAction } from "../domain";
 import { gameReducer } from "./game";
 import { lobbyIdReducer } from "./lobbyId";
 import { playerReducers } from "./playerNames";
 
 const chatReducer = (
-  state: State["chat"] = defaultState.chat,
-  action: BaseAction<ActionType, unknown>
+  state = defaultState.chat,
+  action: ReducerAction
 ): State["chat"] => {
   switch (action.type) {
     case "ADD_CHAT_MESSAGE":
-      const messageAction = action as MessageAction;
-      return state.concat(messageAction.payload);
+      return state.concat(action.payload);
     default:
       return state;
   }
 };
 
 const historyReducer = (
-  state: State["history"] = defaultState.history,
-  action: BaseAction<ActionType, unknown>
+  state = defaultState.history,
+  action: ReducerAction
 ): State["history"] => {
   switch (action.type) {
     case "ADD_HISTORY_ACTION":
-      const historyAction = action as HistoryAction;
-      return state.concat(historyAction.payload);
+      return state.concat(action.payload);
     default:
       return state;
   }
 };
 
 const latestActionReducer = (
-  state: State["latestAction"] = defaultState.latestAction,
-  action: BaseAction<ActionType, unknown>
+  state = defaultState.latestAction,
+  action: ReducerAction
 ): State["latestAction"] => {
   switch (action.type) {
     case "ADD_LATEST_ACTION":
-      const { payload } = action as HistoryAction;
-      return payload;
+      return action.payload;
     case "REMOVE_LATEST_ACTION":
       return undefined;
     default:
@@ -54,35 +43,31 @@ const latestActionReducer = (
 };
 
 const connectionReducer = (
-  state: State["connection"] = defaultState.connection,
-  action: BaseAction<ActionType, unknown>
+  state = defaultState.connection,
+  action: ReducerAction
 ): State["connection"] => {
   switch (action.type) {
     case "UPDATE_CONNECTION":
-      const { payload } = action as WSConnectionAction;
-      return payload;
+      return action.payload;
     default:
       return state;
   }
 };
 
 const clientIdReducer = (
-  state: State["clientId"] = defaultState.clientId,
-  action: BaseAction<ActionType, unknown>
+  state = defaultState.clientId,
+  action: ReducerAction
 ): State["clientId"] => {
   switch (action.type) {
     case "JOIN_LOBBY":
-      const { payload } = action as JoinLobbyAction;
-      return payload.clientId;
+      return action.payload.clientId;
     default:
       return state;
   }
 };
 
-export default (
-  state: State = defaultState,
-  action: BaseAction<ActionType, unknown>
-): State => ({
+/** Custom "combineReducer" function as some reducers require access to global state */
+export default (state: State = defaultState, action: ReducerAction): State => ({
   game: gameReducer(state.game, action),
   chat: chatReducer(state.chat, action),
   history: historyReducer(state.history, action),
@@ -90,5 +75,5 @@ export default (
   connection: connectionReducer(state.connection, action),
   lobbyId: lobbyIdReducer(state.lobbyId, action),
   clientId: clientIdReducer(state.clientId, action),
-  playerNames: playerReducers(state, action, state),
+  playerNames: playerReducers(state.playerNames, action, state),
 });

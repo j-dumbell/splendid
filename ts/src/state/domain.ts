@@ -35,12 +35,12 @@ export type State = {
   playerNames: Record<number, string>;
   connection: WSConnection;
   game: {
-    form: SplendidForm,
-    response?: SplendidGame,
+    form: SplendidForm;
+    response?: SplendidGame;
   };
 };
 
-export const actionTypes = [
+const actionTypes = [
   "JOIN_LOBBY",
   "EXIT_LOBBY",
   "ADD_CHAT_MESSAGE",
@@ -52,7 +52,7 @@ export const actionTypes = [
 ] as const;
 export type ActionType = typeof actionTypes[number];
 
-export type BaseAction<T, P> = {
+type BaseAction<T, P> = {
   type: T;
   payload: P;
 };
@@ -65,3 +65,13 @@ export type AddLatestAction = BaseAction<typeof actionTypes[4], History>;
 export type RemoveLatestAction = BaseAction<typeof actionTypes[5], undefined>;
 export type SplendidAction = BaseAction<typeof actionTypes[6], SplendidGame>;
 export type WSConnectionAction = BaseAction<typeof actionTypes[7], WSConnection>;
+
+export type ReducerAction =
+  | JoinLobbyAction
+  | ExitLobbyAction
+  | MessageAction
+  | HistoryAction
+  | AddLatestAction
+  | RemoveLatestAction
+  | SplendidAction
+  | WSConnectionAction;

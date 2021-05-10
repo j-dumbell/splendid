@@ -1,16 +1,16 @@
 import { defaultState } from "..";
-import { State, BaseAction, ActionType, JoinLobbyAction, ExitLobbyAction } from "../domain";
+import { State, ReducerAction } from "../domain";
 
 export const playerReducers = (
-  state: State["playerNames"] = defaultState.playerNames,
-  action: BaseAction<ActionType, unknown>,
+  state = defaultState.playerNames,
+  action: ReducerAction,
   { lobbyId, clientId }: State
 ): State["playerNames"] => {
   switch (action.type) {
     case "JOIN_LOBBY":
       const {
         payload: { lobbyId: joinLobbyId, playerNames: joinPlayerNames },
-      } = action as JoinLobbyAction;
+      } = action;
       if (lobbyId === joinLobbyId && clientId) {
         return joinPlayerNames;
       }
@@ -18,7 +18,7 @@ export const playerReducers = (
     case "EXIT_LOBBY":
       const {
         payload: { playerNames: exitPlayerNames },
-      } = action as ExitLobbyAction;
+      } = action;
       if (clientId && exitPlayerNames[clientId]) {
         return exitPlayerNames;
       }

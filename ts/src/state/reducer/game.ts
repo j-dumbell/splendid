@@ -1,21 +1,23 @@
 import { defaultState } from "..";
-import { SplendidForm } from "../../components/Splendid/domain";
-import { State, BaseAction, ActionType, SplendidAction } from "../domain";
+import { constructEmptyResourceList } from "../../components/Splendid/util";
+import { State, ReducerAction } from "../domain";
 
 export const gameReducer = (
-  state: State["game"] = defaultState.game,
-  action: BaseAction<ActionType, unknown>
+  state = defaultState.game,
+  action: ReducerAction
 ): State["game"] => {
   switch (action.type) {
     case "UPDATE_GAME":
-      const splendidAction = action as SplendidAction;
       return {
         ...state,
-        response: splendidAction.payload,
+        response: action.payload,
       };
     case "EXIT_LOBBY":
       return {
-        form: {} as SplendidForm,
+        form: {
+          selectedCard: "",
+          resources: constructEmptyResourceList(),
+        },
         response: undefined,
       };
     default:
