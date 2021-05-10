@@ -1,6 +1,6 @@
 import fixtures from "../gameFixtures.json";
 
-import { SplendidGame } from "../../components/Splendid/domain";
+import { SplendidForm, SplendidGame } from "../../components/Splendid/domain";
 import {
   State,
   JoinLobbyAction,
@@ -37,6 +37,7 @@ const withFixtures: Partial<State> | undefined = withFixtureEnv
       },
       clientId: 1,
       game: {
+        form: {} as SplendidForm,
         response: (fixtures as unknown) as SplendidGame,
       },
     }
@@ -52,7 +53,7 @@ export const defaultState: State = {
     error: undefined,
   },
   game: {
-    form: {},
+    form: {} as SplendidForm,
   },
   ...withFixtures,
 };
@@ -105,7 +106,7 @@ function reducer(
         history: [],
         chat: [],
         game: {
-          form: {},
+          form: {} as SplendidForm,
           response: undefined,
         },
       };
