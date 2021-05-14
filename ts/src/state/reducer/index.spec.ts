@@ -1,12 +1,13 @@
-import { SplendidGame } from "../components/Splendid/domain";
+import { SplendidGame } from "../../components/Splendid/domain";
 import {
   addChatMessage,
   exitLobby,
   joinLobby,
   updateSplendidGame,
-} from "./actionCreator";
-import { State } from "./domain";
-import reducer, { defaultState } from "./reducer";
+} from "../actionCreator";
+import { State } from "../domain";
+import reducer from ".";
+import { defaultState } from "..";
 
 const game: SplendidGame = {
   turn: 1,
@@ -123,18 +124,17 @@ describe("reducer()", () => {
       const action = updateSplendidGame(game);
       const newState = reducer(defaultState, action);
 
-      expect(newState.game).toEqual(action.payload);
-      expect(newState.game?.activePlayerIndex).toBe(0);
+      expect(newState.game.response).toEqual(action.payload);
+      expect(newState.game.response?.activePlayerIndex).toBe(0);
     });
 
     it("it replaces updated game", () => {
       const action = updateSplendidGame({ ...game, activePlayerIndex: 1 });
-      const initialState: State = { ...defaultState, game };
-      const newState = reducer(initialState, action);
+      const newState = reducer(defaultState, action);
       const newerState = reducer(newState, action);
 
-      expect(newerState.game).toEqual(action.payload);
-      expect(newerState.game?.activePlayerIndex).toBe(1);
+      expect(newerState.game.response).toEqual(action.payload);
+      expect(newerState.game.response?.activePlayerIndex).toBe(1);
     });
   });
 });

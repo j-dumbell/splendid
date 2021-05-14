@@ -28,8 +28,8 @@ const History = ({ title, history }: Props) => {
     <>
       {title && <h3>{title}</h3>}
       <Scrollable>
-        {history.map(({ timestamp, message, name }) => (
-          <p>
+        {history.map(({ timestamp, message, name }, i) => (
+          <p key={i}>
             <Text color="#ac81fe">
               {`${formatTimestamp(timestamp)}: `}
               {name && `${name} `}

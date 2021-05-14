@@ -5,11 +5,11 @@ import { sendJSON } from "../../../hooks/useWebsocket";
 import { useLobbyId } from "../../../hooks/useLobbyId";
 import Button from "../../common/Button";
 import { FlexForm, FlexField } from "../../common/FlexContainer";
-import { useClient } from "../../../hooks/useClient";
+import { useClientId } from "../../../hooks/useClientId";
 
 const SendChatForm = () => {
   const [lobbyId] = useLobbyId();
-  const [, clientId] = useClient();
+  const [clientId] = useClientId();
   if (!lobbyId) {
     return null;
   }

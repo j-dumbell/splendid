@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useClient } from "../../../hooks/useClient";
+import { useClientId } from "../../../hooks/useClientId";
 import { SplendidPlayer } from "../domain";
 import Player from "./Player";
 import { sortPlayers } from "./util";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Players = ({ players }: Props) => {
-  const [, clientId] = useClient();
+  const [clientId] = useClientId();
   return (
     <PlayersContainer column justify="flex-end">
       {sortPlayers(players, clientId).map((player, i) => (
